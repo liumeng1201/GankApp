@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">GankApp</string>
+
+    <string name="nav_home">首页</string>
+    <string name="nav_fav">收藏</string>
+    <string name="nav_gt">即时通讯</string>
+    <string name="nav_fk">意见反馈</string>
+    <string name="nav_setting">设置</string>
+</resources>

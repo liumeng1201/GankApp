@@ -33,6 +33,8 @@
 -keep class com.squareup.okhttp.** {*;}
 -keep interface com.squareup.okhttp.** {*;}
 -dontwarn okio.**
+# okhttputils
+-keep class com.zhy.http.okhttp.** {*;}
 
 # for gson
 -keep class com.google.gson.** {*;}
@@ -41,5 +43,12 @@
 -keep class com.orhanobut.logger.** {*;}
 
 # for LeakCanary
--keep class org.eclipse.mat.** { *; }
--keep class com.squareup.leakcanary.** { *; }
+-keep class org.eclipse.mat.** {*;}
+-keep class com.squareup.leakcanary.** {*;}
+
+# for icepick icepick-processor
+-dontwarn icepick.**
+-keep class **$$Icepick {*;}
+-keepclasseswithmembernames class * {
+    @icepick.* <fields>;
+}

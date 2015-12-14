@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">GankApp</string>
+
+    <string name="nav_home">Home</string>
+    <string name="nav_fav">Favorite</string>
+    <string name="nav_gt">IM</string>
+    <string name="nav_fk">FeedBack</string>
+    <string name="nav_setting">Setting</string>
 </resources>
