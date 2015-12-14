@@ -18,7 +18,7 @@ allprojects {
         //Bmob的maven仓库地址
         maven { url "https://raw.github.com/bmob/bmob-android-sdk/master" }
         maven { url "https://jitpack.io" }
-        maven {url "https://clojars.org/repo/"}
+        maven { url "https://clojars.org/repo/" }
     }
 }
 

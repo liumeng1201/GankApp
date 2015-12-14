@@ -27,6 +27,7 @@
 
 # for bmob
 -keep class cn.bmob.v3.** {*;}
+-keep class cn.bmob.push.** {*;}
 
 # for okhttp、okio
 -dontwarn com.squareup.okhttp.**
