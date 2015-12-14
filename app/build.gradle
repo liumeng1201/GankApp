@@ -47,4 +47,8 @@ dependencies {
     // bmob的im包，以下两个配置是im功能所需
     compile 'cn.bmob.android:bmob-im:1.1.9'
     compile 'cn.bmob.android:bmob-sdk:3.4.3'
+
+    // leakcanary内存泄漏检测
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
 }

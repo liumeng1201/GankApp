@@ -39,3 +39,7 @@
 
 # for logger
 -keep class com.orhanobut.logger.** {*;}
+
+# for LeakCanary
+-keep class org.eclipse.mat.** { *; }
+-keep class com.squareup.leakcanary.** { *; }
