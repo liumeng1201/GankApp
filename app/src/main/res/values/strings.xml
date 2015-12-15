@@ -1,9 +1,21 @@
 <resources>
-    <string name="app_name">GankApp</string>
+    <string name="app_name">Gank.IO</string>
 
     <string name="nav_home">Home</string>
     <string name="nav_fav">Favorite</string>
     <string name="nav_gt">IM</string>
     <string name="nav_fk">FeedBack</string>
     <string name="nav_setting">Setting</string>
+
+    <string-array name="slide_menu">
+        <item>Home</item>
+        <item>Favorite</item>
+        <item>IM</item>
+        <item>FeedBack</item>
+        <item>Setting</item>
+    </string-array>
+
+    <string name="search">Search</string>
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
 </resources>

@@ -18,6 +18,8 @@
 
 -keepattributes Signature
 
+-dontwarn android.support.v4.** –
+
 # for Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
@@ -26,8 +28,8 @@
 }
 
 # for bmob
--keep class cn.bmob.v3.** {*;}
--keep class cn.bmob.push.** {*;}
+-keep class cn.bmob.** {*;}
+-keep class com.bmob.** {*;}
 
 # for okhttp、okio
 -dontwarn com.squareup.okhttp.**

@@ -4,6 +4,7 @@
         <item
             android:id="@+id/nav_home"
             android:checked="true"
+            android:icon="@mipmap/ic_home_white"
             android:title="@string/nav_home" />
 
         <item
@@ -18,9 +19,10 @@
 
     </group>
 
-    <group>
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_fk"
+            android:icon="@mipmap/ic_feedback_white"
             android:title="@string/nav_fk" />
 
         <item
