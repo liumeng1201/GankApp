@@ -1,26 +1,34 @@
-package com.lm.android.gankapp.views;
+package com.lm.android.gankapp.activities;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import com.lm.android.gankapp.R;
 
 public class MainActivity extends BaseAppCompatActivity {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle mDrawerToggle;
     private NavigationView navigationView;
-    private FrameLayout container;
+    private TabLayout tabs;
+    private ViewPager viewPager;
 
     private String[] titles;
+
+    private final int NAV_HOME = 0;
+    private final int NAV_FAV = 1;
+    private final int NAV_GT = 2;
+    private final int NAV_FK = 3;
+    private final int NAV_SET = 4;
+    private int navItemIndex = NAV_HOME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,82 +37,58 @@ public class MainActivity extends BaseAppCompatActivity {
 
         titles = getResources().getStringArray(R.array.slide_menu);
 
-        container = (FrameLayout) findViewById(R.id.container);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer);
         navigationView = (NavigationView) findViewById(R.id.nv_main_navigation);
+        tabs = (TabLayout) findViewById(R.id.tabs);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
 
         setSupportActionBar(toolbar);
-        initDrawerLayout();
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setHomeAsUpIndicator(R.mipmap.ic_menu_white);
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+        }
         initNavigationMenuItemClickListener();
-    }
-
-    private void initDrawerLayout() {
-        mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                invalidateOptionsMenu();
-            }
-
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                if (slideOffset < 0.6) {
-                    if (Build.VERSION.SDK_INT >= 11) {
-                        // API 11以上的系统会设置toolBar的透明度
-                        toolbar.setAlpha(1 - slideOffset);
-                    }
-                }
-            }
-        };
-
-        drawerLayout.setDrawerListener(mDrawerToggle);
-        drawerLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mDrawerToggle.syncState();
-            }
-        });
+        setTitle(titles[0]);
+        invalidateOptionsMenu();
     }
 
     private void initNavigationMenuItemClickListener() {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                int index = 0;
                 switch (menuItem.getItemId()) {
                     case R.id.nav_home:
-                        index = 0;
+                        navItemIndex = NAV_HOME;
+                        tabs.setVisibility(View.VISIBLE);
                         break;
                     case R.id.nav_fav:
-                        index = 1;
+                        navItemIndex = NAV_FAV;
+                        tabs.setVisibility(View.GONE);
                         break;
                     case R.id.nav_gt:
-                        index = 2;
+                        navItemIndex = NAV_GT;
+                        tabs.setVisibility(View.GONE);
                         break;
                     case R.id.nav_fk:
-                        index = 3;
+                        navItemIndex = NAV_FK;
+                        tabs.setVisibility(View.GONE);
                         break;
                     case R.id.nav_setting:
-                        index = 4;
+                        navItemIndex = NAV_SET;
+                        tabs.setVisibility(View.GONE);
                         break;
                     default:
                         break;
                 }
-                setTitle(titles[index]);
+                setTitle(titles[navItemIndex]);
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
+                invalidateOptionsMenu();
                 return true;
             }
         });
-
-        setTitle(titles[0]);
     }
 
     @Override
@@ -120,8 +104,20 @@ public class MainActivity extends BaseAppCompatActivity {
         switch (id) {
             case R.id.action_search:
                 return true;
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
+        if (navItemIndex == NAV_FAV) {
+            menu.findItem(R.id.action_search).setVisible(true);
+        } else {
+            menu.findItem(R.id.action_search).setVisible(false);
+        }
+        return super.onPrepareOptionsPanel(view, menu);
     }
 }

@@ -1,20 +1,20 @@
-package com.lm.android.gankapp.views;
+package com.lm.android.gankapp.fragments;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import icepick.Icepick;
 import icepick.State;
 
 /**
- * Created by liumeng on 2015/12/14.
+ * Created by liumeng on 2015/12/15.
  */
-public class BaseAppCompatActivity extends AppCompatActivity {
+public class BaseFragment extends Fragment {
     @State
     String username; // TODO This will be automatically saved and restored
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
     }
@@ -24,5 +24,4 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
     }
-
 }

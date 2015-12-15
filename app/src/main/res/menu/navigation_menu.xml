@@ -5,29 +5,31 @@
             android:id="@+id/nav_home"
             android:checked="true"
             android:icon="@mipmap/ic_home_white"
+            android:tint="@color/button_grey"
             android:title="@string/nav_home" />
 
         <item
             android:id="@+id/nav_fav"
             android:icon="@mipmap/ic_grade_white"
+            android:tint="@color/button_grey"
             android:title="@string/nav_fav" />
 
         <item
             android:id="@+id/nav_gt"
             android:icon="@mipmap/ic_chat_bubble_white"
+            android:tint="@color/button_grey"
             android:title="@string/nav_gt" />
 
-    </group>
-
-    <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_fk"
             android:icon="@mipmap/ic_feedback_white"
+            android:tint="@color/button_grey"
             android:title="@string/nav_fk" />
 
         <item
             android:id="@+id/nav_setting"
             android:icon="@mipmap/ic_settings_applications_white"
+            android:tint="@color/button_grey"
             android:title="@string/nav_setting" />
     </group>
 </menu>
