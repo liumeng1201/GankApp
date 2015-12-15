@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.lm.android.gankapp.R;
+import com.lm.android.gankapp.adapters.TabAdapter;
+import com.lm.android.gankapp.fragments.ContentFragment;
 
 public class MainActivity extends BaseAppCompatActivity {
     private Toolbar toolbar;
@@ -49,6 +51,8 @@ public class MainActivity extends BaseAppCompatActivity {
             supportActionBar.setHomeAsUpIndicator(R.mipmap.ic_menu_white);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
+        setupViewPager(viewPager);
+        tabs.setupWithViewPager(viewPager);
         initNavigationMenuItemClickListener();
         setTitle(titles[0]);
         invalidateOptionsMenu();
@@ -61,23 +65,18 @@ public class MainActivity extends BaseAppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.nav_home:
                         navItemIndex = NAV_HOME;
-                        tabs.setVisibility(View.VISIBLE);
                         break;
                     case R.id.nav_fav:
                         navItemIndex = NAV_FAV;
-                        tabs.setVisibility(View.GONE);
                         break;
                     case R.id.nav_gt:
                         navItemIndex = NAV_GT;
-                        tabs.setVisibility(View.GONE);
                         break;
                     case R.id.nav_fk:
                         navItemIndex = NAV_FK;
-                        tabs.setVisibility(View.GONE);
                         break;
                     case R.id.nav_setting:
                         navItemIndex = NAV_SET;
-                        tabs.setVisibility(View.GONE);
                         break;
                     default:
                         break;
@@ -89,6 +88,14 @@ public class MainActivity extends BaseAppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
+        adapter.addFragment(new ContentFragment(), "List");
+        adapter.addFragment(new ContentFragment(), "Tile");
+        adapter.addFragment(new ContentFragment(), "Card");
+        viewPager.setAdapter(adapter);
     }
 
     @Override
