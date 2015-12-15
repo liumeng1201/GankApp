@@ -19,6 +19,13 @@
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="category_android">Android</string>
+    <string name="category_ios">iOS</string>
+    <string name="category_web">Front-End Web</string>
+    <string name="category_expand">Expand Resources</string>
+    <string name="category_video">Video</string>
+    <string name="categroy_meizi">MeiZi</string>
+
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_content_listitem">%1$s\nAuthor:%2$s\nTime:%3$s</string>
 </resources>

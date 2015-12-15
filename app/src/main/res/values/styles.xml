@@ -11,10 +11,12 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="MyCustomPopupTheme" parent="ThemeOverlay.AppCompat.Light">
-    </style>
+    <style name="MyCustomPopupTheme" parent="ThemeOverlay.AppCompat.Light"></style>
 
-    <style name="MyCustomAppBarTheme" parent="ThemeOverlay.AppCompat.Dark">
-    </style>
+    <style name="MyCustomAppBarTheme" parent="ThemeOverlay.AppCompat.Dark"></style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

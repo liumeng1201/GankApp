@@ -18,4 +18,10 @@
     <string name="search">搜索</string>
     <string name="drawer_open">开启</string>
     <string name="drawer_close">关闭</string>
+    <string name="category_android">Android</string>
+    <string name="category_ios">iOS</string>
+    <string name="category_web">前端</string>
+    <string name="category_expand">拓展资源</string>
+    <string name="category_video">休息视频</string>
+    <string name="categroy_meizi">福利</string>
 </resources>

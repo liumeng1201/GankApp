@@ -1,18 +1,16 @@
 package com.lm.android.gankapp.fragments;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+
+import com.zhy.http.okhttp.OkHttpUtils;
 
 import icepick.Icepick;
-import icepick.State;
 
 /**
  * Created by liumeng on 2015/12/15.
  */
 public class BaseFragment extends Fragment {
-    @State
-    String username; // TODO This will be automatically saved and restored
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,5 +21,11 @@ public class BaseFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        OkHttpUtils.getInstance().cancelTag(this);
     }
 }

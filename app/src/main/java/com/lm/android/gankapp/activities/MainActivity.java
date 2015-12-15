@@ -15,6 +15,8 @@ import android.view.View;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.TabAdapter;
 import com.lm.android.gankapp.fragments.ContentFragment;
+import com.lm.android.gankapp.models.ContentCategory;
+import com.lm.android.gankapp.models.ContentType;
 
 public class MainActivity extends BaseAppCompatActivity {
     private Toolbar toolbar;
@@ -92,9 +94,12 @@ public class MainActivity extends BaseAppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
-        adapter.addFragment(new ContentFragment(), "List");
-        adapter.addFragment(new ContentFragment(), "Tile");
-        adapter.addFragment(new ContentFragment(), "Card");
+        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.ANDROID.getType()), getString(R.string.category_android));
+        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.IOS.getType()), getString(R.string.category_ios));
+        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.WEB.getType()), getString(R.string.category_web));
+        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.EXPAND.getType()), getString(R.string.category_expand));
+        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.VIDEO.getType()), getString(R.string.category_video));
+        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.MEIZI.getType()), getString(R.string.categroy_meizi));
         viewPager.setAdapter(adapter);
     }
 

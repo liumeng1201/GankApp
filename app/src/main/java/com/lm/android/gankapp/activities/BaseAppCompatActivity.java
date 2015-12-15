@@ -3,6 +3,8 @@ package com.lm.android.gankapp.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.zhy.http.okhttp.OkHttpUtils;
+
 import icepick.Icepick;
 import icepick.State;
 
@@ -25,4 +27,9 @@ public class BaseAppCompatActivity extends AppCompatActivity {
         Icepick.saveInstanceState(this, outState);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        OkHttpUtils.getInstance().cancelTag(this);
+    }
 }
