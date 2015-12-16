@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.ContentAdapter;
+import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentItemInfo;
 import com.lm.android.gankapp.models.Utils;
 import com.orhanobut.logger.Logger;
@@ -71,7 +73,7 @@ public class ContentFragment extends BaseFragment {
         }
         request_base_url = Utils.base_category_data_url + Utils.requestCategory[mCategory] + "/" + Utils.requestNum + "/";
         datas = new ArrayList<>();
-        adapter = new ContentAdapter(datas);
+        adapter = new ContentAdapter(datas, mCategory == ContentCategory.MEIZI.getType() ? true : false);
         refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -106,11 +108,15 @@ public class ContentFragment extends BaseFragment {
         View convertView = inflater.inflate(R.layout.fragment_content, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout) convertView.findViewById(R.id.swiperefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(refreshListener);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
         RecyclerView recyclerView = (RecyclerView) convertView.findViewById(R.id.my_recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addOnScrollListener(scrollListener);
+        // 初次进入显示刷新动画
+        swipeRefreshLayout.setProgressViewOffset(true, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+        swipeRefreshLayout.setRefreshing(true);
         requestDatas(request_base_url, false);
         return convertView;
     }
@@ -151,10 +157,10 @@ public class ContentFragment extends BaseFragment {
                 }
                 if (loadMore) {
                     datas.addAll(response);
-                    adapter.refresh(datas);
+                    adapter.refresh(datas, mCategory == ContentCategory.MEIZI.getType() ? true : false);
                 } else {
                     datas = response;
-                    adapter.refresh(datas);
+                    adapter.refresh(datas, mCategory == ContentCategory.MEIZI.getType() ? true : false);
                 }
             }
         });

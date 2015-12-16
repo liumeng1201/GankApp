@@ -9,25 +9,58 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.activities.DetailActivity;
 import com.lm.android.gankapp.models.ContentItemInfo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by liumeng on 2015/12/15.
  */
 public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHolder> {
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.mmm'Z'", Locale.CHINA);
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
     private Context context;
     private ArrayList<ContentItemInfo> datas;
+    private boolean bigImage;
 
+    /**
+     * @param datas 要显示的数据
+     */
     public ContentAdapter(ArrayList<ContentItemInfo> datas) {
         this.datas = datas;
     }
 
+    /**
+     * @param datas    要显示的数据
+     * @param bigImage 是否为大图片数据
+     */
+    public ContentAdapter(ArrayList<ContentItemInfo> datas, boolean bigImage) {
+        this.datas = datas;
+        this.bigImage = bigImage;
+    }
+
+    /**
+     * @param datas 要显示的数据
+     */
     public void refresh(ArrayList<ContentItemInfo> datas) {
         this.datas = datas;
+        this.notifyDataSetChanged();
+    }
+
+    /**
+     * @param datas    要显示的数据
+     * @param bigImage 是否为大图片数据
+     */
+    public void refresh(ArrayList<ContentItemInfo> datas, boolean bigImage) {
+        this.datas = datas;
+        this.bigImage = bigImage;
         this.notifyDataSetChanged();
     }
 
@@ -39,11 +72,24 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        // Glide.with(context).load(getItemData(position).getUrl()).centerCrop().crossFade().into(holder.image);
-        holder.title.setText(String.format(context.getString(R.string.title_content_listitem),
-                getItemData(position).getDesc(),
-                getItemData(position).getWho(),
-                getItemData(position).getPublishedAt()));
+        String time = getItemData(position).getPublishedAt();
+        try {
+            Date date = df.parse(time);
+            time = sdf.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (bigImage) {
+            Glide.with(context).load(getItemData(position).getUrl()).centerCrop().crossFade().into(holder.image);
+            holder.title.setText(String.format(context.getString(R.string.title_content_listitem_bigimage),
+                    getItemData(position).getWho(),
+                    time));
+        } else {
+            holder.title.setText(String.format(context.getString(R.string.title_content_listitem_normal),
+                    getItemData(position).getDesc(),
+                    getItemData(position).getWho(),
+                    time));
+        }
     }
 
     @Override
@@ -60,7 +106,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
         public TextView title;
 
         public ViewHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.listitem_content, parent, false));
+            super(inflater.inflate(bigImage ? R.layout.listitem_content_image : R.layout.listitem_content_normal, parent, false));
 
             image = (ImageView) itemView.findViewById(R.id.list_avatar);
             title = (TextView) itemView.findViewById(R.id.list_title);
