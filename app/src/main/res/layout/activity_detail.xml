@@ -1,20 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="com.lm.android.gankapp.activities.DetailActivity">
+    android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar" />
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <android.support.v7.widget.ButtonBarLayout
+        android:id="@+id/control_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:orientation="horizontal">
 
-        <include
-            android:id="@+id/app_bar"
-            layout="@layout/app_bar" />
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/btn_share"
+            style="@style/ControlBarButtonTheme.Normal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_share_white" />
 
-    </android.support.design.widget.AppBarLayout>
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/btn_collect"
+            style="@style/ControlBarButtonTheme.Favorite"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_favorite_white" />
 
-</android.support.design.widget.CoordinatorLayout>
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/btn_open_in_browser"
+            style="@style/ControlBarButtonTheme.Normal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_explore_white" />
+
+    </android.support.v7.widget.ButtonBarLayout>
+</LinearLayout>
+
