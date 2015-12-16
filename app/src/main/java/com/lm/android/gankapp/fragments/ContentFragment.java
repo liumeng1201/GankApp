@@ -52,7 +52,6 @@ public class ContentFragment extends BaseFragment {
     /**
      * @param type     页面类型，分为网络数据和收藏数据
      * @param category 数据类型，分为Android、iOS、前端等
-     * @return
      */
     public static ContentFragment newInstance(int type, int category) {
         ContentFragment fragment = new ContentFragment();
@@ -116,6 +115,12 @@ public class ContentFragment extends BaseFragment {
         return convertView;
     }
 
+    /**
+     * 请求数据操作
+     *
+     * @param url      请求的url
+     * @param loadMore 是否为加载更多
+     */
     private void requestDatas(String url, final boolean loadMore) {
         if (loadMore) {
             pageNum++;
