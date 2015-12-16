@@ -26,6 +26,6 @@
     <string name="category_video">Video</string>
     <string name="categroy_meizi">MeiZi</string>
 
-    <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_activity_detail">Details</string>
     <string name="title_content_listitem">%1$s\nAuthor:%2$s\nTime:%3$s</string>
 </resources>

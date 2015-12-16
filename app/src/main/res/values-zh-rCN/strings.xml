@@ -24,4 +24,7 @@
     <string name="category_expand">拓展资源</string>
     <string name="category_video">休息视频</string>
     <string name="categroy_meizi">福利</string>
+
+    <string name="title_activity_detail">查看详情</string>
+    <string name="title_content_listitem">%1$s\n作者：%2$s\n时间：%3$s</string>
 </resources>

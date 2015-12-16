@@ -1,6 +1,7 @@
 package com.lm.android.gankapp.fragments;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.ContentAdapter;
 import com.lm.android.gankapp.models.ContentItemInfo;
 import com.lm.android.gankapp.models.Utils;
+import com.orhanobut.logger.Logger;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -32,9 +34,16 @@ public class ContentFragment extends BaseFragment {
     @State
     int mCategory;
 
+    private boolean isLoading = false;
+    private boolean isLoadAll = false;
     private int pageNum = 1;
+    private String request_base_url;
     private ArrayList<ContentItemInfo> datas;
     private ContentAdapter adapter;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout.OnRefreshListener refreshListener;
+    private RecyclerView.OnScrollListener scrollListener;
 
     public ContentFragment() {
         // Required empty public constructor
@@ -61,19 +70,50 @@ public class ContentFragment extends BaseFragment {
             mType = getArguments().getInt(ARG_PARAM_TYPE);
             mCategory = getArguments().getInt(ARG_PARAM_CATEGORY);
         }
+        request_base_url = Utils.base_category_data_url + Utils.requestCategory[mCategory] + "/" + Utils.requestNum + "/";
         datas = new ArrayList<>();
         adapter = new ContentAdapter(datas);
+        refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                pageNum = 1;
+                requestDatas(request_base_url, false);
+            }
+        };
+        scrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
+                int totalItemCount = mLayoutManager.getItemCount();
+                // lastVisibleItem >= totalItemCount - 10 表示剩下10个item自动加载，各位自由选择
+                // dy>0 表示向下滑动
+                if (lastVisibleItem >= totalItemCount - 10 && dy > 0 && !isLoading && !isLoadAll) {
+                    isLoading = true;
+                    requestDatas(request_base_url, true);
+                }
+            }
+        };
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_content, container, false);
+        View convertView = inflater.inflate(R.layout.fragment_content, container, false);
+        swipeRefreshLayout = (SwipeRefreshLayout) convertView.findViewById(R.id.swiperefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(refreshListener);
+        RecyclerView recyclerView = (RecyclerView) convertView.findViewById(R.id.my_recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        String url = Utils.base_category_data_url + Utils.requestCategory[mCategory] + "/" + Utils.requestNum + "/";
-        requestDatas(url, false);
-        return recyclerView;
+        recyclerView.addOnScrollListener(scrollListener);
+        requestDatas(request_base_url, false);
+        return convertView;
     }
 
     private void requestDatas(String url, final boolean loadMore) {
@@ -81,22 +121,35 @@ public class ContentFragment extends BaseFragment {
             pageNum++;
         }
         url = url + pageNum;
+        Logger.d(url);
         OkHttpUtils.get().url(url).build().execute(new DatasCallback() {
             @Override
             public void onError(Request request, Exception e) {
+                isLoading = false;
+                if (swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
                 Toast.makeText(getActivity(), "Error! Please retry!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onResponse(ArrayList<ContentItemInfo> response) {
+                isLoading = false;
+                if (swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+                if (response == null) {
+                    return;
+                }
+                if (response.size() < Utils.requestNum) {
+                    isLoadAll = true;
+                }
                 if (loadMore) {
                     datas.addAll(response);
                     adapter.refresh(datas);
                 } else {
-                    if (response != null) {
-                        datas = response;
-                        adapter.refresh(datas);
-                    }
+                    datas = response;
+                    adapter.refresh(datas);
                 }
             }
         });

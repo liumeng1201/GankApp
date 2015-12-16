@@ -28,8 +28,8 @@ public class BaseAppCompatActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         OkHttpUtils.getInstance().cancelTag(this);
     }
 }
