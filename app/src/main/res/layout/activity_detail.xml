@@ -14,36 +14,38 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <android.support.v7.widget.ButtonBarLayout
+    <LinearLayout
         android:id="@+id/control_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <android.support.v7.widget.AppCompatImageButton
-            android:id="@+id/btn_share"
-            style="@style/ControlBarButtonTheme.Normal"
+        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@mipmap/ic_share_white" />
+            android:layout_weight="1" />
 
-        <android.support.v7.widget.AppCompatImageButton
+        <ImageButton
             android:id="@+id/btn_collect"
-            style="@style/ControlBarButtonTheme.Favorite"
-            android:layout_width="0dp"
+            style="@style/ControlBarButtonTheme.Normal"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:src="@mipmap/ic_favorite_white" />
 
-        <android.support.v7.widget.AppCompatImageButton
-            android:id="@+id/btn_open_in_browser"
+        <Button
+            android:id="@+id/btn_zan"
             style="@style/ControlBarButtonTheme.Normal"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@mipmap/ic_explore_white" />
+            android:drawableLeft="@mipmap/ic_share_white" />
 
-    </android.support.v7.widget.ButtonBarLayout>
+        <Button
+            android:id="@+id/btn_comment"
+            style="@style/ControlBarButtonTheme.Normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@mipmap/ic_explore_white" />
+
+    </LinearLayout>
 </LinearLayout>
 

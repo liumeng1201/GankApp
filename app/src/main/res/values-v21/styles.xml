@@ -6,4 +6,10 @@
         <item name="android:colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="DrawerLayoutTheme" parent="AppTheme">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="MyCustomTabLayoutTheme" parent="ThemeOverlay.AppCompat.Light">
+    </style>
 </resources>

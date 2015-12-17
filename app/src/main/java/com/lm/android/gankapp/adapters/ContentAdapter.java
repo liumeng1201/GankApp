@@ -1,7 +1,6 @@
 package com.lm.android.gankapp.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lm.android.gankapp.R;
-import com.lm.android.gankapp.activities.DetailActivity;
 import com.lm.android.gankapp.models.ContentItemInfo;
 
 import java.text.ParseException;
@@ -29,6 +27,8 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
     private Context context;
     private ArrayList<ContentItemInfo> datas;
     private boolean bigImage;
+
+    private OnContentItemClickListener itemClickListener;
 
     /**
      * @param datas 要显示的数据
@@ -64,6 +64,10 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
         this.notifyDataSetChanged();
     }
 
+    public void setOnItemClickListener(OnContentItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
@@ -90,6 +94,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
                     getItemData(position).getWho(),
                     time));
         }
+        holder.setOnClickListener(position);
     }
 
     @Override
@@ -110,15 +115,19 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
 
             image = (ImageView) itemView.findViewById(R.id.list_avatar);
             title = (TextView) itemView.findViewById(R.id.list_title);
+        }
 
+        public void setOnClickListener(final int position) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, DetailActivity.class);
-                    context.startActivity(intent);
+                    itemClickListener.onItemClickListener(position);
                 }
             });
         }
+    }
+
+    public interface OnContentItemClickListener {
+        public void onItemClickListener(int position);
     }
 }

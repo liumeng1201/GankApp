@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lm.android.gankapp.R;
+import com.lm.android.gankapp.activities.DetailActivity;
 import com.lm.android.gankapp.adapters.ContentAdapter;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentItemInfo;
@@ -74,6 +75,13 @@ public class ContentFragment extends BaseFragment {
         request_base_url = Utils.base_category_data_url + Utils.requestCategory[mCategory] + "/" + Utils.requestNum + "/";
         datas = new ArrayList<>();
         adapter = new ContentAdapter(datas, mCategory == ContentCategory.MEIZI.getType() ? true : false);
+        adapter.setOnItemClickListener(new ContentAdapter.OnContentItemClickListener() {
+            @Override
+            public void onItemClickListener(int position) {
+                ContentItemInfo itemData = adapter.getItemData(position);
+                DetailActivity.actionStart(getActivity(), itemData.getUrl(), itemData.getDesc());
+            }
+        });
         refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

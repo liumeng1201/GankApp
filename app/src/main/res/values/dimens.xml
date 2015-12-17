@@ -19,4 +19,6 @@
     <dimen name="navheader_height">222dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="big_image_height">300dp</dimen>
+
+    <dimen name="drawer_margin_top">24dp</dimen>
 </resources>
