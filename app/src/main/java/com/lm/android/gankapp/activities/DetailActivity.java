@@ -1,11 +1,14 @@
 package com.lm.android.gankapp.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.lm.android.gankapp.R;
 
@@ -13,6 +16,8 @@ import icepick.State;
 
 public class DetailActivity extends BaseAppCompatActivity {
     private WebView webView;
+    private ProgressDialog loadingDialog;
+
     @State
     String url;
     @State
@@ -40,7 +45,29 @@ public class DetailActivity extends BaseAppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        loadingDialog = new ProgressDialog(this);
+        loadingDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
         webView = (WebView) findViewById(R.id.webview);
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                loadingDialog.show();
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                loadingDialog.dismiss();
+            }
+        });
 
         Intent intent = getIntent();
         if (intent != null) {
