@@ -31,4 +31,8 @@
 
     <style name="DrawerLayoutTheme" parent="AppTheme"></style>
 
+    <style name="MyCustomProgressBarTheme" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress</item>
+    </style>
+
 </resources>

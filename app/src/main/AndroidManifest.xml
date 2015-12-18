@@ -39,6 +39,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.lm.android.gankapp.activities.MainActivity" />
         </activity>
+
+        <activity android:name=".activities.TestActivity" />
     </application>
 
 </manifest>

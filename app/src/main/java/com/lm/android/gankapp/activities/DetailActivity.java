@@ -1,22 +1,24 @@
 package com.lm.android.gankapp.activities;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import com.lm.android.gankapp.R;
+import com.orhanobut.logger.Logger;
 
 import icepick.State;
 
 public class DetailActivity extends BaseAppCompatActivity {
     private WebView webView;
-    private ProgressDialog loadingDialog;
+    private ProgressBar progressBar;
 
     @State
     String url;
@@ -45,9 +47,7 @@ public class DetailActivity extends BaseAppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        loadingDialog = new ProgressDialog(this);
-        loadingDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-
+        progressBar = (ProgressBar) findViewById(R.id.progressbar);
         webView = (WebView) findViewById(R.id.webview);
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -59,13 +59,19 @@ public class DetailActivity extends BaseAppCompatActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                loadingDialog.show();
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                loadingDialog.dismiss();
+            }
+        });
+        webView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                Logger.d("progress : " + newProgress);
+                progressBar.setProgress(newProgress);
             }
         });
 
