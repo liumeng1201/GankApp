@@ -13,6 +13,23 @@ android {
 
         multiDexEnabled true
     }
+
+    android {
+        lintOptions {
+            checkReleaseBuilds false
+            abortOnError false
+        }
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("../../myreleasekey.keystore")
+            storePassword "android"
+            keyAlias "android"
+            keyPassword "android"
+        }
+    }
+
     buildTypes {
         debug {
             minifyEnabled false
@@ -21,7 +38,10 @@ android {
 
         release {
             minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }

@@ -18,8 +18,6 @@
 
 -keepattributes Signature
 
--dontwarn android.support.v4.** –
-
 # for Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
@@ -57,4 +55,4 @@
 }
 
 # for photoview
--keey class uk.co.senab.photoview.** {*;}
+-keep class uk.co.senab.photoview.** {*;}

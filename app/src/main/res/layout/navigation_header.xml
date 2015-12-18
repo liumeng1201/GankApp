@@ -2,15 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorAccent"
+    android:background="@color/colorPrimary"
     android:gravity="center"
     android:orientation="vertical">
 
     <ImageView
+        android:id="@+id/avatar_image"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_marginTop="@dimen/drawer_margin_top"
-        android:background="@mipmap/ic_launcher" />
+        android:layout_marginTop="@dimen/drawer_margin_top" />
 
     <TextView
         android:layout_width="match_parent"
