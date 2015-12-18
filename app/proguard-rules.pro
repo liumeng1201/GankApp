@@ -53,3 +53,7 @@
 -keepclasseswithmembernames class * {
     @icepick.* <fields>;
 }
+
+-keepclasseswithmembers class * {
+    public *;
+}
