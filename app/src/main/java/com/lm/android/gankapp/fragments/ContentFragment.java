@@ -10,21 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.activities.DetailActivity;
 import com.lm.android.gankapp.activities.ImageViewActivity;
 import com.lm.android.gankapp.adapters.ContentAdapter;
+import com.lm.android.gankapp.interfaces.DatasCallback;
+import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentItemInfo;
 import com.lm.android.gankapp.models.Utils;
 import com.lm.android.gankapp.utils.LogUtils;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.Callback;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import icepick.State;
@@ -76,7 +74,7 @@ public class ContentFragment extends BaseFragment {
         request_base_url = Utils.base_category_data_url + Utils.requestCategory[mCategory] + "/" + Utils.requestNum + "/";
         datas = new ArrayList<>();
         adapter = new ContentAdapter(datas, mCategory == ContentCategory.MEIZI.getType() ? true : false);
-        adapter.setOnItemClickListener(new ContentAdapter.OnContentItemClickListener() {
+        adapter.setOnItemClickListener(new OnContentItemClickListener() {
             @Override
             public void onItemClickListener(int position) {
                 ContentItemInfo itemData = adapter.getItemData(position);
@@ -178,19 +176,5 @@ public class ContentFragment extends BaseFragment {
                 }
             }
         });
-    }
-
-    class ResponseModel {
-        boolean error;
-        ArrayList<ContentItemInfo> results;
-    }
-
-    public abstract class DatasCallback extends Callback<ArrayList<ContentItemInfo>> {
-        @Override
-        public ArrayList<ContentItemInfo> parseNetworkResponse(Response response) throws IOException {
-            String payload = response.body().string();
-            ResponseModel result = new Gson().fromJson(payload, ResponseModel.class);
-            return result.results;
-        }
     }
 }

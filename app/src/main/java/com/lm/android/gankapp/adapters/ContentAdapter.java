@@ -9,8 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.lm.android.gankapp.R;
+import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
 import com.lm.android.gankapp.models.ContentItemInfo;
+import com.orhanobut.logger.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -76,6 +79,8 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        Logger.d("onBindViewHolder");
+        Logger.json(new Gson().toJson(getItemData(position)));
         String time = getItemData(position).getPublishedAt();
         try {
             Date date = df.parse(time);
@@ -125,9 +130,5 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
                 }
             });
         }
-    }
-
-    public interface OnContentItemClickListener {
-        public void onItemClickListener(int position);
     }
 }

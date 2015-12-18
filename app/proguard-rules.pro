@@ -16,7 +16,31 @@
 #   public *;
 #}
 
+-ignorewarnings
 -keepattributes Signature
+-keepclasseswithmembers class * {
+    public *;
+}
+
+-keep interface com.lm.android.gankapp.interfaces.** {*;}
+-keep class com.lm.android.gankapp.models.** {*;}
+
+-keep public enum com.lm.android.gankapp.models.ContentCategory$** {
+    **[] $VALUES;
+    public *;
+}
+-keep public enum com.lm.android.gankapp.models.ContentType$** {
+    **[] $VALUES;
+    public *;
+}
+
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends android.app.backup.BackupAgentHelper
+-keep public class * extends android.preference.Preference
 
 # for Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
@@ -33,6 +57,7 @@
 -dontwarn com.squareup.okhttp.**
 -keep class com.squareup.okhttp.** {*;}
 -keep interface com.squareup.okhttp.** {*;}
+-keep class com.squareup.okio.** {*;}
 -dontwarn okio.**
 # okhttputils
 -keep class com.zhy.http.okhttp.** {*;}
@@ -52,8 +77,4 @@
 -keep class **$$Icepick {*;}
 -keepclasseswithmembernames class * {
     @icepick.* <fields>;
-}
-
--keepclasseswithmembers class * {
-    public *;
 }

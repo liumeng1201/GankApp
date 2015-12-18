@@ -7,7 +7,7 @@ public enum ContentType {
     NET(1), DB(2);
 
     private int type;
-    private ContentType(int _type) {
+    ContentType(int _type) {
         this.type = _type;
     }
 
