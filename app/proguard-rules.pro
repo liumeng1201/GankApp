@@ -53,6 +53,3 @@
 -keepclasseswithmembernames class * {
     @icepick.* <fields>;
 }
-
-# for photoview
--keep class uk.co.senab.photoview.** {*;}

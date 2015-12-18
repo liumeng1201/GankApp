@@ -4,7 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <uk.co.senab.photoview.PhotoView
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar" />
+
+    <com.lm.android.gankapp.component.PinchImageView
         android:id="@+id/imageview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

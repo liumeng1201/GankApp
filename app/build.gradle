@@ -79,7 +79,4 @@ dependencies {
     // icepick/icepick-processor Activity状态保存恢复
     compile 'frankiesardo:icepick:3.1.0'
     provided 'frankiesardo:icepick-processor:3.1.0'
-
-    // 图片缩放
-    compile 'com.commit451:PhotoView:1.2.4'
 }
