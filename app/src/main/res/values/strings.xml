@@ -29,4 +29,6 @@
     <string name="title_activity_detail">Details</string>
     <string name="title_content_listitem_normal">%1$s\nPost By:%2$s\nAt:%3$s</string>
     <string name="title_content_listitem_bigimage">Post By:%1$s\nAt:%2$s</string>
+
+    <string name="title_activity_imageview">Image Details</string>
 </resources>

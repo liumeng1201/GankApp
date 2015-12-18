@@ -33,14 +33,12 @@
 
         <activity
             android:name=".activities.DetailActivity"
-            android:label="@string/title_activity_detail"
-            android:parentActivityName=".activities.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.lm.android.gankapp.activities.MainActivity" />
-        </activity>
+            android:label="@string/title_activity_detail" />
 
-        <activity android:name=".activities.TestActivity" />
+        <activity
+            android:name=".activities.ImageViewActivity"
+            android:label="@string/title_activity_imageview" />
+
     </application>
 
 </manifest>

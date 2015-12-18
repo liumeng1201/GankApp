@@ -4,11 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
+    <uk.co.senab.photoview.PhotoView
+        android:id="@+id/imageview"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_margin="16dp"
-        android:max="100" />
+        android:layout_height="match_parent" />
+
 </LinearLayout>

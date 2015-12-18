@@ -26,4 +26,5 @@
     <string name="categroy_meizi">福利</string>
 
     <string name="title_activity_detail">查看详情</string>
+    <string name="title_activity_imageview">查看大图</string>
 </resources>

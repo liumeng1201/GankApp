@@ -55,3 +55,6 @@
 -keepclasseswithmembernames class * {
     @icepick.* <fields>;
 }
+
+# for photoview
+-keey class uk.co.senab.photoview.** {*;}

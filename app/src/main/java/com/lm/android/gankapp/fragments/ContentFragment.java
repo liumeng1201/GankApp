@@ -13,11 +13,12 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.activities.DetailActivity;
+import com.lm.android.gankapp.activities.ImageViewActivity;
 import com.lm.android.gankapp.adapters.ContentAdapter;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentItemInfo;
 import com.lm.android.gankapp.models.Utils;
-import com.orhanobut.logger.Logger;
+import com.lm.android.gankapp.utils.LogUtils;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -79,7 +80,12 @@ public class ContentFragment extends BaseFragment {
             @Override
             public void onItemClickListener(int position) {
                 ContentItemInfo itemData = adapter.getItemData(position);
-                DetailActivity.actionStart(getActivity(), itemData.getUrl(), itemData.getDesc());
+                LogUtils.logd("category = " + mCategory);
+                if (mCategory == ContentCategory.MEIZI.getType()) {
+                    ImageViewActivity.actionStart(getActivity(), itemData.getUrl());
+                } else {
+                    DetailActivity.actionStart(getActivity(), itemData.getUrl(), itemData.getDesc());
+                }
             }
         });
         refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
@@ -140,7 +146,7 @@ public class ContentFragment extends BaseFragment {
             pageNum++;
         }
         url = url + pageNum;
-        Logger.d(url);
+        LogUtils.logd(url);
         OkHttpUtils.get().url(url).build().execute(new DatasCallback() {
             @Override
             public void onError(Request request, Exception e) {

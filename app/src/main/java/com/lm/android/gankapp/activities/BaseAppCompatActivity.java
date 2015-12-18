@@ -3,6 +3,7 @@ package com.lm.android.gankapp.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.lm.android.gankapp.utils.LogUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import icepick.Icepick;
@@ -19,6 +20,8 @@ public class BaseAppCompatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
+
+        LogUtils.logd(getLocalClassName());
     }
 
     @Override
