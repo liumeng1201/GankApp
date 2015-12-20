@@ -20,12 +20,12 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"></style>
 
     <style name="ControlBarButtonTheme.Normal" parent="Theme.AppCompat.Light">
-        <item name="android:padding">@dimen/tile_padding</item>
-        <item name="android:tint">@color/button_grey</item>
+        <item name="android:padding">@dimen/content_padding</item>
+        <item name="android:tint">@color/normal_grey</item>
     </style>
 
     <style name="ControlBarButtonTheme.Favorite" parent="Theme.AppCompat.Light">
-        <item name="android:padding">@dimen/tile_padding</item>
+        <item name="android:padding">@dimen/content_padding</item>
         <item name="android:tint">@color/yellow</item>
     </style>
 
