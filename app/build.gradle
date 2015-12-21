@@ -79,4 +79,7 @@ dependencies {
     // icepick/icepick-processor Activity状态保存恢复
     compile 'frankiesardo:icepick:3.1.0'
     provided 'frankiesardo:icepick-processor:3.1.0'
+
+    // greenDAO
+    compile 'de.greenrobot:greendao:2.0.0'
 }
