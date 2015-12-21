@@ -28,7 +28,7 @@
 
         <item
             android:id="@+id/nav_setting"
-            android:icon="@mipmap/ic_settings_applications_white"
+            android:icon="@mipmap/ic_settings_white"
             android:tint="@color/normal_grey"
             android:title="@string/nav_setting" />
     </group>
