@@ -16,9 +16,6 @@
     </string-array>
 
     <string name="search">Search</string>
-    <string name="drawer_open">open</string>
-    <string name="drawer_close">close</string>
-
     <string name="category_android">Android</string>
     <string name="category_ios">iOS</string>
     <string name="category_web">Front-End Web</string>
@@ -26,9 +23,9 @@
     <string name="category_video">Video</string>
     <string name="categroy_meizi">MeiZi</string>
 
+    <string name="navigation_header_title">Click Avatar to Login</string>
     <string name="title_activity_detail">Details</string>
     <string name="title_content_listitem_normal">%1$s\nPost By:%2$s\nAt:%3$s</string>
     <string name="title_content_listitem_bigimage">Post By:%1$s\nAt:%2$s</string>
-
     <string name="title_activity_imageview">Image Details</string>
 </resources>

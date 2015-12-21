@@ -11,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,8 +53,7 @@ public class MainActivity extends BaseAppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer);
         navigationView = (NavigationView) findViewById(R.id.nv_main_navigation);
-        navigationHeaderView = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
-        navigationView.addHeaderView(navigationHeaderView);
+        navigationHeaderView = (LinearLayout) navigationView.getHeaderView(0);
         avatarImageView = (ImageView) navigationHeaderView.findViewById(R.id.avatar_image);
         tabs = (TabLayout) findViewById(R.id.tabs);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -71,7 +69,7 @@ public class MainActivity extends BaseAppCompatActivity {
         initNavigationMenuItemClickListener();
         setTitle(titles[0]);
         invalidateOptionsMenu();
-        Glide.with(this).load(R.drawable.tx).asBitmap().centerCrop().into(new BitmapImageViewTarget(avatarImageView) {
+        Glide.with(this).load(R.mipmap.default_avatar).asBitmap().centerCrop().into(new BitmapImageViewTarget(avatarImageView) {
             @Override
             protected void setResource(Bitmap resource) {
                 RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);

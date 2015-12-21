@@ -16,8 +16,6 @@
     </string-array>
 
     <string name="search">搜索</string>
-    <string name="drawer_open">开启</string>
-    <string name="drawer_close">关闭</string>
     <string name="category_android">Android</string>
     <string name="category_ios">iOS</string>
     <string name="category_web">前端</string>
@@ -25,6 +23,7 @@
     <string name="category_video">休息视频</string>
     <string name="categroy_meizi">福利</string>
 
+    <string name="navigation_header_title">点击头像登录</string>
     <string name="title_activity_detail">查看详情</string>
     <string name="title_activity_imageview">查看大图</string>
 </resources>
