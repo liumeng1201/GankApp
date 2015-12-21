@@ -3,7 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="content_margin">8dp</dimen>
+    <dimen name="content_margin_2x">16dp</dimen>
     <dimen name="content_padding">8dp</dimen>
+    <dimen name="content_padding_2x">16dp</dimen>
 
     <dimen name="avator_height_width">40dp</dimen>
     <dimen name="listitem_image_height">300dp</dimen>

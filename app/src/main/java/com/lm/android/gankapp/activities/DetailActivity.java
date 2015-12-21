@@ -2,13 +2,18 @@ package com.lm.android.gankapp.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.lm.android.gankapp.R;
@@ -19,6 +24,9 @@ import icepick.State;
 public class DetailActivity extends BaseAppCompatActivity {
     private WebView webView;
     private ProgressBar progressBar;
+    private ImageButton btn_favorite;
+    private ImageButton btn_zan;
+    private ImageButton btn_comment;
 
     @State
     String url;
@@ -43,12 +51,20 @@ public class DetailActivity extends BaseAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        btn_favorite = (ImageButton) findViewById(R.id.btn_favorite);
+        btn_zan = (ImageButton) findViewById(R.id.btn_share);
+        btn_comment = (ImageButton) findViewById(R.id.btn_open_in_browser);
+        progressBar = (ProgressBar) findViewById(R.id.progressbar);
+        webView = (WebView) findViewById(R.id.webview);
+
+        btn_favorite.setImageDrawable(getDrawableStateListRes(getResources(), R.mipmap.ic_favorite_white, R.color.button_favorite_color_tint_list));
+        btn_zan.setImageDrawable(getDrawableStateListRes(getResources(), R.mipmap.ic_share_white, R.color.button_normal_color_tint_list));
+        btn_comment.setImageDrawable(getDrawableStateListRes(getResources(), R.mipmap.ic_explore_white, R.color.button_normal_color_tint_list));
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressbar);
-        webView = (WebView) findViewById(R.id.webview);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -66,7 +82,7 @@ public class DetailActivity extends BaseAppCompatActivity {
                 super.onPageFinished(view, url);
             }
         });
-        webView.setWebChromeClient(new WebChromeClient(){
+        webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
@@ -83,6 +99,20 @@ public class DetailActivity extends BaseAppCompatActivity {
 
         setTitle(title);
         webView.loadUrl(url);
+    }
+
+    private Drawable getDrawableStateListRes(Resources res, int drawableId, int colorTintList) {
+        ColorStateList colorStateList;
+        Drawable drawable;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            colorStateList = res.getColorStateList(colorTintList, null);
+            drawable = DrawableCompat.wrap(res.getDrawable(drawableId, null));
+        } else {
+            colorStateList = res.getColorStateList(colorTintList);
+            drawable = DrawableCompat.wrap(res.getDrawable(drawableId));
+        }
+        DrawableCompat.setTintList(drawable, colorStateList);
+        return drawable;
     }
 
     @Override
