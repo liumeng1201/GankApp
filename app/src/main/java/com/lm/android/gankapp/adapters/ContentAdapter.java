@@ -94,23 +94,23 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
         holder.author.setText(getItemData(position).getWho());
         holder.time.setText(time);
         if (bigImage) {
-            Glide.with(context).load(getItemData(position).getUrl()).centerCrop().crossFade().into(holder.image);
+            Glide.with(context).load(getItemData(position).getUrl()).placeholder(R.mipmap.ic_launcher).centerCrop().crossFade().into(holder.image);
         } else {
             holder.title.setText(getItemData(position).getDesc());
         }
         Query query = dao.queryBuilder().where(ReadContentDao.Properties.ObjectId.eq(getItemData(position).getObjectId())).build();
         if (!ListUtils.isEmpty(query.list())) {
             if (!bigImage) {
-                holder.title.setTextColor(context.getResources().getColor(R.color.medium_grey));
+                holder.title.setTextColor(context.getResources().getColor(R.color.read));
             }
-            holder.author.setTextColor(context.getResources().getColor(R.color.medium_grey));
-            holder.time.setTextColor(context.getResources().getColor(R.color.medium_grey));
+            holder.author.setTextColor(context.getResources().getColor(R.color.read));
+            holder.time.setTextColor(context.getResources().getColor(R.color.read));
         } else {
             if (!bigImage) {
-                holder.title.setTextColor(context.getResources().getColor(R.color.dark_grey));
+                holder.title.setTextColor(context.getResources().getColor(R.color.unread));
             }
-            holder.author.setTextColor(context.getResources().getColor(R.color.dark_grey));
-            holder.time.setTextColor(context.getResources().getColor(R.color.dark_grey));
+            holder.author.setTextColor(context.getResources().getColor(R.color.unread));
+            holder.time.setTextColor(context.getResources().getColor(R.color.unread));
         }
         holder.setOnClickListener(position);
     }

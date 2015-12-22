@@ -8,4 +8,7 @@
     <color name="medium_grey">#9E9E9E</color>
     <color name="normal_grey">#757575</color>
     <color name="yellow">#FFD700</color>
+
+    <color name="read">#858585</color>
+    <color name="unread">#323232</color>
 </resources>

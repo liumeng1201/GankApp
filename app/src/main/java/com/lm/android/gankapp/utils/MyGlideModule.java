@@ -22,7 +22,6 @@ public class MyGlideModule implements GlideModule {
         int defaultBitmapPoolSize = calculator.getBitmapPoolSize();
         builder.setMemoryCache(new LruResourceCache(defaultMemoryCacheSize));
         builder.setBitmapPool(new LruBitmapPool(defaultBitmapPoolSize));
-
         builder.setDiskCache(new ExternalCacheDiskCacheFactory(context, "glideCache", 1024 * 1024 * 50));
 
         builder.setDecodeFormat(DecodeFormat.PREFER_ARGB_8888);
