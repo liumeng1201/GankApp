@@ -94,7 +94,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
         holder.author.setText(getItemData(position).getWho());
         holder.time.setText(time);
         if (bigImage) {
-            Glide.with(context).load(getItemData(position).getUrl()).placeholder(R.mipmap.ic_launcher).centerCrop().crossFade().into(holder.image);
+            Glide.with(context).load(getItemData(position).getUrl()).centerCrop().crossFade().into(holder.image);
         } else {
             holder.title.setText(getItemData(position).getDesc());
         }
