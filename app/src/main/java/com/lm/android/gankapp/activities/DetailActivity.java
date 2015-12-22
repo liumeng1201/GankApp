@@ -32,6 +32,8 @@ public class DetailActivity extends BaseAppCompatActivity {
     String url;
     @State
     String title;
+    @State
+    String objectId;
 
     /**
      * 其他Activity启动DetailsActivity操作
@@ -40,8 +42,9 @@ public class DetailActivity extends BaseAppCompatActivity {
      * @param url
      * @param title
      */
-    public static void actionStart(Context context, String url, String title) {
+    public static void actionStart(Context context, String objectId, String url, String title) {
         Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra("objectId", objectId);
         intent.putExtra("url", url);
         intent.putExtra("title", title);
         context.startActivity(intent);
@@ -95,6 +98,7 @@ public class DetailActivity extends BaseAppCompatActivity {
         if (intent != null) {
             url = intent.getStringExtra("url");
             title = intent.getStringExtra("title");
+            objectId = intent.getStringExtra("objectId");
         }
 
         setTitle(title);

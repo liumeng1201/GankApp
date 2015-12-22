@@ -10,14 +10,19 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lm.android.gankapp.R;
+import com.lm.android.gankapp.dao.DaoHelper;
+import com.lm.android.gankapp.dao.ReadContentDao;
 import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
 import com.lm.android.gankapp.models.ContentItemInfo;
+import com.lm.android.gankapp.utils.ListUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import de.greenrobot.dao.query.Query;
 
 /**
  * Created by liumeng on 2015/12/15.
@@ -30,6 +35,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
     private boolean bigImage;
 
     private OnContentItemClickListener itemClickListener;
+    private ReadContentDao dao;
 
     /**
      * @param datas 要显示的数据
@@ -72,6 +78,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
+        dao = DaoHelper.getDaoSession(context).getReadContentDao();
         return new ViewHolder(LayoutInflater.from(context), parent);
     }
 
@@ -94,6 +101,12 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
                     getItemData(position).getDesc(),
                     getItemData(position).getWho(),
                     time));
+        }
+        Query query = dao.queryBuilder().where(ReadContentDao.Properties.ObjectId.eq(getItemData(position).getObjectId())).build();
+        if (!ListUtils.isEmpty(query.list())) {
+            holder.title.setTextColor(context.getResources().getColor(R.color.medium_grey));
+        } else {
+            holder.title.setTextColor(context.getResources().getColor(R.color.dark_grey));
         }
         holder.setOnClickListener(position);
     }
@@ -122,7 +135,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    itemClickListener.onItemClickListener(position);
+                    itemClickListener.onItemClickListener(itemView, position);
                 }
             });
         }

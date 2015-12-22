@@ -8,12 +8,16 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.activities.DetailActivity;
 import com.lm.android.gankapp.activities.ImageViewActivity;
 import com.lm.android.gankapp.adapters.ContentAdapter;
+import com.lm.android.gankapp.dao.DaoHelper;
+import com.lm.android.gankapp.dao.ReadContent;
+import com.lm.android.gankapp.dao.ReadContentDao;
 import com.lm.android.gankapp.interfaces.DatasCallback;
 import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
 import com.lm.android.gankapp.models.ContentCategory;
@@ -76,14 +80,21 @@ public class ContentFragment extends BaseFragment {
         adapter = new ContentAdapter(datas, mCategory == ContentCategory.MEIZI.getType() ? true : false);
         adapter.setOnItemClickListener(new OnContentItemClickListener() {
             @Override
-            public void onItemClickListener(int position) {
+            public void onItemClickListener(View view, int position) {
                 ContentItemInfo itemData = adapter.getItemData(position);
+                ReadContentDao dao = DaoHelper.getDaoSession(getActivity()).getReadContentDao();
+                ReadContent readContent = new ReadContent();
+                readContent.setObjectId(itemData.getObjectId());
+                dao.insert(readContent);
+
                 LogUtils.logd("category = " + mCategory);
+
                 if (mCategory == ContentCategory.MEIZI.getType()) {
                     ImageViewActivity.actionStart(getActivity(), itemData.getUrl());
                 } else {
-                    DetailActivity.actionStart(getActivity(), itemData.getUrl(), itemData.getDesc());
+                    DetailActivity.actionStart(getActivity(), itemData.getObjectId(), itemData.getUrl(), itemData.getDesc());
                 }
+                ((TextView) view.findViewById(R.id.list_title)).setTextColor(getResources().getColor(R.color.medium_grey));
             }
         });
         refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
