@@ -93,8 +93,10 @@ public class ContentFragment extends BaseFragment {
                     ImageViewActivity.actionStart(getActivity(), itemData.getUrl());
                 } else {
                     DetailActivity.actionStart(getActivity(), itemData.getObjectId(), itemData.getUrl(), itemData.getDesc());
+                    ((TextView) view.findViewById(R.id.list_title)).setTextColor(getResources().getColor(R.color.medium_grey));
                 }
-                ((TextView) view.findViewById(R.id.list_title)).setTextColor(getResources().getColor(R.color.medium_grey));
+                ((TextView) view.findViewById(R.id.list_time)).setTextColor(getResources().getColor(R.color.medium_grey));
+                ((TextView) view.findViewById(R.id.list_author)).setTextColor(getResources().getColor(R.color.medium_grey));
             }
         });
         refreshListener = new SwipeRefreshLayout.OnRefreshListener() {

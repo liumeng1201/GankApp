@@ -91,22 +91,26 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        holder.author.setText(getItemData(position).getWho());
+        holder.time.setText(time);
         if (bigImage) {
             Glide.with(context).load(getItemData(position).getUrl()).centerCrop().crossFade().into(holder.image);
-            holder.title.setText(String.format(context.getString(R.string.title_content_listitem_bigimage),
-                    getItemData(position).getWho(),
-                    time));
         } else {
-            holder.title.setText(String.format(context.getString(R.string.title_content_listitem_normal),
-                    getItemData(position).getDesc(),
-                    getItemData(position).getWho(),
-                    time));
+            holder.title.setText(getItemData(position).getDesc());
         }
         Query query = dao.queryBuilder().where(ReadContentDao.Properties.ObjectId.eq(getItemData(position).getObjectId())).build();
         if (!ListUtils.isEmpty(query.list())) {
-            holder.title.setTextColor(context.getResources().getColor(R.color.medium_grey));
+            if (!bigImage) {
+                holder.title.setTextColor(context.getResources().getColor(R.color.medium_grey));
+            }
+            holder.author.setTextColor(context.getResources().getColor(R.color.medium_grey));
+            holder.time.setTextColor(context.getResources().getColor(R.color.medium_grey));
         } else {
-            holder.title.setTextColor(context.getResources().getColor(R.color.dark_grey));
+            if (!bigImage) {
+                holder.title.setTextColor(context.getResources().getColor(R.color.dark_grey));
+            }
+            holder.author.setTextColor(context.getResources().getColor(R.color.dark_grey));
+            holder.time.setTextColor(context.getResources().getColor(R.color.dark_grey));
         }
         holder.setOnClickListener(position);
     }
@@ -123,12 +127,19 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView image;
         public TextView title;
+        public TextView time;
+        public TextView author;
 
         public ViewHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(bigImage ? R.layout.listitem_content_image : R.layout.listitem_content_normal, parent, false));
 
-            image = (ImageView) itemView.findViewById(R.id.list_avatar);
-            title = (TextView) itemView.findViewById(R.id.list_title);
+            if (bigImage) {
+                image = (ImageView) itemView.findViewById(R.id.list_avatar);
+            } else {
+                title = (TextView) itemView.findViewById(R.id.list_title);
+            }
+            time = (TextView) itemView.findViewById(R.id.list_time);
+            author = (TextView) itemView.findViewById(R.id.list_author);
         }
 
         public void setOnClickListener(final int position) {
