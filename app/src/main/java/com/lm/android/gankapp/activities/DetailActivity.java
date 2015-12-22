@@ -2,14 +2,14 @@ package com.lm.android.gankapp.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -17,16 +17,19 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.lm.android.gankapp.R;
+import com.lm.android.gankapp.utils.DrawableUtils;
 import com.orhanobut.logger.Logger;
 
 import icepick.State;
 
-public class DetailActivity extends BaseAppCompatActivity {
+public class DetailActivity extends BaseAppCompatActivity implements View.OnClickListener {
     private WebView webView;
     private ProgressBar progressBar;
-    private ImageButton btn_favorite;
-    private ImageButton btn_zan;
-    private ImageButton btn_comment;
+    private ImageButton btnFavorite;
+    private ImageButton btnShare;
+    private ImageButton btnOpenInBrowser;
+
+    private GestureDetector gs = null;
 
     @State
     String url;
@@ -54,20 +57,44 @@ public class DetailActivity extends BaseAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        btn_favorite = (ImageButton) findViewById(R.id.btn_favorite);
-        btn_zan = (ImageButton) findViewById(R.id.btn_share);
-        btn_comment = (ImageButton) findViewById(R.id.btn_open_in_browser);
+        initView();
+        initWebView();
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            url = intent.getStringExtra("url");
+            title = intent.getStringExtra("title");
+            objectId = intent.getStringExtra("objectId");
+        }
+
+        setTitle(title);
+        webView.loadUrl(url);
+    }
+
+    private void initView() {
+        btnFavorite = (ImageButton) findViewById(R.id.btn_favorite);
+        btnShare = (ImageButton) findViewById(R.id.btn_share);
+        btnOpenInBrowser = (ImageButton) findViewById(R.id.btn_open_in_browser);
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
         webView = (WebView) findViewById(R.id.webview);
 
-        btn_favorite.setImageDrawable(getDrawableStateListRes(getResources(), R.mipmap.ic_favorite_white, R.color.button_favorite_color_tint_list));
-        btn_zan.setImageDrawable(getDrawableStateListRes(getResources(), R.mipmap.ic_share_white, R.color.button_normal_color_tint_list));
-        btn_comment.setImageDrawable(getDrawableStateListRes(getResources(), R.mipmap.ic_explore_white, R.color.button_normal_color_tint_list));
+        btnFavorite.setOnClickListener(this);
+        btnShare.setOnClickListener(this);
+        btnOpenInBrowser.setOnClickListener(this);
+
+        btnFavorite.setImageDrawable(DrawableUtils.getDrawableStateListRes(getResources(), R.mipmap.ic_favorite_white, R.color.button_favorite_color_tint_list));
+        btnShare.setImageDrawable(DrawableUtils.getDrawableStateListRes(getResources(), R.mipmap.ic_share_white, R.color.button_normal_color_tint_list));
+        btnOpenInBrowser.setImageDrawable(DrawableUtils.getDrawableStateListRes(getResources(), R.mipmap.ic_explore_white, R.color.button_normal_color_tint_list));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
+    private void initWebView() {
+        webView.getSettings().setSupportZoom(true);
+        webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setDisplayZoomControls(false);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -93,30 +120,24 @@ public class DetailActivity extends BaseAppCompatActivity {
                 progressBar.setProgress(newProgress);
             }
         });
-
-        Intent intent = getIntent();
-        if (intent != null) {
-            url = intent.getStringExtra("url");
-            title = intent.getStringExtra("title");
-            objectId = intent.getStringExtra("objectId");
-        }
-
-        setTitle(title);
-        webView.loadUrl(url);
-    }
-
-    private Drawable getDrawableStateListRes(Resources res, int drawableId, int colorTintList) {
-        ColorStateList colorStateList;
-        Drawable drawable;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            colorStateList = res.getColorStateList(colorTintList, null);
-            drawable = DrawableCompat.wrap(res.getDrawable(drawableId, null));
-        } else {
-            colorStateList = res.getColorStateList(colorTintList);
-            drawable = DrawableCompat.wrap(res.getDrawable(drawableId));
-        }
-        DrawableCompat.setTintList(drawable, colorStateList);
-        return drawable;
+        webView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (gs == null) {
+                    gs = new GestureDetector(DetailActivity.this,
+                            new GestureDetector.SimpleOnGestureListener() {
+                                @Override
+                                public boolean onDoubleTapEvent(MotionEvent e) {
+                                    //Double Tap
+                                    webView.zoomIn();//Zoom in
+                                    return true;
+                                }
+                            });
+                }
+                gs.onTouchEvent(event);
+                return false;
+            }
+        });
     }
 
     @Override
@@ -132,4 +153,17 @@ public class DetailActivity extends BaseAppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_favorite:
+                break;
+            case R.id.btn_share:
+                break;
+            case R.id.btn_open_in_browser:
+                Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(openBrowser);
+                break;
+        }
+    }
 }

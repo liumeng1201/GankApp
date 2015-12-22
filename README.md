@@ -18,9 +18,9 @@ gson:2.4
 okhttp:2.7.0<br>
 okio:1.6.0<br>
 // okhttp工具库<br>
-okhttputils:2.0.0
+okhttputils:2.0.2
 
-// bmob SDK<br>
+// 移动后端服务bmob SDK<br>
 bmob-im:1.1.9<br>
 bmob-sdk:3.4.3
 
@@ -29,3 +29,6 @@ leakcanary-android:1.3.1
 
 // Activity状态保存恢复<br>
 icepick:3.1.0
+
+// 数据库DAO<br>
+greendao:2.0.0

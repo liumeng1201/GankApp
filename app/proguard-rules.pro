@@ -80,7 +80,7 @@
 }
 
 # for greenDAO
--keep de.greenrobot.dao.** {*;}
+-keep class de.greenrobot.dao.** {*;}
 -keepclassmembers class * extends de.greenrobot.dao.AbstractDao {
     public static java.lang.String TABLENAME;
 }
