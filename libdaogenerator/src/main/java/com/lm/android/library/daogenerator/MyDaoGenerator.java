@@ -8,7 +8,7 @@ public class MyDaoGenerator {
     public static void main(String[] args) throws Exception {
         // 正如你所见的，你创建了一个用于添加实体（Entity）的模式（Schema）对象。
         // 两个参数分别代表：数据库版本号与自动生成代码的包路径。
-        Schema schema = new Schema(1, "com.lm.android.gankapp.greendao");
+        Schema schema = new Schema(1, "com.lm.android.gankapp.dao");
         // 当然，如果你愿意，你也可以分别指定生成的 Bean 与 DAO 类所在的目录，只要如下所示：
         // Schema schema = new Schema(1, "me.itangqi.bean");
         // schema.setDefaultJavaPackageDao("me.itangqi.dao");
@@ -18,18 +18,20 @@ public class MyDaoGenerator {
         // schema2.enableKeepSectionsByDefault();
 
         // 一旦你拥有了一个 Schema 对象后，你便可以使用它添加实体（Entities）了。
-        addNote(schema);
+        // addNote(schema);
+        addReadContent(schema);
+        addFavoriteContent(schema);
 
-        // 最后我们将使用 DAOGenerator 类的 generateAll() 方法自动生成代码，此处你需要根据自己的情况更改输出目录（既之前创建的 java-gen)。
+        // 最后我们将使用 DAOGenerator 类的 generateAll() 方法自动生成代码，此处你需要根据自己的情况更改输出目录。
         // 其实，输出目录的路径可以在 build.gradle 中设置，有兴趣的朋友可以自行搜索，这里就不再详解。
-        new DaoGenerator().generateAll(schema, "D:\\work\\eclipse\\git\\GankApp\\app\\src\\main\\greendao-gen");
+        new DaoGenerator().generateAll(schema, "D:\\work\\eclipse\\git\\GankApp\\app\\src\\main\\java");
     }
 
     private static void addNote(Schema schema) {
         // 一个实体（类）就关联到数据库中的一张表，此处表名为「Note」（既类名）
         Entity note = schema.addEntity("Note");
         // 你也可以重新给表命名
-        // note.setTableName("NODE");
+        // note.setTableName("NOTE");
 
         // greenDAO 会自动根据实体类的属性值来创建表字段，并赋予默认值
         // 接下来你便可以设置表中的字段：
@@ -41,4 +43,21 @@ public class MyDaoGenerator {
         note.addDateProperty("date");
     }
 
+    private static void addReadContent(Schema schema) {
+        Entity readContent = schema.addEntity("ReadContent");
+        readContent.addIdProperty();
+        readContent.addStringProperty("objectId").notNull();
+    }
+
+    private static void addFavoriteContent(Schema schema) {
+        Entity favoriteContent = schema.addEntity("FavoriteContent");
+        favoriteContent.addIdProperty();
+        favoriteContent.addStringProperty("objectId").notNull();
+        favoriteContent.addStringProperty("type").notNull();
+        favoriteContent.addStringProperty("desc").notNull();
+        favoriteContent.addStringProperty("url").notNull();
+        favoriteContent.addStringProperty("who").notNull();
+        favoriteContent.addStringProperty("publishedAt").notNull();
+        favoriteContent.addDateProperty("favoriteAt").notNull();
+    }
 }
