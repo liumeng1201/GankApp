@@ -8,7 +8,7 @@ public class MyDaoGenerator {
     public static void main(String[] args) throws Exception {
         // 正如你所见的，你创建了一个用于添加实体（Entity）的模式（Schema）对象。
         // 两个参数分别代表：数据库版本号与自动生成代码的包路径。
-        Schema schema = new Schema(2, "com.lm.android.gankapp.dao");
+        Schema schema = new Schema(1, "com.lm.android.gankapp.dao");
         // 当然，如果你愿意，你也可以分别指定生成的 Bean 与 DAO 类所在的目录，只要如下所示：
         // Schema schema = new Schema(1, "me.itangqi.bean");
         // schema.setDefaultJavaPackageDao("me.itangqi.dao");
@@ -24,7 +24,7 @@ public class MyDaoGenerator {
 
         // 最后我们将使用 DAOGenerator 类的 generateAll() 方法自动生成代码，此处你需要根据自己的情况更改输出目录。
         // 其实，输出目录的路径可以在 build.gradle 中设置，有兴趣的朋友可以自行搜索，这里就不再详解。
-        new DaoGenerator().generateAll(schema, "D:\\work\\eclipse\\git\\GankApp\\app\\src\\main\\java");
+        new DaoGenerator().generateAll(schema, args[0]);//"D:\\work\\eclipse\\git\\GankApp\\app\\src\\main\\java");
     }
 
     private static void addNote(Schema schema) {
@@ -47,8 +47,6 @@ public class MyDaoGenerator {
         Entity readContent = schema.addEntity("ReadContent");
         readContent.addIdProperty();
         readContent.addStringProperty("objectId").notNull();
-        readContent.addStringProperty("test");
-        readContent.addStringProperty("testtest");
     }
 
     private static void addFavoriteContent(Schema schema) {
