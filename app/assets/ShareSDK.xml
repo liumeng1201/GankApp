@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DevInfor>
+    <ShareSDK AppKey="da295bc346fa" />
+
+    <Wechat
+        AppId="wx1addf08af7a3ecb3"
+        BypassApproval="false"
+        Enable="true"
+        Id="1"
+        SortId="1" />
+    <WechatMoments
+        AppId="wx1addf08af7a3ecb3"
+        BypassApproval="false"
+        Enable="true"
+        Id="2"
+        SortId="2" />
+
+    <QQ
+        AppId="1105038320"
+        AppKey="j4bSsmYdJdZGXqdv"
+        Enable="true"
+        Id="3"
+        ShareByAppClient="true"
+        SortId="3" />
+
+    <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
+    <SinaWeibo
+        AppKey="2509157018"
+        AppSecret="a645773b215d149a3f410784f1f2cf5b"
+        Enable="true"
+        Id="4"
+        RedirectUrl="https://github.com/liumeng1201/GankApp"
+        ShareByAppClient="true"
+        SortId="4" />
+
+</DevInfor>

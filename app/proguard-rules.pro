@@ -15,6 +15,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+# signature 0a94f074e5816bc4024c010fa8e08541
 
 -ignorewarnings
 -keepattributes Signature
