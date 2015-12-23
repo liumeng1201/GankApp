@@ -3,13 +3,13 @@
     <ShareSDK AppKey="da295bc346fa" />
 
     <Wechat
-        AppId="wx1addf08af7a3ecb3"
+        AppId="wx10e2b6c7614f61ad"
         BypassApproval="false"
         Enable="true"
         Id="1"
         SortId="1" />
     <WechatMoments
-        AppId="wx1addf08af7a3ecb3"
+        AppId="wx10e2b6c7614f61ad"
         BypassApproval="false"
         Enable="true"
         Id="2"
