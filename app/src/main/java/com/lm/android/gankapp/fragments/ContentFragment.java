@@ -15,7 +15,6 @@ import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.activities.DetailActivity;
 import com.lm.android.gankapp.activities.ImageViewActivity;
 import com.lm.android.gankapp.adapters.ContentAdapter;
-import com.lm.android.gankapp.dao.DaoHelper;
 import com.lm.android.gankapp.dao.ReadContent;
 import com.lm.android.gankapp.dao.ReadContentDao;
 import com.lm.android.gankapp.interfaces.DatasCallback;
@@ -77,12 +76,12 @@ public class ContentFragment extends BaseFragment {
         }
         request_base_url = Utils.base_category_data_url + Utils.requestCategory[mCategory] + "/" + Utils.requestNum + "/";
         datas = new ArrayList<>();
-        adapter = new ContentAdapter(datas, mCategory == ContentCategory.MEIZI.getType() ? true : false);
+        adapter = new ContentAdapter(datas, mCategory == ContentCategory.MEIZI.getType() ? true : false, gankApplication.getDaoSession());
         adapter.setOnItemClickListener(new OnContentItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
                 ContentItemInfo itemData = adapter.getItemData(position);
-                ReadContentDao dao = DaoHelper.getDaoSession(getActivity()).getReadContentDao();
+                ReadContentDao dao = gankApplication.getDaoSession().getReadContentDao();
                 ReadContent readContent = new ReadContent();
                 readContent.setObjectId(itemData.getObjectId());
                 dao.insert(readContent);

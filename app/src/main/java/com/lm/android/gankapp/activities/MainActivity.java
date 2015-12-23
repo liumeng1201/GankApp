@@ -21,7 +21,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.TabAdapter;
-import com.lm.android.gankapp.dao.DaoHelper;
 import com.lm.android.gankapp.fragments.ContentFragment;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentType;
@@ -153,9 +152,4 @@ public class MainActivity extends BaseAppCompatActivity {
         return super.onPrepareOptionsPanel(view, menu);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        DaoHelper.closeDaoSession();
-    }
 }

@@ -12,6 +12,11 @@ public class LogUtils {
             Logger.d(message, args);
     }
 
+    public static void logi(String message, Object... args) {
+        if (BuildConfig.DEBUG)
+            Logger.i(message, args);
+    }
+
     public static void logw(String message, Object... args) {
         if (BuildConfig.DEBUG)
             Logger.w(message, args);

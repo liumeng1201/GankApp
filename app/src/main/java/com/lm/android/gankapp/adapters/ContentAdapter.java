@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lm.android.gankapp.R;
-import com.lm.android.gankapp.dao.DaoHelper;
+import com.lm.android.gankapp.dao.DaoSession;
 import com.lm.android.gankapp.dao.ReadContentDao;
 import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
 import com.lm.android.gankapp.models.ContentItemInfo;
@@ -35,22 +35,24 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
     private boolean bigImage;
 
     private OnContentItemClickListener itemClickListener;
-    private ReadContentDao dao;
+    private DaoSession daoSession;
 
     /**
      * @param datas 要显示的数据
      */
-    public ContentAdapter(ArrayList<ContentItemInfo> datas) {
+    public ContentAdapter(ArrayList<ContentItemInfo> datas, DaoSession daoSession) {
         this.datas = datas;
+        this.daoSession = daoSession;
     }
 
     /**
      * @param datas    要显示的数据
      * @param bigImage 是否为大图片数据
      */
-    public ContentAdapter(ArrayList<ContentItemInfo> datas, boolean bigImage) {
+    public ContentAdapter(ArrayList<ContentItemInfo> datas, boolean bigImage, DaoSession daoSession) {
         this.datas = datas;
         this.bigImage = bigImage;
+        this.daoSession = daoSession;
     }
 
     /**
@@ -78,7 +80,6 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
-        dao = DaoHelper.getDaoSession(context).getReadContentDao();
         return new ViewHolder(LayoutInflater.from(context), parent);
     }
 
@@ -98,7 +99,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
         } else {
             holder.title.setText(getItemData(position).getDesc());
         }
-        Query query = dao.queryBuilder().where(ReadContentDao.Properties.ObjectId.eq(getItemData(position).getObjectId())).build();
+        Query query = daoSession.getReadContentDao().queryBuilder().where(ReadContentDao.Properties.ObjectId.eq(getItemData(position).getObjectId())).build();
         if (!ListUtils.isEmpty(query.list())) {
             if (!bigImage) {
                 holder.title.setTextColor(context.getResources().getColor(R.color.read));
