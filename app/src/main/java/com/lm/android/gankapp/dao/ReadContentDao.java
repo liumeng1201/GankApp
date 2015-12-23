@@ -25,6 +25,8 @@ public class ReadContentDao extends AbstractDao<ReadContent, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property ObjectId = new Property(1, String.class, "objectId", false, "OBJECT_ID");
+        public final static Property Test = new Property(2, String.class, "test", false, "TEST");
+        public final static Property Testtest = new Property(3, String.class, "testtest", false, "TESTTEST");
     };
 
 
@@ -41,7 +43,9 @@ public class ReadContentDao extends AbstractDao<ReadContent, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"READ_CONTENT\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"OBJECT_ID\" TEXT NOT NULL );"); // 1: objectId
+                "\"OBJECT_ID\" TEXT NOT NULL ," + // 1: objectId
+                "\"TEST\" TEXT," + // 2: test
+                "\"TESTTEST\" TEXT);"); // 3: testtest
     }
 
     /** Drops the underlying database table. */
@@ -60,6 +64,16 @@ public class ReadContentDao extends AbstractDao<ReadContent, Long> {
             stmt.bindLong(1, id);
         }
         stmt.bindString(2, entity.getObjectId());
+ 
+        String test = entity.getTest();
+        if (test != null) {
+            stmt.bindString(3, test);
+        }
+ 
+        String testtest = entity.getTesttest();
+        if (testtest != null) {
+            stmt.bindString(4, testtest);
+        }
     }
 
     /** @inheritdoc */
@@ -73,7 +87,9 @@ public class ReadContentDao extends AbstractDao<ReadContent, Long> {
     public ReadContent readEntity(Cursor cursor, int offset) {
         ReadContent entity = new ReadContent( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getString(offset + 1) // objectId
+            cursor.getString(offset + 1), // objectId
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // test
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // testtest
         );
         return entity;
     }
@@ -83,6 +99,8 @@ public class ReadContentDao extends AbstractDao<ReadContent, Long> {
     public void readEntity(Cursor cursor, ReadContent entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setObjectId(cursor.getString(offset + 1));
+        entity.setTest(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setTesttest(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
      }
     
     /** @inheritdoc */

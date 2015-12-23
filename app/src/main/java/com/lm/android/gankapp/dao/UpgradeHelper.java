@@ -9,7 +9,7 @@ import com.lm.android.gankapp.utils.LogUtils;
  * Created by liumeng on 2015/12/23.
  */
 public class UpgradeHelper extends DaoMaster.OpenHelper {
-    private final boolean UPDATE_DB = false;
+    private final boolean UPDATE_DB = true;
 
     public UpgradeHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
         super(context, name, factory);
@@ -25,7 +25,7 @@ public class UpgradeHelper extends DaoMaster.OpenHelper {
             for (int i = oldVersion; i < newVersion; i++) {
                 LogUtils.logi("Upgrading schema from version " + oldVersion + " to " + newVersion + " by migrating all tables data");
                 // TODO 需要upgrade的表
-                MigrationHelper.getInstance().migrate(db, FavoriteContentDao.class);
+                MigrationHelper.getInstance().migrate(db, ReadContentDao.class);
             }
         }
     }
