@@ -1,1 +1,1 @@
-include ':libdaogenerator', ':app'
+include ':libdaogenerator', ':app', ':sharesdk', ':onekeyshare'
