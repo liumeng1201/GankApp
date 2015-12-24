@@ -23,8 +23,7 @@ public class MyDaoGenerator {
         addFavoriteContent(schema);
 
         // 最后我们将使用 DAOGenerator 类的 generateAll() 方法自动生成代码，此处你需要根据自己的情况更改输出目录。
-        // 其实，输出目录的路径可以在 build.gradle 中设置，有兴趣的朋友可以自行搜索，这里就不再详解。
-        new DaoGenerator().generateAll(schema, args[0]);//"D:\\work\\eclipse\\git\\GankApp\\app\\src\\main\\java");
+        new DaoGenerator().generateAll(schema, args[0]);
     }
 
     private static void addNote(Schema schema) {

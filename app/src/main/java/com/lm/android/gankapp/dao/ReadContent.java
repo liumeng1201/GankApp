@@ -9,8 +9,6 @@ public class ReadContent {
     private Long id;
     /** Not-null value. */
     private String objectId;
-    private String test;
-    private String testtest;
 
     public ReadContent() {
     }
@@ -19,11 +17,9 @@ public class ReadContent {
         this.id = id;
     }
 
-    public ReadContent(Long id, String objectId, String test, String testtest) {
+    public ReadContent(Long id, String objectId) {
         this.id = id;
         this.objectId = objectId;
-        this.test = test;
-        this.testtest = testtest;
     }
 
     public Long getId() {
@@ -42,22 +38,6 @@ public class ReadContent {
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setObjectId(String objectId) {
         this.objectId = objectId;
-    }
-
-    public String getTest() {
-        return test;
-    }
-
-    public void setTest(String test) {
-        this.test = test;
-    }
-
-    public String getTesttest() {
-        return testtest;
-    }
-
-    public void setTesttest(String testtest) {
-        this.testtest = testtest;
     }
 
 }
