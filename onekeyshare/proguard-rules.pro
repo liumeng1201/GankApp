@@ -15,3 +15,12 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-ignorewarnings
+-keepattributes Signature
+-keepclasseswithmembers class * {
+    public *;
+}
+
+# for sharesdk
+-keep class cn.sharesdk.** {*;}

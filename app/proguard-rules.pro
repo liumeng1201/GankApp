@@ -86,3 +86,6 @@
     public static java.lang.String TABLENAME;
 }
 -keep class **$Properties
+
+# for sharesdk
+-keep class cn.sharesdk.** {*;}
