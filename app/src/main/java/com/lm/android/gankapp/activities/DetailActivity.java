@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.utils.DrawableUtils;
+import com.lm.android.gankapp.utils.ShareUtils;
 import com.orhanobut.logger.Logger;
 
 import icepick.State;
@@ -159,6 +160,7 @@ public class DetailActivity extends BaseAppCompatActivity implements View.OnClic
             case R.id.btn_favorite:
                 break;
             case R.id.btn_share:
+                ShareUtils.showShare(this);
                 break;
             case R.id.btn_open_in_browser:
                 Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
