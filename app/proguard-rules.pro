@@ -89,3 +89,4 @@
 
 # for sharesdk
 -keep class cn.sharesdk.** {*;}
+-keep class com.mob.** {*;}
