@@ -26,4 +26,6 @@
     <string name="navigation_header_title">点击头像登录</string>
     <string name="title_activity_detail">查看详情</string>
     <string name="title_activity_imageview">查看大图</string>
+    <string name="share_dialog_title">分享</string>
+    <string name="listitem_share_more">更多</string>
 </resources>

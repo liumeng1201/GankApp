@@ -1,17 +1,11 @@
 package com.lm.android.gankapp.utils;
 
-import android.content.Context;
-
-import com.lm.android.gankapp.R;
-
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-
 /**
  * Created by liumeng on 2015/12/24.
  */
 public class ShareUtils {
     /** http://www.cnblogs.com/smyhvae/p/4585340.html */
+    /*
     public static void showShare(Context context) {
         ShareSDK.initSDK(context);
         OnekeyShare oks = new OnekeyShare();
@@ -36,5 +30,5 @@ public class ShareUtils {
         oks.setSiteUrl("http://sharesdk.cn");
         // 启动分享GUI
         oks.show(context);
-    }
+    }*/
 }

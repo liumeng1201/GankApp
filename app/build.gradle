@@ -80,5 +80,5 @@ dependencies {
     provided 'frankiesardo:icepick-processor:3.1.0'
     // greenDAO
     compile 'de.greenrobot:greendao:2.0.0'
-    compile project(':onekeyshare')
+    compile project(':sharesdk')
 }
