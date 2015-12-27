@@ -25,9 +25,14 @@
         <item name="android:progressDrawable">@drawable/progress</item>
     </style>
 
-    <style name="MyCustomButtonTheme">
+    <style name="MyCustomDetailsControlButtonTheme">
         <item name="android:padding">@dimen/content_padding_2x</item>
-        <item name="android:background">@drawable/button_background_selector</item>
+        <item name="android:background">@drawable/details_control_button_background_selector</item>
+    </style>
+
+    <style name="MyCustomLoginButtonTheme">
+        <item name="android:padding">@dimen/content_padding_2x</item>
+        <item name="android:background">@drawable/login_button_background_selector</item>
     </style>
 
 </resources>

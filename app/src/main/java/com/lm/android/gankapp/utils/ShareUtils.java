@@ -14,7 +14,6 @@ import com.lm.android.gankapp.adapters.ShareListAdapter;
 import com.lm.android.gankapp.component.CustomLinearLayoutManager;
 import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
 import com.lm.android.gankapp.models.SharePlatItem;
-import com.lm.android.gankapp.models.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +34,6 @@ public class ShareUtils {
     /**
      * sharesdk使用参考http://www.cnblogs.com/smyhvae/p/4585340.html
      */
-
     public static void showShare(final Context context, final String contentUrl, final String contentTitle) {
         ShareSDK.initSDK(context);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

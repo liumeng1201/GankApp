@@ -40,19 +40,19 @@
 
         <ImageButton
             android:id="@+id/btn_favorite"
-            style="@style/MyCustomButtonTheme"
+            style="@style/MyCustomDetailsControlButtonTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <ImageButton
             android:id="@+id/btn_share"
-            style="@style/MyCustomButtonTheme"
+            style="@style/MyCustomDetailsControlButtonTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <ImageButton
             android:id="@+id/btn_open_in_browser"
-            style="@style/MyCustomButtonTheme"
+            style="@style/MyCustomDetailsControlButtonTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

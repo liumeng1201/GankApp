@@ -13,6 +13,8 @@ import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.concurrent.TimeUnit;
 
+import cn.bmob.v3.Bmob;
+
 /**
  * Created by liumeng on 2015/12/14.
  */
@@ -35,6 +37,9 @@ public class GankApplication extends Application {
         // 设置okhttp全局配置
         OkHttpClient client = OkHttpUtils.getInstance().getOkHttpClient();
         client.setConnectTimeout(10000, TimeUnit.MILLISECONDS);
+
+        // 初始化bmob服务
+        Bmob.initialize(instance, "1d12db91cc13949729e6db732046c69f");
     }
 
     public static GankApplication getInstance() {

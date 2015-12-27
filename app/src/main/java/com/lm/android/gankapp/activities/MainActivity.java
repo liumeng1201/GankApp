@@ -1,5 +1,6 @@
 package com.lm.android.gankapp.activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -24,6 +25,7 @@ import com.lm.android.gankapp.adapters.TabAdapter;
 import com.lm.android.gankapp.fragments.ContentFragment;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentType;
+import com.lm.android.gankapp.utils.Utils;
 
 public class MainActivity extends BaseAppCompatActivity {
     private Toolbar toolbar;
@@ -75,6 +77,13 @@ public class MainActivity extends BaseAppCompatActivity {
                 RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
                 circularBitmapDrawable.setCircular(true);
                 avatarImageView.setImageDrawable(circularBitmapDrawable);
+            }
+        });
+        avatarImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivityForResult(intent, Utils.REQUEST_CODE_LOGIN);
             }
         });
     }
@@ -152,4 +161,13 @@ public class MainActivity extends BaseAppCompatActivity {
         return super.onPrepareOptionsPanel(view, menu);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == Utils.REQUEST_CODE_LOGIN) {
+                // TODO login success
+            }
+        }
+    }
 }

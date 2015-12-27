@@ -33,4 +33,10 @@
     <string name="share_success">Share Success</string>
     <string name="share_failed">Share Failed, Please try again</string>
     <string name="share_cancel">Share Cancel</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="username">UserName</string>
+    <string name="password">PassWord</string>
+    <string name="login">Login</string>
+    <string name="login_with_third_account">Login with third account</string>
+    <string name="register">Register</string>
 </resources>

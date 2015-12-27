@@ -10,6 +10,5 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="MyCustomTabLayoutTheme" parent="ThemeOverlay.AppCompat.Light">
-    </style>
+    <style name="MyCustomTabLayoutTheme" parent="ThemeOverlay.AppCompat.Light"></style>
 </resources>

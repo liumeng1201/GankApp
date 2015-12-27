@@ -21,7 +21,7 @@ import com.lm.android.gankapp.interfaces.DatasCallback;
 import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentItemInfo;
-import com.lm.android.gankapp.models.Utils;
+import com.lm.android.gankapp.utils.Utils;
 import com.lm.android.gankapp.utils.LogUtils;
 import com.squareup.okhttp.Request;
 import com.zhy.http.okhttp.OkHttpUtils;
