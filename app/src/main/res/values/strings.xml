@@ -30,4 +30,7 @@
     <string name="title_activity_imageview">Image Details</string>
     <string name="share_dialog_title">Share</string>
     <string name="listitem_share_more">More</string>
+    <string name="share_success">Share Success</string>
+    <string name="share_failed">Share Failed, Please try again</string>
+    <string name="share_cancel">Share Cancel</string>
 </resources>

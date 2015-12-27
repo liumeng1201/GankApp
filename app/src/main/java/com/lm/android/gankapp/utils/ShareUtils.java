@@ -1,6 +1,7 @@
 package com.lm.android.gankapp.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,15 +17,27 @@ import com.lm.android.gankapp.models.SharePlatItem;
 import com.lm.android.gankapp.models.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.wechat.friends.Wechat;
+import cn.sharesdk.wechat.moments.WechatMoments;
 
 /**
  * Created by liumeng on 2015/12/24.
  */
 public class ShareUtils {
-    /** http://www.cnblogs.com/smyhvae/p/4585340.html */
+    /**
+     * sharesdk使用参考http://www.cnblogs.com/smyhvae/p/4585340.html
+     */
 
-    public static void showShare(Context context, String contentUrl) {
+    public static void showShare(final Context context, final String contentUrl, final String contentTitle) {
+        ShareSDK.initSDK(context);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
         View convertView = LayoutInflater.from(context).inflate(R.layout.layout_share_dialog, null);
@@ -37,16 +50,67 @@ public class ShareUtils {
         platList.add(new SharePlatItem(R.drawable.ssdk_oks_skyblue_logo_sinaweibo_checked, resources.getString(R.string.ssdk_sinaweibo)));
         platList.add(new SharePlatItem(R.drawable.ic_more_horiz_white_36dp, resources.getString(R.string.listitem_share_more)));
         final ShareListAdapter shareListAdapter = new ShareListAdapter(platList);
-        shareListAdapter.setOnItemClickListener(new OnContentItemClickListener() {
-            @Override
-            public void onItemClickListener(View view, int position) {
-                Utils.getToastShort(view.getContext(), "Click " + shareListAdapter.getItem(position).getPlatName()).show();
-            }
-        });
         view.setAdapter(shareListAdapter);
         view.setLayoutManager(new CustomLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         builder.setView(convertView);
-        AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();
+        final PlatformActionListener platFormActionListener = new PlatformActionListener() {
+            @Override
+            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+                Utils.getToastShort(context, context.getString(R.string.share_success)).show();
+            }
+
+            @Override
+            public void onError(Platform platform, int i, Throwable throwable) {
+                Utils.getToastShort(context, context.getString(R.string.share_failed)).show();
+            }
+
+            @Override
+            public void onCancel(Platform platform, int i) {
+                Utils.getToastShort(context, context.getString(R.string.share_cancel)).show();
+            }
+        };
+        shareListAdapter.setOnItemClickListener(new OnContentItemClickListener() {
+            @Override
+            public void onItemClickListener(View view, int position) {
+                Platform.ShareParams sp = new Platform.ShareParams();
+                sp.setTitle(contentTitle);
+                sp.setTitleUrl(contentUrl);
+                sp.setText(contentTitle + " " + contentUrl);
+                sp.setUrl(contentUrl);
+                switch (shareListAdapter.getItem(position).getPlatImage()) {
+                    case R.drawable.ssdk_oks_skyblue_logo_wechat_checked:
+                        sp.setShareType(Platform.SHARE_WEBPAGE);
+                        Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
+                        wechat.setPlatformActionListener(platFormActionListener);
+                        wechat.share(sp);
+                        break;
+                    case R.drawable.ssdk_oks_skyblue_logo_wechatmoments_checked:
+                        sp.setShareType(Platform.SHARE_WEBPAGE);
+                        Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
+                        wechatMoments.setPlatformActionListener(platFormActionListener);
+                        wechatMoments.share(sp);
+                        break;
+                    case R.drawable.ssdk_oks_skyblue_logo_qq_checked:
+                        Platform qq = ShareSDK.getPlatform(QQ.NAME);
+                        qq.setPlatformActionListener(platFormActionListener);
+                        qq.share(sp);
+                        break;
+                    case R.drawable.ssdk_oks_skyblue_logo_sinaweibo_checked:
+                        Platform sinaWeibo = ShareSDK.getPlatform(SinaWeibo.NAME);
+                        sinaWeibo.setPlatformActionListener(platFormActionListener);
+                        sinaWeibo.share(sp);
+                        break;
+                    case R.drawable.ic_more_horiz_white_36dp:
+                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, contentTitle + " " + contentUrl);
+                        shareIntent.setType("text/plain");
+                        context.startActivity(Intent.createChooser(shareIntent, context.getResources().getString(R.string.share_dialog_title)));
+                        break;
+                }
+                dialog.dismiss();
+            }
+        });
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
