@@ -13,14 +13,13 @@ import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.ShareListAdapter;
 import com.lm.android.gankapp.component.CustomLinearLayoutManager;
 import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
+import com.lm.android.gankapp.listener.MyPlatformActionListener;
 import com.lm.android.gankapp.models.SharePlatItem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
@@ -52,22 +51,6 @@ public class ShareUtils {
         view.setLayoutManager(new CustomLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         builder.setView(convertView);
         final AlertDialog dialog = builder.create();
-        final PlatformActionListener platFormActionListener = new PlatformActionListener() {
-            @Override
-            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-                Utils.getToastShort(context, context.getString(R.string.share_success)).show();
-            }
-
-            @Override
-            public void onError(Platform platform, int i, Throwable throwable) {
-                Utils.getToastShort(context, context.getString(R.string.share_failed)).show();
-            }
-
-            @Override
-            public void onCancel(Platform platform, int i) {
-                Utils.getToastShort(context, context.getString(R.string.share_cancel)).show();
-            }
-        };
         shareListAdapter.setOnItemClickListener(new OnContentItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
@@ -80,23 +63,23 @@ public class ShareUtils {
                     case R.drawable.ssdk_oks_skyblue_logo_wechat_checked:
                         sp.setShareType(Platform.SHARE_WEBPAGE);
                         Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
-                        wechat.setPlatformActionListener(platFormActionListener);
+                        wechat.setPlatformActionListener(new MyPlatformActionListener(context));
                         wechat.share(sp);
                         break;
                     case R.drawable.ssdk_oks_skyblue_logo_wechatmoments_checked:
                         sp.setShareType(Platform.SHARE_WEBPAGE);
                         Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
-                        wechatMoments.setPlatformActionListener(platFormActionListener);
+                        wechatMoments.setPlatformActionListener(new MyPlatformActionListener(context));
                         wechatMoments.share(sp);
                         break;
                     case R.drawable.ssdk_oks_skyblue_logo_qq_checked:
                         Platform qq = ShareSDK.getPlatform(QQ.NAME);
-                        qq.setPlatformActionListener(platFormActionListener);
+                        qq.setPlatformActionListener(new MyPlatformActionListener(context));
                         qq.share(sp);
                         break;
                     case R.drawable.ssdk_oks_skyblue_logo_sinaweibo_checked:
                         Platform sinaWeibo = ShareSDK.getPlatform(SinaWeibo.NAME);
-                        sinaWeibo.setPlatformActionListener(platFormActionListener);
+                        sinaWeibo.setPlatformActionListener(new MyPlatformActionListener(context));
                         sinaWeibo.share(sp);
                         break;
                     case R.drawable.ic_more_horiz_white_36dp:
