@@ -19,8 +19,9 @@ public class MyDaoGenerator {
 
         // 一旦你拥有了一个 Schema 对象后，你便可以使用它添加实体（Entities）了。
         // addNote(schema);
-        addReadContent(schema);
-        addFavoriteContent(schema);
+        addReadTable(schema);
+        addFavoriteTable(schema);
+        addPropertyTable(schema);
 
         // 最后我们将使用 DAOGenerator 类的 generateAll() 方法自动生成代码，此处你需要根据自己的情况更改输出目录。
         new DaoGenerator().generateAll(schema, args[0]);
@@ -42,13 +43,13 @@ public class MyDaoGenerator {
         note.addDateProperty("date");
     }
 
-    private static void addReadContent(Schema schema) {
+    private static void addReadTable(Schema schema) {
         Entity readContent = schema.addEntity("ReadContent");
         readContent.addIdProperty();
         readContent.addStringProperty("objectId").notNull();
     }
 
-    private static void addFavoriteContent(Schema schema) {
+    private static void addFavoriteTable(Schema schema) {
         Entity favoriteContent = schema.addEntity("FavoriteContent");
         favoriteContent.addIdProperty();
         favoriteContent.addStringProperty("objectId").notNull();
@@ -58,5 +59,13 @@ public class MyDaoGenerator {
         favoriteContent.addStringProperty("who").notNull();
         favoriteContent.addStringProperty("publishedAt").notNull();
         favoriteContent.addDateProperty("favoriteAt").notNull();
+    }
+
+    // 用来代替SharedPreference的属性表
+    private static void addPropertyTable(Schema schema) {
+        Entity propertyContent = schema.addEntity("PropertyContent");
+        propertyContent.addIdProperty();
+        propertyContent.addStringProperty("key").notNull();
+        propertyContent.addStringProperty("value");
     }
 }
