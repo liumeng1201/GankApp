@@ -32,7 +32,7 @@
 
     <style name="MyCustomLoginButtonTheme">
         <item name="android:padding">@dimen/content_padding_2x</item>
-        <item name="android:background">@drawable/login_button_background_selector</item>
+        <item name="android:background">@drawable/btn_third_login_selector</item>
     </style>
 
 </resources>

@@ -33,7 +33,7 @@
     <string name="share_cancel">分享取消</string>
     <string name="username">用户名</string>
     <string name="password">密码</string>
-    <string name="login">登录</string>
+    <string name="login">登&#160;&#160;录</string>
     <string name="login_with_third_account">使用第三方账号登录</string>
-    <string name="register">注册</string>
+    <string name="register">注&#160;&#160;册</string>
 </resources>
