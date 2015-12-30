@@ -41,10 +41,9 @@
         <activity
             android:name=".activities.ImageViewActivity"
             android:label="@string/title_activity_imageview" />
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.RegisterActivity" />
 
-        <activity
-            android:name=".activities.LoginActivity"
-            android:label="@string/title_activity_login" />
 
         <!-- sharesdk start -->
         <activity
@@ -77,6 +76,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- sharesdk end -->
+
     </application>
 
 </manifest>

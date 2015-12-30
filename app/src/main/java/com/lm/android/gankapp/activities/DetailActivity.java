@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -24,7 +23,7 @@ import com.orhanobut.logger.Logger;
 
 import icepick.State;
 
-public class DetailActivity extends BaseAppCompatActivity implements View.OnClickListener {
+public class DetailActivity extends BaseActivity implements View.OnClickListener {
     private WebView webView;
     private ProgressBar progressBar;
     private ImageButton btnFavorite;
@@ -56,9 +55,13 @@ public class DetailActivity extends BaseAppCompatActivity implements View.OnClic
     }
 
     @Override
+    protected void setContentLayout() {
+        setContentView(R.layout.activity_detail);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
         initView();
         initWebView();
 
@@ -88,8 +91,6 @@ public class DetailActivity extends BaseAppCompatActivity implements View.OnClic
         btnShare.setImageDrawable(DrawableUtils.getDrawableStateListRes(getResources(), R.mipmap.ic_share_white, R.color.button_normal_color_tint_list));
         btnOpenInBrowser.setImageDrawable(DrawableUtils.getDrawableStateListRes(getResources(), R.mipmap.ic_explore_white, R.color.button_normal_color_tint_list));
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

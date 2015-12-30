@@ -11,7 +11,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,8 +26,7 @@ import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentType;
 import com.lm.android.gankapp.utils.Utils;
 
-public class MainActivity extends BaseAppCompatActivity {
-    private Toolbar toolbar;
+public class MainActivity extends BaseActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private TabLayout tabs;
@@ -46,13 +44,16 @@ public class MainActivity extends BaseAppCompatActivity {
     private int navItemIndex = NAV_HOME;
 
     @Override
+    protected void setContentLayout() {
+        setContentView(R.layout.activity_main);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         titles = getResources().getStringArray(R.array.slide_menu);
 
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
         drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer);
         navigationView = (NavigationView) findViewById(R.id.nv_main_navigation);
         navigationHeaderView = (LinearLayout) navigationView.getHeaderView(0);
@@ -60,7 +61,6 @@ public class MainActivity extends BaseAppCompatActivity {
         tabs = (TabLayout) findViewById(R.id.tabs);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        setSupportActionBar(toolbar);
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setHomeAsUpIndicator(R.mipmap.ic_menu_white);

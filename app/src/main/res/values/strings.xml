@@ -39,4 +39,5 @@
     <string name="login">Login</string>
     <string name="login_with_third_account">Login with third account</string>
     <string name="register">Register</string>
+    <string name="password_confirm">Confirm Password</string>
 </resources>

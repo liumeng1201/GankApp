@@ -12,6 +12,7 @@ public class Utils {
     public static int requestNum = 100;
 
     public static int REQUEST_CODE_LOGIN = 20001;
+    public static int REQUEST_CODE_REGISTER = 20002;
 
     public static Toast getToastShort(Context context, String msg) {
         return Toast.makeText(context, msg, Toast.LENGTH_SHORT);
