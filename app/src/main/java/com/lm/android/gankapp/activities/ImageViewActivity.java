@@ -43,7 +43,7 @@ public class ImageViewActivity extends BaseActivity {
         }
 
         LogUtils.logd(imageUri);
-        Glide.with(this).load(imageUri).crossFade().into(imageView);
+        Glide.with(context).load(imageUri).crossFade().into(imageView);
     }
 
     @Override

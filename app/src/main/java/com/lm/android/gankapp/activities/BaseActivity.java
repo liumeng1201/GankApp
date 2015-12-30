@@ -1,5 +1,6 @@
 package com.lm.android.gankapp.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,13 +18,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     @State
     String username; // TODO This will be automatically saved and restored
 
+    protected Context context;
     protected Toolbar toolbar;
     protected abstract void setContentLayout();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Icepick.restoreInstanceState(this, savedInstanceState);
+        context = this;
+        Icepick.restoreInstanceState(context, savedInstanceState);
         setContentLayout();
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);

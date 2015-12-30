@@ -37,4 +37,5 @@
     <string name="login_with_third_account">使用第三方账号登录</string>
     <string name="register">注&#160;&#160;册</string>
     <string name="password_confirm">确认密码</string>
+    <string name="register_edt_null">用户名、密码、确认密码不能为空</string>
 </resources>

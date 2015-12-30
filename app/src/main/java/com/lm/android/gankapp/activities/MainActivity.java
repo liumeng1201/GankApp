@@ -71,7 +71,7 @@ public class MainActivity extends BaseActivity {
         initNavigationMenuItemClickListener();
         setTitle(titles[0]);
         invalidateOptionsMenu();
-        Glide.with(this).load(R.mipmap.default_avatar).asBitmap().centerCrop().into(new BitmapImageViewTarget(avatarImageView) {
+        Glide.with(context).load(R.mipmap.default_avatar).asBitmap().centerCrop().into(new BitmapImageViewTarget(avatarImageView) {
             @Override
             protected void setResource(Bitmap resource) {
                 RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity {
         avatarImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(context, LoginActivity.class);
                 startActivityForResult(intent, Utils.REQUEST_CODE_LOGIN);
             }
         });

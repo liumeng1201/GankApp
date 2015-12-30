@@ -69,7 +69,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case R.id.btn_login:
                 break;
             case R.id.btn_register:
-                Intent toRegister = new Intent(LoginActivity.this, RegisterActivity.class);
+                Intent toRegister = new Intent(context, RegisterActivity.class);
                 startActivityForResult(toRegister, Utils.REQUEST_CODE_REGISTER);
                 break;
             case R.id.login_btn_wechat:

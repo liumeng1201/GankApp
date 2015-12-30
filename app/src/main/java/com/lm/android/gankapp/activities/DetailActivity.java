@@ -162,7 +162,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
             case R.id.btn_favorite:
                 break;
             case R.id.btn_share:
-                ShareUtils.showShare(DetailActivity.this, url, title);
+                ShareUtils.showShare(context, url, title);
                 break;
             case R.id.btn_open_in_browser:
                 Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
