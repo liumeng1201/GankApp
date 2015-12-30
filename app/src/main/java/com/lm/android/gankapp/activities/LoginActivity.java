@@ -86,7 +86,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == Utils.REQUEST_CODE_REGISTER) {
-                // TODO 注册成功
+                // 注册成功
+                setResult(RESULT_OK);
+                finish();
             }
         }
     }

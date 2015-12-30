@@ -16,15 +16,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.TabAdapter;
+import com.lm.android.gankapp.dao.PropertyContent;
+import com.lm.android.gankapp.dao.PropertyContentDao;
 import com.lm.android.gankapp.fragments.ContentFragment;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentType;
+import com.lm.android.gankapp.models.PropertyUtils;
+import com.lm.android.gankapp.utils.ListUtils;
+import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
+
+import java.util.List;
+
+import de.greenrobot.dao.query.Query;
 
 public class MainActivity extends BaseActivity {
     private DrawerLayout drawerLayout;
@@ -33,8 +43,10 @@ public class MainActivity extends BaseActivity {
     private ViewPager viewPager;
     private LinearLayout navigationHeaderView;
     private ImageView avatarImageView;
+    private TextView avatarUsername;
 
     private String[] titles;
+    private PropertyContentDao propertyContentDao;
 
     private final int NAV_HOME = 0;
     private final int NAV_FAV = 1;
@@ -53,11 +65,13 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         titles = getResources().getStringArray(R.array.slide_menu);
+        propertyContentDao = gankApplication.getDaoSession().getPropertyContentDao();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer);
         navigationView = (NavigationView) findViewById(R.id.nv_main_navigation);
         navigationHeaderView = (LinearLayout) navigationView.getHeaderView(0);
         avatarImageView = (ImageView) navigationHeaderView.findViewById(R.id.avatar_image);
+        avatarUsername = (TextView) navigationHeaderView.findViewById(R.id.avatar_name);
         tabs = (TabLayout) findViewById(R.id.tabs);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
@@ -71,21 +85,23 @@ public class MainActivity extends BaseActivity {
         initNavigationMenuItemClickListener();
         setTitle(titles[0]);
         invalidateOptionsMenu();
-        Glide.with(context).load(R.mipmap.default_avatar).asBitmap().centerCrop().into(new BitmapImageViewTarget(avatarImageView) {
-            @Override
-            protected void setResource(Bitmap resource) {
-                RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
-                circularBitmapDrawable.setCircular(true);
-                avatarImageView.setImageDrawable(circularBitmapDrawable);
-            }
-        });
+
         avatarImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, LoginActivity.class);
-                startActivityForResult(intent, Utils.REQUEST_CODE_LOGIN);
+                if (isUserLogin()) {
+
+                } else {
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    startActivityForResult(intent, Utils.REQUEST_CODE_LOGIN);
+                }
             }
         });
+        if (isUserLogin()) {
+            setUserInfo();
+        } else {
+            loadAvatar(R.mipmap.default_avatar);
+        }
     }
 
     private void initNavigationMenuItemClickListener() {
@@ -166,8 +182,66 @@ public class MainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == Utils.REQUEST_CODE_LOGIN) {
-                // TODO login success
+                // 登录成功
+                setUserInfo();
             }
         }
+    }
+
+    private boolean isUserLogin() {
+        Query nameQuery = propertyContentDao.queryBuilder().where(PropertyContentDao.Properties.Key.eq(PropertyUtils.login)).build();
+        List<PropertyContent> login = nameQuery.list();
+        if (!ListUtils.isEmpty(login)) {
+            if (!StringUtils.isEmpty(login.get(0).getValue()) && login.get(0).getValue().equalsIgnoreCase("true")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void setUserInfo() {
+        Query nameQuery = propertyContentDao.queryBuilder().where(PropertyContentDao.Properties.Key.eq(PropertyUtils.name)).build();
+        List<PropertyContent> userName = nameQuery.list();
+        if (!ListUtils.isEmpty(userName)) {
+            String name = userName.get(0).getValue();
+            if (!StringUtils.isEmpty(name)) {
+                avatarUsername.setText(name);
+            }
+        }
+
+        Query avatarQuery = propertyContentDao.queryBuilder().where(PropertyContentDao.Properties.Key.eq(PropertyUtils.avatar)).build();
+        List<PropertyContent> userAvatar = avatarQuery.list();
+        if (!ListUtils.isEmpty(userAvatar)) {
+            String avatarUrl = userAvatar.get(0).getValue();
+            if (!StringUtils.isEmpty(avatarUrl)) {
+                loadAvatar(avatarUrl);
+            } else {
+                loadAvatar(R.mipmap.default_avatar);
+            }
+        } else {
+            loadAvatar(R.mipmap.default_avatar);
+        }
+    }
+
+    private void loadAvatar(int resId) {
+        Glide.with(context).load(resId).asBitmap().centerCrop().into(new BitmapImageViewTarget(avatarImageView) {
+            @Override
+            protected void setResource(Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
+                circularBitmapDrawable.setCircular(true);
+                avatarImageView.setImageDrawable(circularBitmapDrawable);
+            }
+        });
+    }
+
+    private void loadAvatar(String url) {
+        Glide.with(context).load(url).asBitmap().centerCrop().into(new BitmapImageViewTarget(avatarImageView) {
+            @Override
+            protected void setResource(Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
+                circularBitmapDrawable.setCircular(true);
+                avatarImageView.setImageDrawable(circularBitmapDrawable);
+            }
+        });
     }
 }

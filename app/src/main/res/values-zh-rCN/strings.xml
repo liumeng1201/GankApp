@@ -38,4 +38,7 @@
     <string name="register">注&#160;&#160;册</string>
     <string name="password_confirm">确认密码</string>
     <string name="register_edt_null">用户名、密码、确认密码不能为空</string>
+    <string name="please_try_again">\n请重试</string>
+    <string name="register_success">注册成功</string>
+    <string name="password_not_equal">密码两次输入不一致</string>
 </resources>

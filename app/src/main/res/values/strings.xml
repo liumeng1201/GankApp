@@ -41,4 +41,7 @@
     <string name="register">Register</string>
     <string name="password_confirm">Confirm Password</string>
     <string name="register_edt_null">UserName/PassWord/Confirm Password can not be empty</string>
+    <string name="please_try_again">\nPlease try again</string>
+    <string name="register_success">Register Success</string>
+    <string name="password_not_equal">Password not equal</string>
 </resources>

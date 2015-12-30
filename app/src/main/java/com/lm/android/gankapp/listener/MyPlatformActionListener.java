@@ -22,16 +22,16 @@ public class MyPlatformActionListener implements PlatformActionListener {
 
     @Override
     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-        Utils.getToastShort(context, context.getString(R.string.share_success)).show();
+        Utils.showToastShort(context, context.getString(R.string.share_success));
     }
 
     @Override
     public void onError(Platform platform, int i, Throwable throwable) {
-        Utils.getToastShort(context, context.getString(R.string.share_failed)).show();
+        Utils.showToastShort(context, context.getString(R.string.share_failed));
     }
 
     @Override
     public void onCancel(Platform platform, int i) {
-        Utils.getToastShort(context, context.getString(R.string.share_cancel)).show();
+        Utils.showToastShort(context, context.getString(R.string.share_cancel));
     }
 }

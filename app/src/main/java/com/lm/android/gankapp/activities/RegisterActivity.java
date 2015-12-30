@@ -3,16 +3,21 @@ package com.lm.android.gankapp.activities;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.lm.android.gankapp.R;
+import com.lm.android.gankapp.dao.PropertyContent;
+import com.lm.android.gankapp.dao.PropertyContentDao;
+import com.lm.android.gankapp.listener.MyBmobSaveListener;
+import com.lm.android.gankapp.models.PropertyUtils;
 import com.lm.android.gankapp.models.User;
 import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
-
-import cn.bmob.v3.listener.SaveListener;
 
 public class RegisterActivity extends BaseActivity {
     private TextInputLayout edtUsername;
@@ -38,31 +43,64 @@ public class RegisterActivity extends BaseActivity {
         edtUsername = (TextInputLayout) findViewById(R.id.input_username);
         edtPassword = (TextInputLayout) findViewById(R.id.input_password);
         edtPasswordConfirm = (TextInputLayout) findViewById(R.id.input_password_again);
+        edtPasswordConfirm.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    registerOpt();
+                }
+                return true;
+            }
+        });
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Editable username = edtUsername.getEditText().getText();
-                Editable password = edtPassword.getEditText().getText();
-                Editable passwordConfirm = edtPasswordConfirm.getEditText().getText();
-                if (canRegister(username, password, passwordConfirm)) {
-                    User user = new User();
-                    user.setUsername(username.toString().trim());
-                    user.setPassword(password.toString().trim());
-                    user.signUp(context, new SaveListener() {
-                        @Override
-                        public void onSuccess() {
-                            // TODO 注册成功
-                        }
-
-                        @Override
-                        public void onFailure(int i, String s) {
-                            // TODO 注册失败
-                        }
-                    });
-                }
+                registerOpt();
             }
         });
+    }
+
+    private void registerOpt() {
+        final Editable username = edtUsername.getEditText().getText();
+        final Editable password = edtPassword.getEditText().getText();
+        Editable passwordConfirm = edtPasswordConfirm.getEditText().getText();
+        if (canRegister(username, password, passwordConfirm)) {
+            User user = new User();
+            user.setUsername(username.toString().trim());
+            user.setPassword(password.toString().trim());
+            user.signUp(context, new MyBmobSaveListener() {
+                @Override
+                protected void successOpt() {
+                    Utils.showToastShort(context, getString(R.string.register_success));
+                    PropertyContentDao dao = gankApplication.getDaoSession().getPropertyContentDao();
+
+                    PropertyContent userName = new PropertyContent();
+                    userName.setKey(PropertyUtils.name);
+                    userName.setValue(username.toString().trim());
+
+                    PropertyContent passWord = new PropertyContent();
+                    passWord.setKey(PropertyUtils.pwd);
+                    passWord.setValue(password.toString().trim());
+
+                    PropertyContent userLogin = new PropertyContent();
+                    userLogin.setKey(PropertyUtils.login);
+                    userLogin.setValue("true");
+
+                    dao.insertOrReplace(userName);
+                    dao.insertOrReplace(passWord);
+                    dao.insertOrReplace(userLogin);
+
+                    setResult(RESULT_OK);
+                    finish();
+                }
+
+                @Override
+                protected void failureOpt(int i, String s) {
+                    Utils.showToastShort(context, s + getString(R.string.please_try_again));
+                }
+            });
+        }
     }
 
     private boolean canRegister(Editable username, Editable password, Editable passwordConfirm) {
@@ -73,14 +111,15 @@ public class RegisterActivity extends BaseActivity {
                 if (password.toString().trim().equals(passwordConfirm.toString().trim())) {
                     return true;
                 } else {
+                    Utils.showToastShort(context, getString(R.string.password_not_equal));
                     return false;
                 }
             } else {
-                Utils.getToastShort(context, getString(R.string.register_edt_null));
+                Utils.showToastShort(context, getString(R.string.register_edt_null));
                 return false;
             }
         } else {
-            Utils.getToastShort(context, getString(R.string.register_edt_null));
+            Utils.showToastShort(context, getString(R.string.register_edt_null));
             return false;
         }
     }
