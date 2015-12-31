@@ -31,6 +31,7 @@ import com.lm.android.gankapp.models.PropertyUtils;
 import com.lm.android.gankapp.utils.ListUtils;
 import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -63,6 +64,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 初始化logger
+        Logger.init(getString(R.string.app_name));
 
         titles = getResources().getStringArray(R.array.slide_menu);
         propertyContentDao = gankApplication.getDaoSession().getPropertyContentDao();

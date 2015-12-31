@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.lm.android.gankapp.dao.DaoMaster;
 import com.lm.android.gankapp.dao.DaoSession;
 import com.lm.android.gankapp.dao.UpgradeHelper;
-import com.orhanobut.logger.Logger;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.OkHttpClient;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -27,9 +26,6 @@ public class GankApplication extends Application {
         super.onCreate();
 
         instance = this;
-
-        // 初始化logger
-        Logger.init(getString(R.string.app_name));
 
         // 初始化LeakCanary
         LeakCanary.install(this);
