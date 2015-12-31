@@ -9,6 +9,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.lm.android.gankapp.R;
+import com.lm.android.gankapp.dao.PropertyContentDao;
+import com.lm.android.gankapp.listener.MyBmobSaveListener;
+import com.lm.android.gankapp.models.PropertyUtils;
+import com.lm.android.gankapp.models.User;
+import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
@@ -67,6 +72,34 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_login:
+                final String name = edtUsername.getEditText().toString();
+                final String passwd = edtPassword.getEditText().toString();
+                if (canLogin(name, passwd)) {
+                    User user = new User();
+                    user.setUsername(name.trim());
+                    user.setPassword(passwd.trim());
+                    user.login(context, new MyBmobSaveListener() {
+                        @Override
+                        protected void successOpt() {
+                            // TODO 登录成功
+                            PropertyContentDao dao = gankApplication.getDaoSession().getPropertyContentDao();
+
+                            PropertyUtils.saveUserName(name.trim(), dao);
+                            PropertyUtils.saveUserPassword(passwd.trim(), dao);
+                            PropertyUtils.saveUserLoginStatus("true", dao);
+
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+
+                        @Override
+                        protected void failureOpt(int i, String s) {
+                            Utils.showToastShort(context, "登录失败\n" + s);
+                        }
+                    });
+                } else {
+                    Utils.showToastShort(context, "请输入用户名和密码");
+                }
                 break;
             case R.id.btn_register:
                 Intent toRegister = new Intent(context, RegisterActivity.class);
@@ -79,6 +112,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case R.id.login_btn_sinaweibo:
                 break;
         }
+    }
+
+    private boolean canLogin(String name, String passwd) {
+        if (!StringUtils.isEmpty(name) && !StringUtils.isEmpty(passwd)) {
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -34,7 +34,6 @@ public class ShareUtils {
      * sharesdk使用参考http://www.cnblogs.com/smyhvae/p/4585340.html
      */
     public static void showShare(final Context context, final String contentUrl, final String contentTitle) {
-        ShareSDK.initSDK(context);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
         View convertView = LayoutInflater.from(context).inflate(R.layout.layout_share_dialog, null);
@@ -51,6 +50,7 @@ public class ShareUtils {
         view.setLayoutManager(new CustomLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         builder.setView(convertView);
         final AlertDialog dialog = builder.create();
+        final MyPlatformActionListener platformActionListener = new MyPlatformActionListener(context);
         shareListAdapter.setOnItemClickListener(new OnContentItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
@@ -63,23 +63,23 @@ public class ShareUtils {
                     case R.drawable.ssdk_oks_skyblue_logo_wechat_checked:
                         sp.setShareType(Platform.SHARE_WEBPAGE);
                         Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
-                        wechat.setPlatformActionListener(new MyPlatformActionListener(context));
+                        wechat.setPlatformActionListener(platformActionListener);
                         wechat.share(sp);
                         break;
                     case R.drawable.ssdk_oks_skyblue_logo_wechatmoments_checked:
                         sp.setShareType(Platform.SHARE_WEBPAGE);
                         Platform wechatMoments = ShareSDK.getPlatform(WechatMoments.NAME);
-                        wechatMoments.setPlatformActionListener(new MyPlatformActionListener(context));
+                        wechatMoments.setPlatformActionListener(platformActionListener);
                         wechatMoments.share(sp);
                         break;
                     case R.drawable.ssdk_oks_skyblue_logo_qq_checked:
                         Platform qq = ShareSDK.getPlatform(QQ.NAME);
-                        qq.setPlatformActionListener(new MyPlatformActionListener(context));
+                        qq.setPlatformActionListener(platformActionListener);
                         qq.share(sp);
                         break;
                     case R.drawable.ssdk_oks_skyblue_logo_sinaweibo_checked:
                         Platform sinaWeibo = ShareSDK.getPlatform(SinaWeibo.NAME);
-                        sinaWeibo.setPlatformActionListener(new MyPlatformActionListener(context));
+                        sinaWeibo.setPlatformActionListener(platformActionListener);
                         sinaWeibo.share(sp);
                         break;
                     case R.drawable.ic_more_horiz_white_36dp:

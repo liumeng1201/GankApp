@@ -9,6 +9,9 @@ public class User extends BmobUser {
     // 昵称
     private String nickName;
 
+    // 头像
+    private String avatar;
+
     // 性别，0：未知，1：男，2：女
     private Integer sex;
 
@@ -48,5 +51,13 @@ public class User extends BmobUser {
 
     public void setCity(Integer city) {
         this.city = city;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

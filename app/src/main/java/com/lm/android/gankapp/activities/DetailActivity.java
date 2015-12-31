@@ -18,8 +18,8 @@ import android.widget.ProgressBar;
 
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.utils.DrawableUtils;
+import com.lm.android.gankapp.utils.LogUtils;
 import com.lm.android.gankapp.utils.ShareUtils;
-import com.orhanobut.logger.Logger;
 
 import icepick.State;
 
@@ -119,7 +119,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
-                Logger.d("progress : " + newProgress);
+                LogUtils.logd("progress : " + newProgress);
                 progressBar.setProgress(newProgress);
             }
         });

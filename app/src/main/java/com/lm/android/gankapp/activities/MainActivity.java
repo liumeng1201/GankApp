@@ -35,6 +35,7 @@ import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
+import cn.sharesdk.framework.ShareSDK;
 import de.greenrobot.dao.query.Query;
 
 public class MainActivity extends BaseActivity {
@@ -67,6 +68,8 @@ public class MainActivity extends BaseActivity {
 
         // 初始化logger
         Logger.init(getString(R.string.app_name));
+        // 初始化ShareSDK
+        ShareSDK.initSDK(context);
 
         titles = getResources().getStringArray(R.array.slide_menu);
         propertyContentDao = gankApplication.getDaoSession().getPropertyContentDao();
