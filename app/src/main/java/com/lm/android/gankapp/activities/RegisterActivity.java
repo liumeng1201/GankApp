@@ -17,7 +17,7 @@ import com.lm.android.gankapp.models.User;
 import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
 
-public class RegisterActivity extends BaseActivity {
+public class RegisterActivity extends BaseActivityWithLoadingDialog {
     private TextInputLayout edtUsername;
     private TextInputLayout edtPassword;
     private TextInputLayout edtPasswordConfirm;
@@ -34,6 +34,8 @@ public class RegisterActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.register);
         initView();
+
+        loadingDialog = Utils.getLoadingDialog(context, "注册中...");
     }
 
     private void initView() {
@@ -64,6 +66,7 @@ public class RegisterActivity extends BaseActivity {
         final Editable password = edtPassword.getEditText().getText();
         Editable passwordConfirm = edtPasswordConfirm.getEditText().getText();
         if (canRegister(username, password, passwordConfirm)) {
+            showLoadingDialog();
             User user = new User();
             user.setUsername(username.toString().trim());
             user.setPassword(password.toString().trim());
@@ -76,12 +79,15 @@ public class RegisterActivity extends BaseActivity {
                     PropertyUtils.saveUserPassword(password.toString().trim(), propertyContentDao);
                     PropertyUtils.saveUserLoginStatus("true", propertyContentDao);
 
+                    dismissLoadingDialog();
+
                     setResult(RESULT_OK);
                     finish();
                 }
 
                 @Override
                 protected void failureOpt(int i, String s) {
+                    dismissLoadingDialog();
                     Utils.showToastShort(context, s + getString(R.string.please_try_again));
                 }
             });

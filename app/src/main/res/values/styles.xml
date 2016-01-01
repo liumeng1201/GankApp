@@ -35,4 +35,10 @@
         <item name="android:background">@drawable/btn_third_login_selector</item>
     </style>
 
+    <style name="MyCustomAlertDialogTheme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:paddingLeft">@dimen/content_padding_2x</item>
+        <item name="android:paddingRight">@dimen/content_padding_2x</item>
+    </style>
+
 </resources>

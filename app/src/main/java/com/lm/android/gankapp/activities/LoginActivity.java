@@ -19,7 +19,7 @@ import com.lm.android.gankapp.models.User;
 import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivityWithLoadingDialog implements View.OnClickListener {
     private Button btnLogin;
     private Button btnRegister;
     private ImageButton btnWechat;
@@ -38,6 +38,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.login);
+
+        loadingDialog = Utils.getLoadingDialog(context, "登录中...");
 
         initView();
     }
@@ -103,6 +105,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         final Editable name = edtUsername.getEditText().getText();
         final Editable passwd = edtPassword.getEditText().getText();
         if (canLogin(name, passwd)) {
+            showLoadingDialog();
             User user = new User();
             user.setUsername(name.toString().trim());
             user.setPassword(passwd.toString().trim());
@@ -113,12 +116,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     PropertyUtils.saveUserPassword(passwd.toString().trim(), propertyContentDao);
                     PropertyUtils.saveUserLoginStatus("true", propertyContentDao);
 
+                    dismissLoadingDialog();
+
                     setResult(RESULT_OK);
                     finish();
                 }
 
                 @Override
                 protected void failureOpt(int i, String s) {
+                    dismissLoadingDialog();
                     Utils.showToastShort(context, getString(R.string.login_failed) + s);
                 }
             });

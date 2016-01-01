@@ -1,7 +1,17 @@
 package com.lm.android.gankapp.utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.lm.android.gankapp.R;
 
 /**
  * Created by liumeng on 2015/12/15.
@@ -44,5 +54,25 @@ public class Utils {
 
     public static void showToastLong(Context context, int msg) {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+    }
+
+    public static AlertDialog getLoadingDialog(Context context, String message) {
+        AlertDialog dialog = new AlertDialog.Builder(context, R.style.MyCustomAlertDialogTheme).create();
+        dialog.setCanceledOnTouchOutside(false);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_loading_dialog, null);
+        final ImageView image = (ImageView) view.findViewById(R.id.image);
+        TextView text = (TextView) view.findViewById(R.id.message);
+        if (!StringUtils.isEmpty(message)) {
+            text.setText(message);
+        }
+        dialog.setView(view);
+        final RotateAnimation rotateAnimation = (RotateAnimation) AnimationUtils.loadAnimation(context, R.anim.anim_rotate_loding);
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                image.startAnimation(rotateAnimation);
+            }
+        });
+        return dialog;
     }
 }
