@@ -41,4 +41,6 @@
     <string name="please_try_again">\n请重试</string>
     <string name="register_success">注册成功</string>
     <string name="password_not_equal">密码两次输入不一致</string>
+    <string name="login_failed">登录失败\n</string>
+    <string name="login_input_null">请输入用户名和密码</string>
 </resources>

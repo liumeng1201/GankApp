@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.lm.android.gankapp.GankApplication;
 import com.lm.android.gankapp.R;
+import com.lm.android.gankapp.dao.PropertyContentDao;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import icepick.Icepick;
@@ -17,6 +18,7 @@ import icepick.State;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     protected GankApplication gankApplication;
+    protected PropertyContentDao propertyContentDao;
 
     @State
     String username; // TODO This will be automatically saved and restored
@@ -30,6 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         context = this;
         gankApplication = GankApplication.getInstance();
+        propertyContentDao = gankApplication.getDaoSession().getPropertyContentDao();
         Icepick.restoreInstanceState(context, savedInstanceState);
         setContentLayout();
 

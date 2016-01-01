@@ -44,4 +44,6 @@
     <string name="please_try_again">\nPlease try again</string>
     <string name="register_success">Register Success</string>
     <string name="password_not_equal">Password not equal</string>
+    <string name="login_failed">Login failed\n</string>
+    <string name="login_input_null">Please input username and password</string>
 </resources>

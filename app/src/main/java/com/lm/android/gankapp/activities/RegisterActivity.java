@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.lm.android.gankapp.R;
-import com.lm.android.gankapp.dao.PropertyContentDao;
 import com.lm.android.gankapp.listener.MyBmobSaveListener;
 import com.lm.android.gankapp.models.PropertyUtils;
 import com.lm.android.gankapp.models.User;
@@ -72,11 +71,10 @@ public class RegisterActivity extends BaseActivity {
                 @Override
                 protected void successOpt() {
                     Utils.showToastShort(context, getString(R.string.register_success));
-                    PropertyContentDao dao = gankApplication.getDaoSession().getPropertyContentDao();
 
-                    PropertyUtils.saveUserName(username.toString().trim(), dao);
-                    PropertyUtils.saveUserPassword(password.toString().trim(), dao);
-                    PropertyUtils.saveUserLoginStatus("true", dao);
+                    PropertyUtils.saveUserName(username.toString().trim(), propertyContentDao);
+                    PropertyUtils.saveUserPassword(password.toString().trim(), propertyContentDao);
+                    PropertyUtils.saveUserLoginStatus("true", propertyContentDao);
 
                     setResult(RESULT_OK);
                     finish();

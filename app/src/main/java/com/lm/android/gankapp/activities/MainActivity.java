@@ -22,21 +22,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.TabAdapter;
-import com.lm.android.gankapp.dao.PropertyContent;
-import com.lm.android.gankapp.dao.PropertyContentDao;
 import com.lm.android.gankapp.fragments.ContentFragment;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentType;
 import com.lm.android.gankapp.models.PropertyUtils;
-import com.lm.android.gankapp.utils.ListUtils;
 import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
 import com.orhanobut.logger.Logger;
 
-import java.util.List;
-
 import cn.sharesdk.framework.ShareSDK;
-import de.greenrobot.dao.query.Query;
 
 public class MainActivity extends BaseActivity {
     private DrawerLayout drawerLayout;
@@ -44,11 +38,10 @@ public class MainActivity extends BaseActivity {
     private TabLayout tabs;
     private ViewPager viewPager;
     private LinearLayout navigationHeaderView;
-    private ImageView avatarImageView;
-    private TextView avatarUsername;
+    private ImageView userAvatar;
+    private TextView userDisplayName;
 
     private String[] titles;
-    private PropertyContentDao propertyContentDao;
 
     private final int NAV_HOME = 0;
     private final int NAV_FAV = 1;
@@ -64,21 +57,20 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         // 初始化logger
         Logger.init(getString(R.string.app_name));
         // 初始化ShareSDK
-        ShareSDK.initSDK(context);
+        ShareSDK.initSDK(this);
+
+        super.onCreate(savedInstanceState);
 
         titles = getResources().getStringArray(R.array.slide_menu);
-        propertyContentDao = gankApplication.getDaoSession().getPropertyContentDao();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer);
         navigationView = (NavigationView) findViewById(R.id.nv_main_navigation);
         navigationHeaderView = (LinearLayout) navigationView.getHeaderView(0);
-        avatarImageView = (ImageView) navigationHeaderView.findViewById(R.id.avatar_image);
-        avatarUsername = (TextView) navigationHeaderView.findViewById(R.id.avatar_name);
+        userAvatar = (ImageView) navigationHeaderView.findViewById(R.id.avatar_image);
+        userDisplayName = (TextView) navigationHeaderView.findViewById(R.id.avatar_name);
         tabs = (TabLayout) findViewById(R.id.tabs);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
@@ -93,10 +85,10 @@ public class MainActivity extends BaseActivity {
         setTitle(titles[0]);
         invalidateOptionsMenu();
 
-        avatarImageView.setOnClickListener(new View.OnClickListener() {
+        userAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isUserLogin()) {
+                if (PropertyUtils.getUserLoginStatus(propertyContentDao)) {
 
                 } else {
                     Intent intent = new Intent(context, LoginActivity.class);
@@ -104,11 +96,8 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-        if (isUserLogin()) {
-            setUserInfo();
-        } else {
-            loadAvatar(R.mipmap.default_avatar);
-        }
+
+        setUserInfo();
     }
 
     private void initNavigationMenuItemClickListener() {
@@ -195,59 +184,38 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private boolean isUserLogin() {
-        Query nameQuery = propertyContentDao.queryBuilder().where(PropertyContentDao.Properties.Key.eq(PropertyUtils.login)).build();
-        List<PropertyContent> login = nameQuery.list();
-        if (!ListUtils.isEmpty(login)) {
-            if (!StringUtils.isEmpty(login.get(0).getValue()) && login.get(0).getValue().equalsIgnoreCase("true")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void setUserInfo() {
-        Query nameQuery = propertyContentDao.queryBuilder().where(PropertyContentDao.Properties.Key.eq(PropertyUtils.name)).build();
-        List<PropertyContent> userName = nameQuery.list();
-        if (!ListUtils.isEmpty(userName)) {
-            String name = userName.get(0).getValue();
-            if (!StringUtils.isEmpty(name)) {
-                avatarUsername.setText(name);
-            }
+        String displayName = PropertyUtils.getUserDisplayName(propertyContentDao);
+        if (!StringUtils.isEmpty(displayName)) {
+            userDisplayName.setText(displayName);
         }
 
-        Query avatarQuery = propertyContentDao.queryBuilder().where(PropertyContentDao.Properties.Key.eq(PropertyUtils.avatar)).build();
-        List<PropertyContent> userAvatar = avatarQuery.list();
-        if (!ListUtils.isEmpty(userAvatar)) {
-            String avatarUrl = userAvatar.get(0).getValue();
-            if (!StringUtils.isEmpty(avatarUrl)) {
-                loadAvatar(avatarUrl);
-            } else {
-                loadAvatar(R.mipmap.default_avatar);
-            }
+        String avatarUrl = PropertyUtils.getUserAvatar(propertyContentDao);
+        if (!StringUtils.isEmpty(avatarUrl)) {
+            loadAvatar(avatarUrl);
         } else {
             loadAvatar(R.mipmap.default_avatar);
         }
     }
 
     private void loadAvatar(int resId) {
-        Glide.with(context).load(resId).asBitmap().centerCrop().into(new BitmapImageViewTarget(avatarImageView) {
+        Glide.with(context).load(resId).asBitmap().centerCrop().into(new BitmapImageViewTarget(userAvatar) {
             @Override
             protected void setResource(Bitmap resource) {
                 RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
                 circularBitmapDrawable.setCircular(true);
-                avatarImageView.setImageDrawable(circularBitmapDrawable);
+                userAvatar.setImageDrawable(circularBitmapDrawable);
             }
         });
     }
 
     private void loadAvatar(String url) {
-        Glide.with(context).load(url).asBitmap().centerCrop().into(new BitmapImageViewTarget(avatarImageView) {
+        Glide.with(context).load(url).asBitmap().centerCrop().into(new BitmapImageViewTarget(userAvatar) {
             @Override
             protected void setResource(Bitmap resource) {
                 RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
                 circularBitmapDrawable.setCircular(true);
-                avatarImageView.setImageDrawable(circularBitmapDrawable);
+                userAvatar.setImageDrawable(circularBitmapDrawable);
             }
         });
     }

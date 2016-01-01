@@ -227,6 +227,18 @@ public class PropertyUtils {
     }
 
     /**
+     * @param dao
+     * @return 用户名处所要显示的信息，昵称不为空则显示昵称否则显示用户名
+     */
+    public static String getUserDisplayName(PropertyContentDao dao) {
+        String nickname = getPropertyValue(PropertyUtils.nickname, dao);
+        if (!StringUtils.isEmpty(nickname)) {
+            return nickname;
+        }
+        return getPropertyValue(PropertyUtils.name, dao);
+    }
+
+    /**
      * @param key
      * @param dao
      * @return 指定key值所对应的value值
