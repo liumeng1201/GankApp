@@ -25,7 +25,7 @@ import com.lm.android.gankapp.adapters.TabAdapter;
 import com.lm.android.gankapp.fragments.ContentFragment;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentType;
-import com.lm.android.gankapp.models.PropertyUtils;
+import com.lm.android.gankapp.utils.PropertyUtils;
 import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
 import com.orhanobut.logger.Logger;

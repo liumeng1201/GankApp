@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.listener.MyBmobSaveListener;
-import com.lm.android.gankapp.models.PropertyUtils;
+import com.lm.android.gankapp.utils.PropertyUtils;
 import com.lm.android.gankapp.models.User;
 import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;

@@ -13,10 +13,13 @@ import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.ShareListAdapter;
 import com.lm.android.gankapp.component.CustomLinearLayoutManager;
 import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
+import com.lm.android.gankapp.interfaces.ThirdPartyLoginCallback;
 import com.lm.android.gankapp.listener.MyPlatformActionListener;
 import com.lm.android.gankapp.models.SharePlatItem;
+import com.lm.android.gankapp.models.ThirdPartyOptType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.sharesdk.framework.Platform;
@@ -50,7 +53,23 @@ public class ShareUtils {
         view.setLayoutManager(new CustomLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         builder.setView(convertView);
         final AlertDialog dialog = builder.create();
-        final MyPlatformActionListener platformActionListener = new MyPlatformActionListener(context);
+        ThirdPartyLoginCallback shareCallback = new ThirdPartyLoginCallback() {
+            @Override
+            public void onSuccess(Platform platform, HashMap<String, Object> result) {
+                Utils.showToastShort(context, R.string.share_success);
+            }
+
+            @Override
+            public void onFailed(Throwable throwable) {
+                Utils.showToastShort(context, R.string.share_failed);
+            }
+
+            @Override
+            public void onCancel() {
+                Utils.showToastShort(context, R.string.share_cancel);
+            }
+        };
+        final MyPlatformActionListener platformActionListener = new MyPlatformActionListener(ThirdPartyOptType.SHARE, shareCallback);
         shareListAdapter.setOnItemClickListener(new OnContentItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {

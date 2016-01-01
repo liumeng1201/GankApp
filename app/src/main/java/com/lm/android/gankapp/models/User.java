@@ -21,6 +21,12 @@ public class User extends BmobUser {
     // 市/区
     private Integer city;
 
+    // QQ
+    private String qq;
+
+    // 新浪微博
+    private String sinaWeibo;
+
     public String getNickName() {
         return nickName;
     }
@@ -59,5 +65,21 @@ public class User extends BmobUser {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
+
+    public String getSinaWeibo() {
+        return sinaWeibo;
+    }
+
+    public void setSinaWeibo(String sinaWeibo) {
+        this.sinaWeibo = sinaWeibo;
     }
 }

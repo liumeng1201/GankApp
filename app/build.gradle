@@ -22,6 +22,13 @@ android {
     }
 
     signingConfigs {
+        debug {
+            storeFile file("../../myreleasekey.keystore")
+            storePassword "android"
+            keyAlias "android"
+            keyPassword "android"
+        }
+
         release {
             storeFile file("../../myreleasekey.keystore")
             storePassword "android"
@@ -34,6 +41,7 @@ android {
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
 
         release {

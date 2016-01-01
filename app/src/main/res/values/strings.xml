@@ -46,4 +46,7 @@
     <string name="password_not_equal">Password not equal</string>
     <string name="login_failed">Login failed\n</string>
     <string name="login_input_null">Please input username and password</string>
+    <string name="login_wechat_not_support">Not support wechat for now</string>
+    <string name="login_cancel">Login cancel</string>
+    <string name="update_userinfo_failed">Update user info failed, Please try latter</string>
 </resources>

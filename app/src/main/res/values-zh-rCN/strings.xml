@@ -43,4 +43,7 @@
     <string name="password_not_equal">密码两次输入不一致</string>
     <string name="login_failed">登录失败\n</string>
     <string name="login_input_null">请输入用户名和密码</string>
+    <string name="login_wechat_not_support">暂不支持微信登录</string>
+    <string name="login_cancel">登录取消</string>
+    <string name="update_userinfo_failed">更新用户信息失败，请稍候重试</string>
 </resources>

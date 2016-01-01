@@ -1,16 +1,15 @@
-package com.lm.android.gankapp.models;
+package com.lm.android.gankapp.utils;
 
 import com.lm.android.gankapp.dao.PropertyContent;
 import com.lm.android.gankapp.dao.PropertyContentDao;
-import com.lm.android.gankapp.utils.ListUtils;
-import com.lm.android.gankapp.utils.StringUtils;
+import com.lm.android.gankapp.models.User;
 
 import java.util.List;
 
 import de.greenrobot.dao.query.Query;
 
 /**
- * 用于对PropertyContent表进行操作的工具类
+ * 用于对PropertyContent表进行操作的工具类，主要用来代替SharedPreference
  * Created by liumeng on 2015/12/30.
  */
 public class PropertyUtils {

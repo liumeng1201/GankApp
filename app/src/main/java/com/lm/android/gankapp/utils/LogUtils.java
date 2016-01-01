@@ -26,4 +26,9 @@ public class LogUtils {
         if (BuildConfig.DEBUG)
             Logger.e(message, args);
     }
+
+    public static void json(String json) {
+        if (BuildConfig.DEBUG)
+            Logger.json(json);
+    }
 }
