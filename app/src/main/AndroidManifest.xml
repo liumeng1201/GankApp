@@ -77,6 +77,15 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- sharesdk end -->
 
+        <!-- 友盟统计 start -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="56867b9f67e58e6f1f003713" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${CHANNEL_VALUE}" />
+        <!-- 友盟统计 end -->
+
     </application>
 
 </manifest>

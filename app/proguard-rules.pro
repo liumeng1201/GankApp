@@ -23,14 +23,14 @@
     public *;
 }
 
+-keepclassmembers class * {
+   public (org.json.JSONObject);
+}
+
 -keep interface com.lm.android.gankapp.interfaces.** {*;}
 -keep class com.lm.android.gankapp.models.** {*;}
 
--keep public enum com.lm.android.gankapp.models.ContentCategory$** {
-    **[] $VALUES;
-    public *;
-}
--keep public enum com.lm.android.gankapp.models.ContentType$** {
+-keep public enum com.lm.android.gankapp.models.** {
     **[] $VALUES;
     public *;
 }

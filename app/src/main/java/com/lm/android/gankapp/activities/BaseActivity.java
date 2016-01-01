@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import com.lm.android.gankapp.GankApplication;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.dao.PropertyContentDao;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import icepick.Icepick;
@@ -38,6 +39,18 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

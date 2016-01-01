@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.activities.DetailActivity;
@@ -19,10 +18,12 @@ import com.lm.android.gankapp.dao.ReadContent;
 import com.lm.android.gankapp.dao.ReadContentDao;
 import com.lm.android.gankapp.interfaces.DatasCallback;
 import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
+import com.lm.android.gankapp.listener.MyBmobSaveListener;
+import com.lm.android.gankapp.models.BmobContentItem;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentItemInfo;
-import com.lm.android.gankapp.utils.Utils;
 import com.lm.android.gankapp.utils.LogUtils;
+import com.lm.android.gankapp.utils.Utils;
 import com.squareup.okhttp.Request;
 import com.zhy.http.okhttp.OkHttpUtils;
 
@@ -80,11 +81,27 @@ public class ContentFragment extends BaseFragment {
         adapter.setOnItemClickListener(new OnContentItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
-                ContentItemInfo itemData = adapter.getItemData(position);
+                final ContentItemInfo itemData = adapter.getItemData(position);
                 ReadContentDao dao = gankApplication.getDaoSession().getReadContentDao();
                 ReadContent readContent = new ReadContent();
                 readContent.setObjectId(itemData.getObjectId());
                 dao.insertOrReplace(readContent);
+
+                BmobContentItem bmobContentItem = new BmobContentItem(itemData.getWho(),
+                        itemData.getPublishedAt(),
+                        itemData.getDesc(),
+                        itemData.getType(),
+                        itemData.getUrl(),
+                        itemData.getObjectId());
+                bmobContentItem.save(getActivity(), new MyBmobSaveListener() {
+                    @Override
+                    protected void successOpt() {
+                        LogUtils.logd("Add " + itemData.getDesc() + " to bmob db");
+                    }
+
+                    @Override
+                    protected void failureOpt(int i, String s) { }
+                });
 
                 LogUtils.logd("category = " + mCategory);
 
@@ -164,7 +181,7 @@ public class ContentFragment extends BaseFragment {
                 if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
                 }
-                Toast.makeText(getActivity(), "Error! Please retry!", Toast.LENGTH_SHORT).show();
+                Utils.showToastShort(getActivity(), "Error! Please retry!");
             }
 
             @Override
