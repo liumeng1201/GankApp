@@ -20,6 +20,7 @@ import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.utils.DrawableUtils;
 import com.lm.android.gankapp.utils.LogUtils;
 import com.lm.android.gankapp.utils.ShareUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import icepick.State;
 
@@ -74,6 +75,18 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 
         setTitle(title);
         webView.loadUrl(url);
+    }
+
+    @Override
+    public void onResume() {
+        MobclickAgent.onPageStart(getClass().getSimpleName());
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        MobclickAgent.onPageEnd(getClass().getSimpleName());
+        super.onPause();
     }
 
     private void initView() {
