@@ -1,9 +1,5 @@
 apply plugin: 'com.android.application'
 
-def releaseTime() {
-    return new Date().format("yyyy-MM-dd_HH_mm", TimeZone.getTimeZone("Asia/Shanghai"))
-}
-
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -57,25 +53,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
-
-        /*
-        releaseMultiChannel {
-            minifyEnabled true
-            zipAlignEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    def outputFile = output.outputFile
-                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                        def fileName = "gankapp_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
-                        output.outputFile = new File(outputFile.parent, fileName)
-                    }
-                }
-            }
-        }*/
     }
 
     sourceSets {
@@ -84,23 +61,6 @@ android {
         }
     }
 
-    /*
-    productFlavors {
-        other_market {}
-        baidu_mobile_assistant {}
-        google_play {}
-        huawei {}
-        leidian_search {}
-        lenovomm {}
-        meizu {}
-        oppo {}
-        tencent_android_myapp {}
-        wandoujia {}
-        xiaomi {}
-    }
-    productFlavors.all {
-        flavor -> flavor.manifestPlaceholders = [CHANNEL_VALUE: name]
-    }*/
 }
 
 dependencies {
