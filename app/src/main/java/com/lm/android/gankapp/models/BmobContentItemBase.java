@@ -5,24 +5,13 @@ import cn.bmob.v3.BmobObject;
 /**
  * Created by liumeng on 2016/1/2.
  */
-public class BmobContentItem extends BmobObject {
+public class BmobContentItemBase extends BmobObject {
     private String who;
     private String publishedAt;
     private String desc;
     private String type;
     private String url;
     private String contentObjectId;
-
-    public BmobContentItem() { }
-
-    public BmobContentItem(String who, String publishedAt, String desc, String type, String url, String contentObjectId) {
-        this.who = who;
-        this.publishedAt = publishedAt;
-        this.desc = desc;
-        this.type = type;
-        this.url = url;
-        this.contentObjectId = contentObjectId;
-    }
 
     public void setWho(String who) {
         this.who = who;

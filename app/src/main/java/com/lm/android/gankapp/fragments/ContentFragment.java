@@ -18,8 +18,6 @@ import com.lm.android.gankapp.dao.ReadContent;
 import com.lm.android.gankapp.dao.ReadContentDao;
 import com.lm.android.gankapp.interfaces.DatasCallback;
 import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
-import com.lm.android.gankapp.listener.MyBmobSaveListener;
-import com.lm.android.gankapp.models.BmobContentItem;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentItemInfo;
 import com.lm.android.gankapp.utils.LogUtils;
@@ -87,28 +85,12 @@ public class ContentFragment extends BaseFragment {
                 readContent.setObjectId(itemData.getObjectId());
                 dao.insertOrReplace(readContent);
 
-                BmobContentItem bmobContentItem = new BmobContentItem(itemData.getWho(),
-                        itemData.getPublishedAt(),
-                        itemData.getDesc(),
-                        itemData.getType(),
-                        itemData.getUrl(),
-                        itemData.getObjectId());
-                bmobContentItem.save(getActivity(), new MyBmobSaveListener() {
-                    @Override
-                    protected void successOpt() {
-                        LogUtils.logd("Add " + itemData.getDesc() + " to bmob db");
-                    }
-
-                    @Override
-                    protected void failureOpt(int i, String s) { }
-                });
-
                 LogUtils.logd("category = " + mCategory);
 
                 if (mCategory == ContentCategory.MEIZI.getType()) {
                     ImageViewActivity.actionStart(getActivity(), itemData.getUrl());
                 } else {
-                    DetailActivity.actionStart(getActivity(), itemData.getObjectId(), itemData.getUrl(), itemData.getDesc());
+                    DetailActivity.actionStart(getActivity(), itemData.getObjectId(), itemData.getUrl(), itemData.getDesc(), itemData.getWho(), itemData.getType(), itemData.getPublishedAt());
                     ((TextView) view.findViewById(R.id.list_title)).setTextColor(getResources().getColor(R.color.read));
                 }
                 ((TextView) view.findViewById(R.id.list_time)).setTextColor(getResources().getColor(R.color.read));
