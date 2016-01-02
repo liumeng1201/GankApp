@@ -58,6 +58,8 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     @State
     String publishAt;
 
+    private boolean loadFinish = false;
+
     /**
      * 其他Activity启动DetailsActivity操作
      *
@@ -203,11 +205,13 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+                loadFinish = false;
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                loadFinish = true;
             }
         });
         webView.setWebChromeClient(new WebChromeClient() {
@@ -233,14 +237,16 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 
                                 @Override
                                 public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                                    float ystart = e1.getY();
-                                    float yend = e2.getY();
-                                    if (ystart - yend > 50) {
-                                        // 向上滚动，隐藏bar
-                                        controlBar.setVisibility(View.GONE);
-                                    } else if (yend - ystart > 50) {
-                                        // 向下滚动，显示bar
-                                        controlBar.setVisibility(View.VISIBLE);
+                                    if (loadFinish) {
+                                        float ystart = e1.getY();
+                                        float yend = e2.getY();
+                                        if (ystart - yend > 50) {
+                                            // 向上滚动，隐藏bar
+                                            controlBar.setVisibility(View.GONE);
+                                        } else if (yend - ystart > 50) {
+                                            // 向下滚动，显示bar
+                                            controlBar.setVisibility(View.VISIBLE);
+                                        }
                                     }
                                     return super.onScroll(e1, e2, distanceX, distanceY);
                                 }
