@@ -23,10 +23,6 @@
     public *;
 }
 
--keepclassmembers class * {
-   public (org.json.JSONObject);
-}
-
 -keep interface com.lm.android.gankapp.interfaces.** {*;}
 -keep class com.lm.android.gankapp.models.** {*;}
 

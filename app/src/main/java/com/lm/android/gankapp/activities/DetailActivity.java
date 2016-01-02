@@ -14,13 +14,23 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.lm.android.gankapp.R;
+import com.lm.android.gankapp.listener.MyBmobFindListener;
+import com.lm.android.gankapp.listener.MyBmobSaveListener;
+import com.lm.android.gankapp.listener.MyBmobUpdateListener;
+import com.lm.android.gankapp.models.ContentItemReadHot;
 import com.lm.android.gankapp.utils.DrawableUtils;
+import com.lm.android.gankapp.utils.ListUtils;
 import com.lm.android.gankapp.utils.LogUtils;
 import com.lm.android.gankapp.utils.ShareUtils;
+import com.umeng.analytics.MobclickAgent;
 
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
 import icepick.State;
 
 public class DetailActivity extends BaseActivity implements View.OnClickListener {
@@ -29,15 +39,26 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     private ImageButton btnFavorite;
     private ImageButton btnShare;
     private ImageButton btnOpenInBrowser;
+    private LinearLayout controlBar;
 
     private GestureDetector gs = null;
+
+    private ContentItemReadHot contentItemReadHot;
 
     @State
     String url;
     @State
     String title;
     @State
-    String objectId;
+    String contentObjectId;
+    @State
+    String who;
+    @State
+    String type;
+    @State
+    String publishAt;
+
+    private boolean loadFinish = false;
 
     /**
      * 其他Activity启动DetailsActivity操作
@@ -46,11 +67,14 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
      * @param url
      * @param title
      */
-    public static void actionStart(Context context, String objectId, String url, String title) {
+    public static void actionStart(Context context, String contentObjectId, String url, String title, String who, String type, String publishAt) {
         Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("objectId", objectId);
+        intent.putExtra("contentObjectId", contentObjectId);
         intent.putExtra("url", url);
         intent.putExtra("title", title);
+        intent.putExtra("who", who);
+        intent.putExtra("type", type);
+        intent.putExtra("publishAt", publishAt);
         context.startActivity(intent);
     }
 
@@ -69,11 +93,83 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         if (intent != null) {
             url = intent.getStringExtra("url");
             title = intent.getStringExtra("title");
-            objectId = intent.getStringExtra("objectId");
+            contentObjectId = intent.getStringExtra("contentObjectId");
+            who = intent.getStringExtra("who");
+            type = intent.getStringExtra("type");
+            publishAt = intent.getStringExtra("publishAt");
+
+            BmobQuery<ContentItemReadHot> query = new BmobQuery<>();
+            query.addWhereEqualTo("contentObjectId", contentObjectId);
+            query.findObjects(context, new MyBmobFindListener<ContentItemReadHot>() {
+                @Override
+                protected void successOpt(List<ContentItemReadHot> list) {
+                    if (ListUtils.isEmpty(list)) {
+                        insertAndUpdateContent();
+                    } else {
+                        updateContent(list.get(0), list.get(0).getObjectId());
+                    }
+                }
+
+                @Override
+                protected void failureOpt(int i, String s) {
+                }
+            });
+
+
         }
 
         setTitle(title);
         webView.loadUrl(url);
+    }
+
+    /**
+     * 后台没有该条记录则插入并更新count
+     */
+    private void insertAndUpdateContent() {
+        contentItemReadHot = new ContentItemReadHot(who, publishAt, title, type, url, contentObjectId);
+        contentItemReadHot.save(context, new MyBmobSaveListener() {
+            @Override
+            protected void successOpt() {
+                LogUtils.logd("Add " + title + " to bmob db");
+                updateContent(contentItemReadHot, contentItemReadHot.getObjectId());
+            }
+
+
+            @Override
+            protected void failureOpt(int i, String s) {
+            }
+        });
+    }
+
+    /**
+     * 后台存在该条记录则只更新count
+     *
+     * @param objectId
+     */
+    private void updateContent(ContentItemReadHot contentItemReadHot, String objectId) {
+        contentItemReadHot.increment("count");
+        contentItemReadHot.update(context, objectId, new MyBmobUpdateListener() {
+            @Override
+            protected void successOpt() {
+                LogUtils.logd("update " + title + " to bmob db");
+            }
+
+            @Override
+            protected void failureOpt(int i, String s) {
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        MobclickAgent.onPageStart(getClass().getSimpleName());
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        MobclickAgent.onPageEnd(getClass().getSimpleName());
+        super.onPause();
     }
 
     private void initView() {
@@ -82,6 +178,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         btnOpenInBrowser = (ImageButton) findViewById(R.id.btn_open_in_browser);
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
         webView = (WebView) findViewById(R.id.webview);
+        controlBar = (LinearLayout) findViewById(R.id.control_bar);
 
         btnFavorite.setOnClickListener(this);
         btnShare.setOnClickListener(this);
@@ -108,11 +205,13 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+                loadFinish = false;
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                loadFinish = true;
             }
         });
         webView.setWebChromeClient(new WebChromeClient() {
@@ -134,6 +233,22 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                                     //Double Tap
                                     webView.zoomIn();//Zoom in
                                     return true;
+                                }
+
+                                @Override
+                                public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                                    if (loadFinish) {
+                                        float ystart = e1.getY();
+                                        float yend = e2.getY();
+                                        if (ystart - yend > 50) {
+                                            // 向上滚动，隐藏bar
+                                            controlBar.setVisibility(View.GONE);
+                                        } else if (yend - ystart > 50) {
+                                            // 向下滚动，显示bar
+                                            controlBar.setVisibility(View.VISIBLE);
+                                        }
+                                    }
+                                    return super.onScroll(e1, e2, distanceX, distanceY);
                                 }
                             });
                 }

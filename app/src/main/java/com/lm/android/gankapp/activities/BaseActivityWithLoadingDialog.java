@@ -4,6 +4,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 
+import com.umeng.analytics.MobclickAgent;
+
 /**
  * 带loading对话框的Activity
  * Created by liumeng on 2016/1/1.
@@ -44,6 +46,18 @@ public abstract class BaseActivityWithLoadingDialog extends BaseActivity {
      */
     protected void dismissLoadingDialog() {
         handler.sendEmptyMessage(DISMISS_LOADING);
+    }
+
+    @Override
+    public void onResume() {
+        MobclickAgent.onPageStart(getClass().getSimpleName());
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        MobclickAgent.onPageEnd(getClass().getSimpleName());
+        super.onPause();
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.component.PinchImageView;
 import com.lm.android.gankapp.utils.LogUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import icepick.State;
 
@@ -44,6 +45,18 @@ public class ImageViewActivity extends BaseActivity {
 
         LogUtils.logd(imageUri);
         Glide.with(context).load(imageUri).crossFade().into(imageView);
+    }
+
+    @Override
+    public void onResume() {
+        MobclickAgent.onPageStart(getClass().getSimpleName());
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        MobclickAgent.onPageEnd(getClass().getSimpleName());
+        super.onPause();
     }
 
     @Override
