@@ -49,4 +49,5 @@
     <string name="login_wechat_not_support">Not support wechat for now</string>
     <string name="login_cancel">Login cancel</string>
     <string name="update_userinfo_failed">Update user info failed, Please try latter</string>
+    <string name="doublic_click_exit_app">Click again to exit App</string>
 </resources>

@@ -11,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -182,6 +183,27 @@ public class MainActivity extends BaseActivity {
                 setUserInfo();
             }
         }
+    }
+
+    private long exitTime = 0;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return false;
+        }
+
+        if (keyCode == KeyEvent.KEYCODE_BACK && !drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            if (System.currentTimeMillis() - exitTime > 2000) {
+                exitTime = System.currentTimeMillis();
+                Utils.showToastShort(context, getString(R.string.doublic_click_exit_app));
+            } else {
+                finish();
+            }
+            return false;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     private void setUserInfo() {

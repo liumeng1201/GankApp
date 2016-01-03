@@ -46,4 +46,5 @@
     <string name="login_wechat_not_support">暂不支持微信登录</string>
     <string name="login_cancel">登录取消</string>
     <string name="update_userinfo_failed">更新用户信息失败，请稍候重试</string>
+    <string name="doublic_click_exit_app">再次点击退出应用</string>
 </resources>
