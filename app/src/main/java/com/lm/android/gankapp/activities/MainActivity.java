@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.lm.android.gankapp.BuildConfig;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.TabAdapter;
 import com.lm.android.gankapp.fragments.ContentFragment;
@@ -30,6 +31,7 @@ import com.lm.android.gankapp.utils.PropertyUtils;
 import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import cn.sharesdk.framework.ShareSDK;
 
@@ -62,6 +64,8 @@ public class MainActivity extends BaseActivity {
         Logger.init(getString(R.string.app_name));
         // 初始化ShareSDK
         ShareSDK.initSDK(this);
+        // 设置umeng统计是否为debug模式
+        MobclickAgent.setDebugMode(BuildConfig.DEBUG);
 
         super.onCreate(savedInstanceState);
 

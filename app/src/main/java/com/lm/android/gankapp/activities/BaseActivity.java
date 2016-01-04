@@ -12,7 +12,6 @@ import com.umeng.analytics.MobclickAgent;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import icepick.Icepick;
-import icepick.State;
 
 /**
  * Created by liumeng on 2015/12/14.
@@ -20,9 +19,6 @@ import icepick.State;
 public abstract class BaseActivity extends AppCompatActivity {
     protected GankApplication gankApplication;
     protected PropertyContentDao propertyContentDao;
-
-    @State
-    String username; // TODO This will be automatically saved and restored
 
     protected Context context;
     protected Toolbar toolbar;
@@ -44,14 +40,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart(getClass().getSimpleName());
         MobclickAgent.onResume(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd(getClass().getSimpleName());
         MobclickAgent.onPause(this);
     }
 
