@@ -7,6 +7,8 @@
     <dimen name="content_padding">8dp</dimen>
     <dimen name="content_padding_2x">16dp</dimen>
 
+    <dimen name="anim_circle_indicator_height">30dp</dimen>
+
     <dimen name="avator_height_width">40dp</dimen>
     <dimen name="listitem_image_height">300dp</dimen>
 

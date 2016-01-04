@@ -20,6 +20,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         tools:ignore="MissingTranslation">
+
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
