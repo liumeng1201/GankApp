@@ -25,12 +25,11 @@ import java.lang.reflect.Field;
  * Thanks to: https://github.com/Trinea/android-auto-scroll-view-pager
  */
 public class InfiniteIndicatorLayout extends RelativeLayout implements RecyclingPagerAdapter.DataChangeListener {
-    private final ScrollHandler handler;
+    private ScrollHandler handler;
     private PageIndicator mIndicator;
     private ViewPager mViewPager;
     private Context mContext;
     private RecyleAdapter mRecyleAdapter;
-
     public static final int DEFAULT_INTERVAL = 2500;
     public static final int LEFT = 0;
     public static final int RIGHT = 1;
@@ -46,7 +45,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
      * deliver event to parent when sliding at the last or first item *
      */
     public static final int SLIDE_BORDER_MODE_TO_PARENT = 2;
-
     /**
      * auto scroll time in milliseconds, default is {@link #DEFAULT_INTERVAL} *
      */
@@ -67,34 +65,33 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
      * how to process when sliding at the last or first item, default is {@link #SLIDE_BORDER_MODE_NONE} *
      */
     private int slideBorderMode = SLIDE_BORDER_MODE_NONE;
-
     public static final int MSG_WHAT = 0;
     private boolean isAutoScroll = false;
     private boolean isStopByTouch = false;
     private float touchX = 0f, downX = 0f;
-
     /**
      * Custome Scroller for
      */
     private CustomDurationScroller scroller = null;
-
     /**
      * Indicator Style Type,default is Circle with no Anim
      */
     public enum IndicatorType {
         Default
     }
-
     public InfiniteIndicatorLayout(Context context) {
-        this(context, null);
+        super(context);
+        initView(context, null, 0);
     }
-
     public InfiniteIndicatorLayout(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+        initView(context, attrs, 0);
     }
-
     public InfiniteIndicatorLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initView(context, attrs, defStyleAttr);
+    }
+    private void initView(Context context, AttributeSet attrs, int defStyleAttr) {
         mContext = context;
         LayoutInflater.from(context).inflate(R.layout.layout_default_indicator, this, true);
         handler = new ScrollHandler(this);
@@ -103,13 +100,10 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
         mRecyleAdapter.setDataChangeListener(this);
         mViewPager.setAdapter(mRecyleAdapter);
         setViewPagerScroller();
-
     }
-
     public <T extends BaseSliderView> void addSlider(T imageContent) {
         mRecyleAdapter.addSlider(imageContent);
     }
-
     /**
      * according page count and is loop decide the first page to display
      */
@@ -121,7 +115,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
             mViewPager.setCurrentItem(0);
         }
     }
-
     /**
      * start auto scroll, first scroll delay time is {@link #getInterval()}
      */
@@ -131,7 +124,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
             sendScrollMessage(interval);
         }
     }
-
     /**
      * start auto scroll
      *
@@ -143,7 +135,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
             sendScrollMessage(delayTimeInMills);
         }
     }
-
     /**
      * stop auto scroll
      */
@@ -151,25 +142,21 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
         isAutoScroll = false;
         handler.removeMessages(MSG_WHAT);
     }
-
     /**
      * set the factor by which the duration of sliding animation will change
      */
     public void setScrollDurationFactor(double scrollFactor) {
         scroller.setScrollDurationFactor(scrollFactor);
     }
-
     private void sendScrollMessage(long delayTimeInMills) {
         /** remove messages before, keeps one message is running at most **/
         handler.removeMessages(MSG_WHAT);
         handler.sendEmptyMessageDelayed(MSG_WHAT, delayTimeInMills);
     }
-
     private void sendScrollMessage() {
         /** remove messages before, keeps one message is running at most **/
         sendScrollMessage(interval);
     }
-
     /**
      * modify duration of ViewPager
      */
@@ -179,14 +166,12 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
             scrollerField.setAccessible(true);
             Field interpolatorField = ViewPager.class.getDeclaredField("sInterpolator");
             interpolatorField.setAccessible(true);
-
             scroller = new CustomDurationScroller(getContext(), (Interpolator) interpolatorField.get(null));
             scrollerField.set(mViewPager, scroller);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     /**
      * scroll only once
      */
@@ -197,9 +182,7 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
         if (adapter == null || (totalCount = adapter.getCount()) <= 1) {
             return;
         }
-
         int nextItem = (direction == LEFT) ? --currentItem : ++currentItem;
-
         if (nextItem < 0) {
             if (isInfinite) {
                 mViewPager.setCurrentItem(totalCount - 1);
@@ -212,7 +195,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
             mViewPager.setCurrentItem(nextItem, true);
         }
     }
-
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         int action = MotionEventCompat.getActionMasked(ev);
@@ -224,7 +206,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
                 startAutoScroll();
             }
         }
-
         if (slideBorderMode == SLIDE_BORDER_MODE_TO_PARENT || slideBorderMode == SLIDE_BORDER_MODE_CYCLE) {
             touchX = ev.getX();
             if (ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -253,24 +234,19 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
         }
         return super.dispatchTouchEvent(ev);
     }
-
     @Override
     public void notifyDataChange() {
         if (mIndicator != null)
             mIndicator.notifyDataSetChanged();
     }
-
     public static class ScrollHandler extends Handler {
         public WeakReference<InfiniteIndicatorLayout> mLeakActivityRef;
-
         public ScrollHandler(InfiniteIndicatorLayout infiniteIndicatorLayout) {
             mLeakActivityRef = new WeakReference<InfiniteIndicatorLayout>(infiniteIndicatorLayout);
         }
-
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-
             InfiniteIndicatorLayout infiniteIndicatorLayout = mLeakActivityRef.get();
             if (infiniteIndicatorLayout != null) {
                 switch (msg.what) {
@@ -283,8 +259,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
             }
         }
     }
-
-
     /**
      * get auto scroll interval time in milliseconds, default is {@link #DEFAULT_INTERVAL}
      *
@@ -293,7 +267,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
     public long getInterval() {
         return interval;
     }
-
     /**
      * set auto scroll interval time in milliseconds, default is {@link #DEFAULT_INTERVAL}
      *
@@ -302,7 +275,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
     public void setInterval(long interval) {
         this.interval = interval;
     }
-
     /**
      * get auto scroll direction
      *
@@ -311,7 +283,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
     public int getDirection() {
         return (direction == LEFT) ? LEFT : RIGHT;
     }
-
     /**
      * set auto scroll direction
      *
@@ -320,7 +291,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
     public void setDirection(int direction) {
         this.direction = direction;
     }
-
     /**
      * whether is infinite loop of viewPager , default is true
      *
@@ -329,7 +299,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
     public boolean isInfinite() {
         return isInfinite;
     }
-
     /**
      * set whether is loop when reaching the last or first item, default is true
      *
@@ -339,7 +308,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
         this.isInfinite = isInfinite;
         mRecyleAdapter.setLoop(isInfinite);
     }
-
     /**
      * whether stop auto scroll when touching, default is true
      *
@@ -348,7 +316,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
     public boolean isStopScrollWhenTouch() {
         return isStopScrollWhenTouch;
     }
-
     /**
      * set whether stop auto scroll when touching, default is true
      *
@@ -357,7 +324,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
     public void setStopScrollWhenTouch(boolean stopScrollWhenTouch) {
         this.isStopScrollWhenTouch = stopScrollWhenTouch;
     }
-
     /**
      * get how to process when sliding at the last or first item
      *
@@ -367,7 +333,6 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
     public int getSlideBorderMode() {
         return slideBorderMode;
     }
-
     /**
      * set how to process when sliding at the last or first item
      * will be explore in future version
@@ -378,57 +343,40 @@ public class InfiniteIndicatorLayout extends RelativeLayout implements Recycling
     private void setSlideBorderMode(int slideBorderMode) {
         this.slideBorderMode = slideBorderMode;
     }
-
     public PageIndicator getPagerIndicator() {
         return mIndicator;
     }
-
     public enum IndicatorPosition {
-        Center("Center_Bottom", R.id.default_center_indicator),
-        Center_Bottom("Center_Bottom", R.id.default_center_bottom_indicator),
-        Right_Bottom("Right_Bottom", R.id.default_bottom_right_indicator),
-        Left_Bottom("Left_Bottom", R.id.default_bottom_left_indicator),
-        Center_Top("Center_Top", R.id.default_center_top_indicator),
-        Right_Top("Right_Top", R.id.default_center_top_right_indicator),
-        Left_Top("Left_Top", R.id.default_center_top_left_indicator);
-
+        Center_Bottom("Center_Bottom", R.id.default_center_bottom_indicator);
         private final String name;
         private final int id;
-
         private IndicatorPosition(String name, int id) {
             this.name = name;
             this.id = id;
         }
-
         public String toString() {
             return name;
         }
-
         public int getResourceId() {
             return id;
         }
     }
-
     public void setIndicatorPosition() {
         setIndicatorPosition(IndicatorPosition.Center_Bottom);
     }
-
     public void setIndicatorPosition(IndicatorPosition presentIndicator) {
         PageIndicator pagerIndicator = (PageIndicator) findViewById(presentIndicator.getResourceId());
         setCustomIndicator(pagerIndicator);
     }
-
     public void setCustomIndicator(PageIndicator indicator) {
         initFirstPage();
         mIndicator = indicator;
         mIndicator.setViewPager(mViewPager);
     }
-
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
         if (onPageChangeListener != null)
             mIndicator.setOnPageChangeListener(onPageChangeListener);
     }
-
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
