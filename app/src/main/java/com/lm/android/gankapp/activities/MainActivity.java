@@ -96,8 +96,11 @@ public class MainActivity extends BaseActivity {
                 if (PropertyUtils.getUserLoginStatus(propertyContentDao)) {
 
                 } else {
-                    Intent intent = new Intent(context, LoginActivity.class);
-                    startActivityForResult(intent, Utils.REQUEST_CODE_LOGIN);
+                    //Intent intent = new Intent(context, LoginActivity.class);
+                    //startActivityForResult(intent, Utils.REQUEST_CODE_LOGIN);
+
+                    Intent intent = new Intent(context, MeActivity.class);
+                    startActivity(intent);
                 }
             }
         });
