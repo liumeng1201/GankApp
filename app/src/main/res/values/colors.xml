@@ -11,4 +11,5 @@
 
     <color name="read">#858585</color>
     <color name="unread">#323232</color>
+    <color name="gray">#9e9e9e</color>
 </resources>
