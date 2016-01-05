@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- infiniteindicator -->
+    <!-- infiniteindicator start -->
     <declare-styleable name="CirclePageIndicator">
         <!-- Whether or not the indicators should be centered. -->
         <attr name="centered" format="boolean" />
@@ -20,15 +20,25 @@
         <attr name="android:background" />
     </declare-styleable>
 
+    <declare-styleable name="LinePageIndicator">
+        <attr name="selectColor" format="color" />
+        <attr name="lineIndicatorWidth" format="dimension" />
+        <attr name="normalHeight" format="dimension" />
+        <attr name="selectHeight" format="dimension" />
+        <attr name="normalColor" format="color" />
+        <attr name="android:background" />
+    </declare-styleable>
+
     <declare-styleable name="InfiniteIndicatorLayout">
         <attr name="indicator_type" format="enum">
-            <enum name="indicator_default" value="0"/>
+            <enum name="indicator_circle" value="0" />
+            <enum name="indicator_line" value="1" />
         </attr>
     </declare-styleable>
 
     <declare-styleable name="ViewPagerIndicator">
         <attr name="vpiCirclePageIndicatorStyle" format="reference" />
     </declare-styleable>
-    <!-- infiniteindicator -->
+    <!-- infiniteindicator end -->
 
 </resources>

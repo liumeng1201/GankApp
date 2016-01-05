@@ -16,7 +16,7 @@ public class RecyleAdapter extends RecyclingPagerAdapter {
     private LayoutInflater inflater;
     private ArrayList<BaseSliderView> mSlederViews;
     private boolean isLoop = true;
-    DataChangeListener mDataChangeListener;
+    RecyclingPagerAdapter.DataChangeListener mDataChangeListener;
 
     public RecyleAdapter(Context context) {
         mContext = context;
