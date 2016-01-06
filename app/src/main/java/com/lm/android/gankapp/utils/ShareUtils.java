@@ -19,7 +19,6 @@ import com.lm.android.gankapp.models.SharePlatItem;
 import com.lm.android.gankapp.models.ThirdPartyOptType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import cn.sharesdk.framework.Platform;
@@ -34,9 +33,15 @@ import cn.sharesdk.wechat.moments.WechatMoments;
  */
 public class ShareUtils {
     /**
+     * 显示分享dialog
      * sharesdk使用参考http://www.cnblogs.com/smyhvae/p/4585340.html
+     *
+     * @param context
+     * @param contentUrl  要分享的网址url，可以为空
+     * @param contentText 要分享的内容，可以为空
+     * @param imageUrl    要分享的图片的url，可以为空
      */
-    public static void showShare(final Context context, final String contentUrl, final String contentTitle) {
+    public static void showShare(final Context context, ThirdPartyLoginCallback shareCallback, final String contentUrl, final String contentText, final String imageUrl) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
         View convertView = LayoutInflater.from(context).inflate(R.layout.layout_share_dialog, null);
@@ -53,31 +58,20 @@ public class ShareUtils {
         view.setLayoutManager(new CustomLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         builder.setView(convertView);
         final AlertDialog dialog = builder.create();
-        ThirdPartyLoginCallback shareCallback = new ThirdPartyLoginCallback() {
-            @Override
-            public void onSuccess(Platform platform, HashMap<String, Object> result) {
-                Utils.showToastShort(context, R.string.share_success);
-            }
-
-            @Override
-            public void onFailed(Throwable throwable) {
-                Utils.showToastShort(context, R.string.share_failed);
-            }
-
-            @Override
-            public void onCancel() {
-                Utils.showToastShort(context, R.string.share_cancel);
-            }
-        };
         final MyPlatformActionListener platformActionListener = new MyPlatformActionListener(ThirdPartyOptType.SHARE, shareCallback);
         shareListAdapter.setOnItemClickListener(new OnContentItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
                 Platform.ShareParams sp = new Platform.ShareParams();
-                sp.setTitle(contentTitle);
-                sp.setTitleUrl(contentUrl);
-                sp.setText(contentTitle + " " + contentUrl);
-                sp.setUrl(contentUrl);
+                sp.setTitle(context.getString(R.string.app_name));
+                sp.setTitleUrl(Utils.share_title_url);
+                if (!StringUtils.isEmpty(contentUrl)) {
+                    sp.setText(contentText + " " + contentUrl);
+                    sp.setUrl(contentUrl);
+                }
+                if (!StringUtils.isEmpty(imageUrl)) {
+                    sp.setImageUrl(imageUrl);
+                }
                 switch (shareListAdapter.getItem(position).getPlatImage()) {
                     case R.drawable.ssdk_oks_skyblue_logo_wechat_checked:
                         sp.setShareType(Platform.SHARE_WEBPAGE);
@@ -103,7 +97,17 @@ public class ShareUtils {
                         break;
                     case R.drawable.ic_more_horiz_white_36dp:
                         Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                        shareIntent.putExtra(Intent.EXTRA_TEXT, contentTitle + " " + contentUrl);
+                        String shareText = context.getString(R.string.app_name);
+                        if (!StringUtils.isEmpty(contentText)) {
+                            shareText = shareText + "\n" + contentText;
+                        }
+                        if (!StringUtils.isEmpty(contentUrl)) {
+                            shareText = shareText + "\n" + contentUrl;
+                        }
+                        if (!StringUtils.isEmpty(imageUrl)) {
+                            shareText = shareText + "\n" + imageUrl;
+                        }
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
                         shareIntent.setType("text/plain");
                         context.startActivity(Intent.createChooser(shareIntent, context.getResources().getString(R.string.share_dialog_title)));
                         break;

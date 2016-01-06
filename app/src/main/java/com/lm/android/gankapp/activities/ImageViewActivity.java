@@ -10,11 +10,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.component.PinchImageView;
+import com.lm.android.gankapp.interfaces.ThirdPartyLoginCallback;
 import com.lm.android.gankapp.utils.FileUtils;
 import com.lm.android.gankapp.utils.ImageUtils;
+import com.lm.android.gankapp.utils.ShareUtils;
 import com.lm.android.gankapp.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.HashMap;
+
+import cn.sharesdk.framework.Platform;
 import icepick.State;
 
 /**
@@ -25,6 +30,8 @@ public class ImageViewActivity extends BaseActivity {
     String imageUri;
     @State
     String objectId;
+
+    private ThirdPartyLoginCallback shareCallback;
 
     private PinchImageView imageView;
 
@@ -44,6 +51,23 @@ public class ImageViewActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        shareCallback = new ThirdPartyLoginCallback() {
+            @Override
+            public void onSuccess(Platform platform, HashMap<String, Object> result) {
+                Utils.showToastShort(context, R.string.share_success);
+            }
+
+            @Override
+            public void onFailed(Throwable throwable) {
+                Utils.showToastShort(context, R.string.share_failed);
+            }
+
+            @Override
+            public void onCancel() {
+                Utils.showToastShort(context, R.string.share_cancel);
+            }
+        };
 
         imageView = (PinchImageView) findViewById(R.id.imageview);
         if (getIntent() != null) {
@@ -81,6 +105,7 @@ public class ImageViewActivity extends BaseActivity {
                 finish();
                 return true;
             case R.id.action_share:
+                ShareUtils.showShare(context, shareCallback, null, null, imageUri);
                 return true;
             case R.id.action_save:
                 saveImage();

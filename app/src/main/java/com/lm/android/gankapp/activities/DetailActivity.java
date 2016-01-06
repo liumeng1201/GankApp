@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.lm.android.gankapp.R;
+import com.lm.android.gankapp.interfaces.ThirdPartyLoginCallback;
 import com.lm.android.gankapp.listener.MyBmobFindListener;
 import com.lm.android.gankapp.listener.MyBmobSaveListener;
 import com.lm.android.gankapp.listener.MyBmobUpdateListener;
@@ -26,11 +27,14 @@ import com.lm.android.gankapp.utils.DrawableUtils;
 import com.lm.android.gankapp.utils.ListUtils;
 import com.lm.android.gankapp.utils.LogUtils;
 import com.lm.android.gankapp.utils.ShareUtils;
+import com.lm.android.gankapp.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.HashMap;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.sharesdk.framework.Platform;
 import icepick.State;
 
 public class DetailActivity extends BaseActivity implements View.OnClickListener {
@@ -57,6 +61,8 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     String type;
     @State
     String publishAt;
+
+    private ThirdPartyLoginCallback shareCallback;
 
     private boolean loadFinish = false;
 
@@ -89,6 +95,23 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         initView();
         initWebView();
 
+        shareCallback = new ThirdPartyLoginCallback() {
+            @Override
+            public void onSuccess(Platform platform, HashMap<String, Object> result) {
+                Utils.showToastShort(context, R.string.share_success);
+            }
+
+            @Override
+            public void onFailed(Throwable throwable) {
+                Utils.showToastShort(context, R.string.share_failed);
+            }
+
+            @Override
+            public void onCancel() {
+                Utils.showToastShort(context, R.string.share_cancel);
+            }
+        };
+
         Intent intent = getIntent();
         if (intent != null) {
             url = intent.getStringExtra("url");
@@ -114,8 +137,6 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                 protected void failureOpt(int i, String s) {
                 }
             });
-
-
         }
 
         setTitle(title);
@@ -277,7 +298,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
             case R.id.btn_favorite:
                 break;
             case R.id.btn_share:
-                ShareUtils.showShare(context, url, title);
+                ShareUtils.showShare(context, shareCallback, url, title, null);
                 break;
             case R.id.btn_open_in_browser:
                 Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
