@@ -66,6 +66,8 @@ public class MainActivity extends BaseActivity {
         ShareSDK.initSDK(this);
         // 设置umeng统计是否为debug模式
         MobclickAgent.setDebugMode(BuildConfig.DEBUG);
+        // 禁止umeng统计默认的统计行为
+        MobclickAgent.openActivityDurationTrack(false);
 
         super.onCreate(savedInstanceState);
 
@@ -94,13 +96,11 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (PropertyUtils.getUserLoginStatus(propertyContentDao)) {
-
-                } else {
-                    //Intent intent = new Intent(context, LoginActivity.class);
-                    //startActivityForResult(intent, Utils.REQUEST_CODE_LOGIN);
-
                     Intent intent = new Intent(context, MeActivity.class);
                     startActivity(intent);
+                } else {
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    startActivityForResult(intent, Utils.REQUEST_CODE_LOGIN);
                 }
             }
         });

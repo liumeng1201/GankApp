@@ -55,7 +55,7 @@ public class LoginActivity extends BaseActivityWithLoadingDialog implements View
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.login);
 
-        loadingDialog = Utils.getLoadingDialog(context, "登录中...");
+        loadingDialog = Utils.getLoadingDialog(context, getString(R.string.logining));
 
         initView();
     }

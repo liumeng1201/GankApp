@@ -50,4 +50,7 @@
     <string name="login_cancel">Login cancel</string>
     <string name="update_userinfo_failed">Update user info failed, Please try latter</string>
     <string name="doublic_click_exit_app">Click again to exit App</string>
+    <string name="title_activity_me">Me</string>
+    <string name="logining">Login...</string>
+    <string name="saving_user_info">Saving user info...</string>
 </resources>
