@@ -50,4 +50,7 @@
     <string name="title_activity_me">个人信息</string>
     <string name="logining">登录中...</string>
     <string name="saving_user_info">个人信息保存中...</string>
+    <string name="menu_save_user_info">保存个人信息</string>
+    <string name="image_already_saved">图片已保存至\n</string>
+    <string name="image_success_saved">图片成功保存至\n</string>
 </resources>

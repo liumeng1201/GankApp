@@ -2,6 +2,7 @@ package com.lm.android.gankapp.utils;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import com.lm.android.gankapp.R;
 
+import java.io.File;
+
 /**
  * Created by liumeng on 2015/12/15.
  */
@@ -23,6 +26,28 @@ public class Utils {
 
     public static int REQUEST_CODE_LOGIN = 20001;
     public static int REQUEST_CODE_REGISTER = 20002;
+
+    /**
+     * @return app外部存储基准目录
+     */
+    public static String getAppBaseDir() {
+        String path = Environment.getExternalStorageDirectory() + File.separator + "gankapp" + File.separator;
+        if (!FileUtils.isFolderExist(path)) {
+            FileUtils.makeFolders(path);
+        }
+        return path;
+    }
+
+    /**
+     * @return app外部图片保存目录
+     */
+    public static String getAppImageDir() {
+        String path = getAppBaseDir() + "images" + File.separator;
+        if (!FileUtils.isFolderExist(path)) {
+            FileUtils.makeFolders(path);
+        }
+        return path;
+    }
 
     public static Toast getToastShort(Context context, String msg) {
         return Toast.makeText(context, msg, Toast.LENGTH_SHORT);

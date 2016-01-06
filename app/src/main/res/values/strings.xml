@@ -53,4 +53,7 @@
     <string name="title_activity_me">Me</string>
     <string name="logining">Login...</string>
     <string name="saving_user_info">Saving user info...</string>
+    <string name="menu_save_user_info">Save user info</string>
+    <string name="image_already_saved">Image already saved to\n</string>
+    <string name="image_success_saved">Image successfully saved to\n</string>
 </resources>

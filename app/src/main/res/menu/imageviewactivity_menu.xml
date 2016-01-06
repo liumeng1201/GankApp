@@ -3,9 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.lm.android.gankapp.activities.MeActivity">
     <item
-        android:id="@+id/action_save"
-        android:icon="@android:drawable/ic_menu_save"
+        android:id="@+id/action_share"
+        android:icon="@mipmap/ic_share_white"
         android:orderInCategory="100"
-        android:title="保存"
+        android:title="分享图片"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_save"
+        android:icon="@mipmap/ic_save_white_36dp"
+        android:orderInCategory="100"
+        android:title="保存图片至本地"
         app:showAsAction="always" />
 </menu>

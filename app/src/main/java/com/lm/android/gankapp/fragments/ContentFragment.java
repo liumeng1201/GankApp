@@ -88,7 +88,7 @@ public class ContentFragment extends BaseFragment {
                 LogUtils.logd("category = " + mCategory);
 
                 if (mCategory == ContentCategory.MEIZI.getType()) {
-                    ImageViewActivity.actionStart(getActivity(), itemData.getUrl());
+                    ImageViewActivity.actionStart(getActivity(), itemData.getUrl(), itemData.getObjectId());
                 } else {
                     DetailActivity.actionStart(getActivity(), itemData.getObjectId(), itemData.getUrl(), itemData.getDesc(), itemData.getWho(), itemData.getType(), itemData.getPublishedAt());
                     ((TextView) view.findViewById(R.id.list_title)).setTextColor(getResources().getColor(R.color.read));

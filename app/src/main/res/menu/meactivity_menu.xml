@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.lm.android.gankapp.activities.MeActivity">
+    <item
+        android:id="@+id/action_save"
+        android:icon="@mipmap/ic_save_white_36dp"
+        android:orderInCategory="100"
+        android:title="@string/menu_save_user_info"
+        app:showAsAction="always" />
+</menu>

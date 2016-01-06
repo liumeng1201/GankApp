@@ -9,6 +9,14 @@ import android.support.v4.graphics.drawable.DrawableCompat;
  * Created by liumeng on 2015/12/22.
  */
 public class DrawableUtils {
+    /**
+     * 根据一个图片生成不同状态下要显示的图片
+     *
+     * @param res
+     * @param drawableId    要显示的资源图片
+     * @param colorTintList 不同状态下对应的tintColor
+     * @return
+     */
     public static Drawable getDrawableStateListRes(Resources res, int drawableId, int colorTintList) {
         ColorStateList colorStateList;
         Drawable drawable;

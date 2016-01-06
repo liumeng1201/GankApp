@@ -25,7 +25,7 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_me, menu);
+        getMenuInflater().inflate(R.menu.meactivity_menu, menu);
         return true;
     }
 

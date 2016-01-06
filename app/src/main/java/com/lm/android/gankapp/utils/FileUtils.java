@@ -479,6 +479,7 @@ public class FileUtils {
     }
 
     /**
+     * 创建目录，可创建多级目录但是filePath需要为一个路径即以"/"结尾
      * @param filePath
      * @return
      * @see #makeDirs(String)
