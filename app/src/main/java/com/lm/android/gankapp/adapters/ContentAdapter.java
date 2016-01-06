@@ -32,7 +32,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
     private Context context;
     private ArrayList<ContentItemInfo> datas;
-    private boolean bigImage;
+    private boolean bigImage = false;
 
     private OnContentItemClickListener itemClickListener;
     private DaoSession daoSession;
