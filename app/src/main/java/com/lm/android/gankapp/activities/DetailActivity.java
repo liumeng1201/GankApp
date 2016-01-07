@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.lm.android.gankapp.R;
-import com.lm.android.gankapp.interfaces.ThirdPartyLoginCallback;
+import com.lm.android.gankapp.interfaces.ShareSDKOptCallback;
 import com.lm.android.gankapp.listener.MyBmobFindListener;
 import com.lm.android.gankapp.listener.MyBmobSaveListener;
 import com.lm.android.gankapp.listener.MyBmobUpdateListener;
@@ -62,7 +62,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     @State
     String publishAt;
 
-    private ThirdPartyLoginCallback shareCallback;
+    private ShareSDKOptCallback shareCallback;
 
     private boolean loadFinish = false;
 
@@ -95,7 +95,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         initView();
         initWebView();
 
-        shareCallback = new ThirdPartyLoginCallback() {
+        shareCallback = new ShareSDKOptCallback() {
             @Override
             public void onSuccess(Platform platform, HashMap<String, Object> result) {
                 Utils.showToastShort(context, R.string.share_success);

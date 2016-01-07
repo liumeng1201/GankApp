@@ -1,6 +1,6 @@
 package com.lm.android.gankapp.listener;
 
-import com.lm.android.gankapp.interfaces.ThirdPartyLoginCallback;
+import com.lm.android.gankapp.interfaces.ShareSDKOptCallback;
 import com.lm.android.gankapp.models.ThirdPartyOptType;
 
 import java.util.HashMap;
@@ -13,13 +13,13 @@ import cn.sharesdk.framework.PlatformActionListener;
  */
 public class MyPlatformActionListener implements PlatformActionListener {
     private ThirdPartyOptType optType;
-    private ThirdPartyLoginCallback callback;
+    private ShareSDKOptCallback callback;
 
     /**
      * @param optType  第三方账号操作类型
      * @param callback 第三方账号登录操作结果回调
      */
-    public MyPlatformActionListener(ThirdPartyOptType optType, ThirdPartyLoginCallback callback) {
+    public MyPlatformActionListener(ThirdPartyOptType optType, ShareSDKOptCallback callback) {
         this.optType = optType;
         this.callback = callback;
     }

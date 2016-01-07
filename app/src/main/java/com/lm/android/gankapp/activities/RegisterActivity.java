@@ -34,8 +34,6 @@ public class RegisterActivity extends BaseActivityWithLoadingDialog {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.register);
         initView();
-
-        loadingDialog = Utils.getLoadingDialog(context, "注册中...");
     }
 
     private void initView() {
@@ -126,5 +124,10 @@ public class RegisterActivity extends BaseActivityWithLoadingDialog {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void initLoadingDialog() {
+        loadingDialog = Utils.getLoadingDialog(context, getString(R.string.logining));
     }
 }

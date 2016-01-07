@@ -1,5 +1,6 @@
 package com.lm.android.gankapp.activities;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
@@ -35,6 +36,11 @@ public abstract class BaseActivityWithLoadingDialog extends BaseActivity {
     };
 
     /**
+     * 初始化loadingDialog，继承自该类的子类必须实现
+     */
+    protected abstract void initLoadingDialog();
+
+    /**
      * 显示loading对话框
      */
     protected void showLoadingDialog() {
@@ -46,6 +52,12 @@ public abstract class BaseActivityWithLoadingDialog extends BaseActivity {
      */
     protected void dismissLoadingDialog() {
         handler.sendEmptyMessage(DISMISS_LOADING);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initLoadingDialog();
     }
 
     @Override

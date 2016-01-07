@@ -13,7 +13,7 @@ import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.ShareListAdapter;
 import com.lm.android.gankapp.component.CustomLinearLayoutManager;
 import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
-import com.lm.android.gankapp.interfaces.ThirdPartyLoginCallback;
+import com.lm.android.gankapp.interfaces.ShareSDKOptCallback;
 import com.lm.android.gankapp.listener.MyPlatformActionListener;
 import com.lm.android.gankapp.models.SharePlatItem;
 import com.lm.android.gankapp.models.ThirdPartyOptType;
@@ -41,7 +41,7 @@ public class ShareUtils {
      * @param contentText 要分享的内容，可以为空
      * @param imageUrl    要分享的图片的url，可以为空
      */
-    public static void showShare(final Context context, ThirdPartyLoginCallback shareCallback, final String contentUrl, final String contentText, final String imageUrl) {
+    public static void showShare(final Context context, ShareSDKOptCallback shareCallback, final String contentUrl, final String contentText, final String imageUrl) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
         View convertView = LayoutInflater.from(context).inflate(R.layout.layout_share_dialog, null);

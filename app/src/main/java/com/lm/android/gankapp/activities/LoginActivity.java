@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.lm.android.gankapp.R;
-import com.lm.android.gankapp.interfaces.ThirdPartyLoginCallback;
+import com.lm.android.gankapp.interfaces.ShareSDKOptCallback;
 import com.lm.android.gankapp.listener.MyBmobOtherLoginListener;
 import com.lm.android.gankapp.listener.MyBmobSaveListener;
 import com.lm.android.gankapp.listener.MyBmobUpdateListener;
@@ -54,8 +54,6 @@ public class LoginActivity extends BaseActivityWithLoadingDialog implements View
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.login);
-
-        loadingDialog = Utils.getLoadingDialog(context, getString(R.string.logining));
 
         initView();
     }
@@ -179,7 +177,7 @@ public class LoginActivity extends BaseActivityWithLoadingDialog implements View
             return;
         }
 
-        ThirdPartyLoginCallback thirdPartyLoginCallback = new ThirdPartyLoginCallback() {
+        ShareSDKOptCallback shareSDKOptCallback = new ShareSDKOptCallback() {
             @Override
             public void onSuccess(Platform platform, HashMap<String, Object> result) {
                 // 第三方授权成功，可以获取第三方用户信息，之后进行用户注册
@@ -241,7 +239,7 @@ public class LoginActivity extends BaseActivityWithLoadingDialog implements View
                 Utils.showToastShort(context, getString(R.string.login_cancel));
             }
         };
-        platform.setPlatformActionListener(new MyPlatformActionListener(ThirdPartyOptType.LOGIN, thirdPartyLoginCallback));
+        platform.setPlatformActionListener(new MyPlatformActionListener(ThirdPartyOptType.LOGIN, shareSDKOptCallback));
         platform.showUser(null);
     }
 
@@ -255,5 +253,10 @@ public class LoginActivity extends BaseActivityWithLoadingDialog implements View
 
         setResult(RESULT_OK);
         finish();
+    }
+
+    @Override
+    protected void initLoadingDialog() {
+        loadingDialog = Utils.getLoadingDialog(context, getString(R.string.logining));
     }
 }

@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.component.PinchImageView;
-import com.lm.android.gankapp.interfaces.ThirdPartyLoginCallback;
+import com.lm.android.gankapp.interfaces.ShareSDKOptCallback;
 import com.lm.android.gankapp.utils.FileUtils;
 import com.lm.android.gankapp.utils.ImageUtils;
 import com.lm.android.gankapp.utils.ShareUtils;
@@ -31,7 +31,7 @@ public class ImageViewActivity extends BaseActivity {
     @State
     String objectId;
 
-    private ThirdPartyLoginCallback shareCallback;
+    private ShareSDKOptCallback shareCallback;
 
     private PinchImageView imageView;
 
@@ -52,7 +52,7 @@ public class ImageViewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        shareCallback = new ThirdPartyLoginCallback() {
+        shareCallback = new ShareSDKOptCallback() {
             @Override
             public void onSuccess(Platform platform, HashMap<String, Object> result) {
                 Utils.showToastShort(context, R.string.share_success);

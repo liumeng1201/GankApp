@@ -53,4 +53,6 @@
     <string name="menu_save_user_info">保存个人信息</string>
     <string name="image_already_saved">图片已保存至\n</string>
     <string name="image_success_saved">图片成功保存至\n</string>
+    <string name="menu_share_image">分享图片</string>
+    <string name="menu_save_image">保存图片至本地</string>
 </resources>

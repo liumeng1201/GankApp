@@ -33,7 +33,6 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.title_activity_me);
 
-        loadingDialog = Utils.getLoadingDialog(context, getString(R.string.saving_user_info));
         recyclerView = (RecyclerView) findViewById(R.id.personal_info);
 
         List<UserInfoModel> userInfo = new ArrayList<>();
@@ -75,5 +74,10 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void initLoadingDialog() {
+        loadingDialog = Utils.getLoadingDialog(context, getString(R.string.saving_user_info));
     }
 }

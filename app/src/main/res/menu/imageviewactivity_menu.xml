@@ -1,17 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.lm.android.gankapp.activities.MeActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_share"
         android:icon="@mipmap/ic_share_white"
         android:orderInCategory="100"
-        android:title="分享图片"
+        android:title="@string/menu_share_image"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_save"
         android:icon="@mipmap/ic_save_white_36dp"
-        android:orderInCategory="100"
-        android:title="保存图片至本地"
+        android:orderInCategory="101"
+        android:title="@string/menu_save_image"
         app:showAsAction="always" />
 </menu>
