@@ -64,7 +64,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
         UserInfoModel item = getItemData(position);
         switch (getItemViewType(position)) {
             case USER_INFO_TYPE_AVATAR:
-                Glide.with(context).load(item.getValue()).asBitmap().centerCrop().into(new BitmapImageViewTarget(holder.avatar) {
+                Glide.with(context).load(item.getValue()).asBitmap().error(R.mipmap.default_avatar).centerCrop().into(new BitmapImageViewTarget(holder.avatar) {
                     @Override
                     protected void setResource(Bitmap resource) {
                         RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), resource);

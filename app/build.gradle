@@ -106,4 +106,7 @@ dependencies {
 
     // 友盟统计
     compile 'com.umeng.analytics:analytics:latest.integration'
+
+    // recyclerview分割线
+    compile 'com.yqritc:recyclerview-flexibledivider:1.2.6'
 }

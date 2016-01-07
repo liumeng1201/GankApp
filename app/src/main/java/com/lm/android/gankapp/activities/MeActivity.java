@@ -9,10 +9,10 @@ import android.view.View;
 
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.UserInfoAdapter;
-import com.lm.android.gankapp.component.DividerItemDecoration;
 import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
 import com.lm.android.gankapp.models.UserInfoModel;
 import com.lm.android.gankapp.utils.Utils;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
         adapter.setOnItemClickListener(itemClickListener);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        recyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
     }
 
     @Override

@@ -228,7 +228,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void loadAvatar(int resId) {
-        Glide.with(context).load(resId).asBitmap().centerCrop().into(new BitmapImageViewTarget(userAvatar) {
+        Glide.with(context).load(resId).asBitmap().error(R.mipmap.default_avatar).centerCrop().into(new BitmapImageViewTarget(userAvatar) {
             @Override
             protected void setResource(Bitmap resource) {
                 RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
@@ -239,7 +239,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void loadAvatar(String url) {
-        Glide.with(context).load(url).asBitmap().centerCrop().into(new BitmapImageViewTarget(userAvatar) {
+        Glide.with(context).load(url).asBitmap().error(R.mipmap.default_avatar).centerCrop().into(new BitmapImageViewTarget(userAvatar) {
             @Override
             protected void setResource(Bitmap resource) {
                 RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
