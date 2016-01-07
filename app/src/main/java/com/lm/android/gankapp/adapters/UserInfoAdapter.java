@@ -24,7 +24,8 @@ import java.util.List;
  */
 public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHolder> {
     public static final int USER_INFO_TYPE_AVATAR = 201;
-    public static final int USER_INFO_TYPE_TEXT = 202;
+    public static final int USER_INFO_TYPE_NORMAL_TEXT = 202;
+    public static final int USER_INFO_TYPE_SNS_ACCOUNT = 203;
 
     private Context context;
     private List<UserInfoModel> userInfo;
@@ -52,8 +53,11 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
             case USER_INFO_TYPE_AVATAR:
                 layoutRes = R.layout.listitem_userinfo_avatar;
                 break;
-            case USER_INFO_TYPE_TEXT:
+            case USER_INFO_TYPE_NORMAL_TEXT:
                 layoutRes = R.layout.listitem_userinfo_text;
+                break;
+            case USER_INFO_TYPE_SNS_ACCOUNT:
+                layoutRes = R.layout.listitem_userinfo_sns;
                 break;
         }
         return new ViewHolder(LayoutInflater.from(context).inflate(layoutRes, parent, false), viewType);
@@ -73,9 +77,13 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
                     }
                 });
                 break;
-            case USER_INFO_TYPE_TEXT:
+            case USER_INFO_TYPE_NORMAL_TEXT:
                 holder.title.setText(item.getTitle());
                 holder.content.setText(item.getValue());
+                break;
+            case USER_INFO_TYPE_SNS_ACCOUNT:
+                holder.title.setText(item.getTitle());
+                // TODO
                 break;
         }
         holder.setOnClickListener(position);
@@ -99,6 +107,9 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
         public ImageView avatar;
         public TextView title;
         public TextView content;
+        public ImageView wechat;
+        public ImageView qq;
+        public ImageView weibo;
 
         public ViewHolder(View itemView, int type) {
             super(itemView);
@@ -106,9 +117,15 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
                 case USER_INFO_TYPE_AVATAR:
                     avatar = (ImageView) itemView.findViewById(R.id.user_info_avatar);
                     break;
-                case USER_INFO_TYPE_TEXT:
+                case USER_INFO_TYPE_NORMAL_TEXT:
                     title = (TextView) itemView.findViewById(R.id.user_info_title);
                     content = (TextView) itemView.findViewById(R.id.user_info_content);
+                    break;
+                case USER_INFO_TYPE_SNS_ACCOUNT:
+                    title = (TextView) itemView.findViewById(R.id.user_info_title);
+                    wechat = (ImageView) itemView.findViewById(R.id.user_info_sns_wechat);
+                    qq = (ImageView) itemView.findViewById(R.id.user_info_sns_qq);
+                    weibo = (ImageView) itemView.findViewById(R.id.user_info_sns_weibo);
                     break;
             }
         }

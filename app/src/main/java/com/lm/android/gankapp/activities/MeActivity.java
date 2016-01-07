@@ -37,12 +37,12 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
 
         List<UserInfoModel> userInfo = new ArrayList<>();
         userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_AVATAR, null, "http://img2.3lian.com/2014/f5/158/d/86.jpg"));
-        userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_TEXT, "昵称", "BHawK"));
-        userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_TEXT, "地区", "上海市-杨浦区"));
-        userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_TEXT, "账号绑定", "QQ、微博"));
-        userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_TEXT, "个人主页", "http://test.com"));
-        userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_TEXT, "个性签名", "不战而屈人之兵"));
-        userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_TEXT, "个人标签", "Android、Java、Linux"));
+        userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_NORMAL_TEXT, "昵称", "BHawK"));
+        userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_NORMAL_TEXT, "地区", "上海市-杨浦区"));
+        userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_SNS_ACCOUNT, "账号绑定", null));
+        userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_NORMAL_TEXT, "个人主页", "http://test.com"));
+        userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_NORMAL_TEXT, "个性签名", "不战而屈人之兵"));
+        userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_NORMAL_TEXT, "个人标签", "Android、Java、Linux"));
         itemClickListener = new OnContentItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
