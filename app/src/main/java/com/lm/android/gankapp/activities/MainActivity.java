@@ -99,7 +99,7 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 if (PropertyUtils.getUserLoginStatus(propertyContentDao)) {
                     Intent intent = new Intent(context, MeActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, Utils.REQUEST_CODE_USERINFO);
                 } else {
                     Intent intent = new Intent(context, LoginActivity.class);
                     startActivityForResult(intent, Utils.REQUEST_CODE_LOGIN);
@@ -187,14 +187,20 @@ public class MainActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == Utils.REQUEST_CODE_LOGIN) {
-                // 登录成功
-                setUserInfo();
+            switch (requestCode) {
+                case Utils.REQUEST_CODE_LOGIN:
+                    // 登录成功
+                    setUserInfo();
+                    break;
+                case Utils.REQUEST_CODE_USERINFO:
+                    // 用户信息变动
+                    setUserInfo();
             }
         }
     }
 
     private long exitTime = 0;
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && drawerLayout.isDrawerOpen(GravityCompat.START)) {

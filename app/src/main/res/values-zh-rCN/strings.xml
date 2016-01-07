@@ -55,4 +55,15 @@
     <string name="image_success_saved">图片成功保存至\n</string>
     <string name="menu_share_image">分享图片</string>
     <string name="menu_save_image">保存图片至本地</string>
+    <string name="avatar_from_camera">使用相机拍照</string>
+    <string name="avatar_from_image">从相册中选取</string>
+    <string name="set_user_avatar">设置头像</string>
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="set_user_nickname">设置昵称</string>
+    <string name="set_user_homepage">设置个人主页</string>
+    <string name="set_user_signature">设置个性签名</string>
+    <string name="nickname">昵称</string>
+    <string name="homepage">个人主页</string>
+    <string name="Signature">个性签名</string>
 </resources>

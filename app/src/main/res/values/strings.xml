@@ -58,4 +58,15 @@
     <string name="image_success_saved">Image successfully saved to\n</string>
     <string name="menu_share_image">Share Image</string>
     <string name="menu_save_image">Save Image</string>
+    <string name="avatar_from_camera">Take avatar use camera</string>
+    <string name="avatar_from_image">Select avatar from images</string>
+    <string name="set_user_avatar">Set avatar</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="set_user_nickname">Set nickname</string>
+    <string name="set_user_homepage">Set homepage</string>
+    <string name="set_user_signature">Set signature</string>
+    <string name="nickname">Nickname</string>
+    <string name="homepage">HomePage</string>
+    <string name="Signature">Signature</string>
 </resources>

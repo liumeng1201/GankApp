@@ -25,8 +25,9 @@ public class Utils {
     public static String[] requestCategory = {"all", "Android", "iOS", "前端", "拓展资源", "休息视频", "福利"};
     public static int requestNum = 100;
 
-    public static int REQUEST_CODE_LOGIN = 20001;
-    public static int REQUEST_CODE_REGISTER = 20002;
+    public static final int REQUEST_CODE_LOGIN = 20001;
+    public static final int REQUEST_CODE_REGISTER = 20002;
+    public static final int REQUEST_CODE_USERINFO = 20003;
 
     /**
      * @return app外部存储基准目录
