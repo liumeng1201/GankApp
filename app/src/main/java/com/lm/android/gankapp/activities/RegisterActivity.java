@@ -72,13 +72,9 @@ public class RegisterActivity extends BaseActivityWithLoadingDialog {
                 @Override
                 protected void successOpt() {
                     Utils.showToastShort(context, getString(R.string.register_success));
-
-                    PropertyUtils.saveUserName(username.toString().trim(), propertyContentDao);
-                    PropertyUtils.saveUserPassword(password.toString().trim(), propertyContentDao);
-                    PropertyUtils.saveUserLoginStatus("true", propertyContentDao);
+                    PropertyUtils.setUserLoginStatus("true", propertyContentDao);
 
                     dismissLoadingDialog();
-
                     setResult(RESULT_OK);
                     finish();
                 }

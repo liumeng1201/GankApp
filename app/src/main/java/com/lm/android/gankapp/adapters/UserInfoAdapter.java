@@ -16,6 +16,7 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
 import com.lm.android.gankapp.models.UserInfoModel;
+import com.lm.android.gankapp.utils.StringUtils;
 
 import java.util.List;
 
@@ -79,11 +80,30 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
                 break;
             case USER_INFO_TYPE_NORMAL_TEXT:
                 holder.title.setText(item.getTitle());
-                holder.content.setText(item.getValue());
+                if (StringUtils.isEmpty(item.getValue())) {
+                    holder.content.setText("请填写" + item.getTitle());
+                } else {
+                    holder.content.setText(item.getValue());
+                }
                 break;
             case USER_INFO_TYPE_SNS_ACCOUNT:
                 holder.title.setText(item.getTitle());
-                // TODO
+                String account = item.getValue();
+                if (account.charAt(0) == '1') {
+                    holder.wechat.setImageResource(R.drawable.ssdk_oks_skyblue_logo_wechat_checked);
+                } else {
+                    holder.wechat.setImageResource(R.drawable.ssdk_oks_skyblue_logo_wechat);
+                }
+                if (account.charAt(1) == '1') {
+                    holder.qq.setImageResource(R.drawable.ssdk_oks_skyblue_logo_qq_checked);
+                } else {
+                    holder.qq.setImageResource(R.drawable.ssdk_oks_skyblue_logo_qq);
+                }
+                if (account.charAt(2) == '1') {
+                    holder.weibo.setImageResource(R.drawable.ssdk_oks_skyblue_logo_sinaweibo_checked);
+                } else {
+                    holder.weibo.setImageResource(R.drawable.ssdk_oks_skyblue_logo_sinaweibo);
+                }
                 break;
         }
         holder.setOnClickListener(position);

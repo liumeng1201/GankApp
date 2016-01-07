@@ -27,12 +27,14 @@ import com.lm.android.gankapp.adapters.TabAdapter;
 import com.lm.android.gankapp.fragments.ContentFragment;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentType;
+import com.lm.android.gankapp.models.User;
 import com.lm.android.gankapp.utils.PropertyUtils;
 import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
+import cn.bmob.v3.BmobUser;
 import cn.sharesdk.framework.ShareSDK;
 
 public class MainActivity extends BaseActivity {
@@ -214,21 +216,26 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setUserInfo() {
-        String displayName = PropertyUtils.getUserDisplayName(propertyContentDao);
-        if (!StringUtils.isEmpty(displayName)) {
-            userDisplayName.setText(displayName);
-        }
+        User user = BmobUser.getCurrentUser(context, User.class);
+        if (user != null) {
+            String displayName = PropertyUtils.getUserDisplayName(user);
+            if (!StringUtils.isEmpty(displayName)) {
+                userDisplayName.setText(displayName);
+            }
 
-        String avatarUrl = PropertyUtils.getUserAvatar(propertyContentDao);
-        if (!StringUtils.isEmpty(avatarUrl)) {
-            loadAvatar(avatarUrl);
+            String avatarUrl = user.getAvatar();
+            if (!StringUtils.isEmpty(avatarUrl)) {
+                loadAvatar(avatarUrl);
+            } else {
+                loadAvatar(R.mipmap.default_avatar);
+            }
         } else {
             loadAvatar(R.mipmap.default_avatar);
         }
     }
 
     private void loadAvatar(int resId) {
-        Glide.with(context).load(resId).asBitmap().error(R.mipmap.default_avatar).centerCrop().into(new BitmapImageViewTarget(userAvatar) {
+        Glide.with(context).load(resId).asBitmap().centerCrop().into(new BitmapImageViewTarget(userAvatar) {
             @Override
             protected void setResource(Bitmap resource) {
                 RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);

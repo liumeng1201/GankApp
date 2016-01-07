@@ -34,6 +34,7 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.wechat.friends.Wechat;
 
 public class LoginActivity extends BaseActivityWithLoadingDialog implements View.OnClickListener {
     private Button btnLogin;
@@ -129,12 +130,8 @@ public class LoginActivity extends BaseActivityWithLoadingDialog implements View
             user.login(context, new MyBmobSaveListener() {
                 @Override
                 protected void successOpt() {
-                    PropertyUtils.saveUserName(name.toString().trim(), propertyContentDao);
-                    PropertyUtils.saveUserPassword(passwd.toString().trim(), propertyContentDao);
-                    PropertyUtils.saveUserLoginStatus("true", propertyContentDao);
-
+                    PropertyUtils.setUserLoginStatus("true", propertyContentDao);
                     dismissLoadingDialog();
-
                     setResult(RESULT_OK);
                     finish();
                 }
@@ -197,26 +194,34 @@ public class LoginActivity extends BaseActivityWithLoadingDialog implements View
                 } else if (platform.getName().equalsIgnoreCase(SinaWeibo.NAME)) {
                     // 使用新浪微博登录
                     authInfo = new BmobUser.BmobThirdUserAuth(BmobUser.BmobThirdUserAuth.SNS_TYPE_WEIBO, accesstoken, experseIn, userId);
-                } else {
+                } else if (platform.getName().equalsIgnoreCase(Wechat.NAME)) {
+                    authInfo = new BmobUser.BmobThirdUserAuth(BmobUser.BmobThirdUserAuth.SNS_TYPE_WEIXIN, accesstoken, experseIn, userId);
                     return;
                 }
+                final String snsType = authInfo.getSnsType();
                 BmobUser.loginWithAuthData(context, authInfo, new MyBmobOtherLoginListener() {
                     @Override
                     public void successOpt(JSONObject jsonObject) {
                         User user = BmobUser.getCurrentUser(context, User.class);
-                        final String userName = user.getUsername();
                         user.setNickName(nickName);
                         user.setAvatar(avatarUrl);
+                        if (snsType.equalsIgnoreCase(BmobUser.BmobThirdUserAuth.SNS_TYPE_QQ)) {
+                            user.setQqBinded(true);
+                        } else if (snsType.equalsIgnoreCase(BmobUser.BmobThirdUserAuth.SNS_TYPE_WEIBO)) {
+                            user.setSinaWeiboBinded(true);
+                        } else if (snsType.equalsIgnoreCase(BmobUser.BmobThirdUserAuth.SNS_TYPE_WEIXIN)) {
+                            user.setWechatBinded(true);
+                        }
                         user.update(context, user.getObjectId(), new MyBmobUpdateListener() {
                             @Override
                             protected void successOpt() {
-                                thirdUserLoginSuccess(userName, nickName, avatarUrl);
+                                thirdUserLoginSuccess(snsType);
                             }
 
                             @Override
                             protected void failureOpt(int i, String s) {
                                 Utils.showToastShort(context, getString(R.string.update_userinfo_failed));
-                                thirdUserLoginSuccess(userName, null, null);
+                                thirdUserLoginSuccess(snsType);
                             }
                         });
                     }
@@ -243,14 +248,10 @@ public class LoginActivity extends BaseActivityWithLoadingDialog implements View
         platform.showUser(null);
     }
 
-    private void thirdUserLoginSuccess(String userName, String nickName, String avatarUrl) {
-        PropertyUtils.saveUserName(userName, propertyContentDao);
-        PropertyUtils.saveUserNickName(nickName, propertyContentDao);
-        PropertyUtils.saveUserAvatar(avatarUrl, propertyContentDao);
-        PropertyUtils.saveUserLoginStatus("true", propertyContentDao);
+    private void thirdUserLoginSuccess(String snsType) {
+        PropertyUtils.setUserLoginStatus("true", propertyContentDao);
 
         dismissLoadingDialog();
-
         setResult(RESULT_OK);
         finish();
     }

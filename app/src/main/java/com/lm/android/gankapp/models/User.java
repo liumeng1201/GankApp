@@ -16,16 +16,27 @@ public class User extends BmobUser {
     private Integer sex;
 
     // 省/直辖市
-    private Integer province;
+    private Integer provinceId;
+    private String provinceName;
 
     // 市/区
-    private Integer city;
+    private Integer cityId;
+    private String cityName;
 
     // QQ
-    private String qq;
+    private Boolean qqBinded;
 
     // 新浪微博
-    private String sinaWeibo;
+    private Boolean sinaWeiboBinded;
+
+    // 微信
+    private Boolean wechatBinded;
+
+    // 个人主页
+    private String homePage;
+
+    // 个人签名
+    private String signature;
 
     public String getNickName() {
         return nickName;
@@ -43,20 +54,20 @@ public class User extends BmobUser {
         this.sex = sex;
     }
 
-    public Integer getProvince() {
-        return province;
+    public Integer getProvinceId() {
+        return provinceId;
     }
 
-    public void setProvince(Integer province) {
-        this.province = province;
+    public void setProvinceId(Integer provinceId) {
+        this.provinceId = provinceId;
     }
 
-    public Integer getCity() {
-        return city;
+    public Integer getCityId() {
+        return cityId;
     }
 
-    public void setCity(Integer city) {
-        this.city = city;
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
     }
 
     public String getAvatar() {
@@ -67,19 +78,59 @@ public class User extends BmobUser {
         this.avatar = avatar;
     }
 
-    public String getQq() {
-        return qq;
+    public String getProvinceName() {
+        return provinceName;
     }
 
-    public void setQq(String qq) {
-        this.qq = qq;
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
     }
 
-    public String getSinaWeibo() {
-        return sinaWeibo;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setSinaWeibo(String sinaWeibo) {
-        this.sinaWeibo = sinaWeibo;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public Boolean getQqBinded() {
+        return qqBinded;
+    }
+
+    public void setQqBinded(Boolean qqBinded) {
+        this.qqBinded = qqBinded;
+    }
+
+    public Boolean getSinaWeiboBinded() {
+        return sinaWeiboBinded;
+    }
+
+    public void setSinaWeiboBinded(Boolean sinaWeiboBinded) {
+        this.sinaWeiboBinded = sinaWeiboBinded;
+    }
+
+    public Boolean getWechatBinded() {
+        return wechatBinded;
+    }
+
+    public void setWechatBinded(Boolean wechatBinded) {
+        this.wechatBinded = wechatBinded;
+    }
+
+    public String getHomePage() {
+        return homePage;
+    }
+
+    public void setHomePage(String homePage) {
+        this.homePage = homePage;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 }
