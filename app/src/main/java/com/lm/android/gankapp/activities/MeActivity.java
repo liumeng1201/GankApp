@@ -59,7 +59,7 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
                         break;
                     case 1:
                         // 昵称
-                        showInputDialog(position);
+                        showInputDialog(position, currentUser.getNickName());
                         break;
                     case 2:
                         // 地区
@@ -69,11 +69,11 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
                         break;
                     case 4:
                         // 个人主页
-                        showInputDialog(position);
+                        showInputDialog(position, currentUser.getHomePage());
                         break;
                     case 5:
                         // 个性签名
-                        showInputDialog(position);
+                        showInputDialog(position, currentUser.getSignature());
                         break;
                     case 6:
                         // 个人标签
@@ -123,21 +123,26 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
 
     private void backOpt() {
         if (userInfoChange) {
+            loadingDialog.show();
             currentUser.update(context, new MyBmobUpdateListener() {
                 @Override
                 protected void successOpt() {
+                    loadingDialog.dismiss();
                     Utils.showToastShort(context, "用户信息更新成功");
+                    setResult(RESULT_OK);
                     finish();
                 }
 
                 @Override
                 protected void failureOpt(int i, String s) {
+                    loadingDialog.dismiss();
                     Utils.showToastShort(context, "更新用户信息失败，请稍候重试");
+                    finish();
                 }
             });
-            setResult(RESULT_OK);
+        } else {
+            finish();
         }
-        finish();
     }
 
     @Override
@@ -146,6 +151,7 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
     }
 
     private void setUserInfo(User user) {
+        userInfo.clear();
         userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_AVATAR, null, user.getAvatar()));
         userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_NORMAL_TEXT, getString(R.string.nickname), user.getNickName()));
         userInfo.add(new UserInfoModel(UserInfoAdapter.USER_INFO_TYPE_NORMAL_TEXT, "地区", (StringUtils.isEmpty(user.getProvinceName()) && (StringUtils.isEmpty(user.getCityName()))) ? null : (user.getProvinceName() + "-" + user.getCityName())));
@@ -171,9 +177,13 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
     /**
      * @param position 用户信息列表中的位置
      */
-    private void showInputDialog(final int position) {
+    private void showInputDialog(final int position, String oldValue) {
         View view = LayoutInflater.from(context).inflate(R.layout.layout_input_dialog, null);
         final TextInputLayout inputLayout = (TextInputLayout) view.findViewById(R.id.input);
+        if (!StringUtils.isEmpty(oldValue)) {
+            inputLayout.getEditText().setText(oldValue);
+            inputLayout.getEditText().setSelection(oldValue.length());
+        }
         AlertDialog inputDialog = new AlertDialog.Builder(context)
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
@@ -195,7 +205,7 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
                             userInfoChange = true;
                         }
                     }
-                }).create();
+                }).setNegativeButton(getString(R.string.cancel), null).create();
         String title = null;
         if (position == 1) {
             title = getString(R.string.set_user_nickname);

@@ -190,11 +190,10 @@ public class MainActivity extends BaseActivity {
             switch (requestCode) {
                 case Utils.REQUEST_CODE_LOGIN:
                     // 登录成功
-                    setUserInfo();
-                    break;
                 case Utils.REQUEST_CODE_USERINFO:
                     // 用户信息变动
                     setUserInfo();
+                    break;
             }
         }
     }
