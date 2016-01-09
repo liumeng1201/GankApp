@@ -17,6 +17,7 @@ import com.lm.android.gankapp.interfaces.ShareSDKOptCallback;
 import com.lm.android.gankapp.listener.MyPlatformActionListener;
 import com.lm.android.gankapp.models.SharePlatItem;
 import com.lm.android.gankapp.models.ThirdPartyOptType;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,7 @@ public class ShareUtils {
         final ShareListAdapter shareListAdapter = new ShareListAdapter(platList);
         view.setAdapter(shareListAdapter);
         view.setLayoutManager(new CustomLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        view.addItemDecoration(new HorizontalDividerItemDecoration.Builder(context).build());
         builder.setView(convertView);
         final AlertDialog dialog = builder.create();
         final MyPlatformActionListener platformActionListener = new MyPlatformActionListener(ThirdPartyOptType.SHARE, shareCallback);

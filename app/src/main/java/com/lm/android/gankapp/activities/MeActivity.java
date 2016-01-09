@@ -11,9 +11,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.lm.android.gankapp.R;
+import com.lm.android.gankapp.adapters.SimpleAdapter;
 import com.lm.android.gankapp.adapters.UserInfoAdapter;
+import com.lm.android.gankapp.component.CustomLinearLayoutManager;
 import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
 import com.lm.android.gankapp.listener.MyBmobUpdateListener;
 import com.lm.android.gankapp.models.User;
@@ -167,9 +170,22 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
 
     private void showAvatarDialog() {
         AlertDialog avatarDialog = new AlertDialog.Builder(context).create();
-        avatarDialog.setTitle(getString(R.string.set_user_avatar));
         avatarDialog.setCanceledOnTouchOutside(true);
         View view = LayoutInflater.from(context).inflate(R.layout.layout_avatar_dialog, null);
+        RecyclerView avatarList = (RecyclerView) view.findViewById(R.id.take_avatar_option);
+        List<String> options = new ArrayList<>();
+        options.add(getString(R.string.avatar_from_camera));
+        options.add(getString(R.string.avatar_from_image));
+        SimpleAdapter adapter = new SimpleAdapter(options);
+        adapter.setItemClickListener(new OnContentItemClickListener() {
+            @Override
+            public void onItemClickListener(View view, int position) {
+                Utils.showToastShort(context, "click " + position);
+            }
+        });
+        avatarList.setAdapter(adapter);
+        avatarList.setLayoutManager(new CustomLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        avatarList.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
         avatarDialog.setView(view);
         avatarDialog.show();
     }
@@ -180,6 +196,7 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
     private void showInputDialog(final int position, String oldValue) {
         View view = LayoutInflater.from(context).inflate(R.layout.layout_input_dialog, null);
         final TextInputLayout inputLayout = (TextInputLayout) view.findViewById(R.id.input);
+        TextView dialogTitle = (TextView) view.findViewById(R.id.title);
         if (!StringUtils.isEmpty(oldValue)) {
             inputLayout.getEditText().setText(oldValue);
             inputLayout.getEditText().setSelection(oldValue.length());
@@ -217,7 +234,7 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
             title = getString(R.string.set_user_signature);
             inputLayout.setHint(getString(R.string.Signature));
         }
-        inputDialog.setTitle(title);
+        dialogTitle.setText(title);
         inputDialog.setCanceledOnTouchOutside(false);
         inputDialog.setView(view);
         inputDialog.show();
