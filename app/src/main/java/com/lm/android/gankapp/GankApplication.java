@@ -2,10 +2,14 @@ package com.lm.android.gankapp;
 
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 
 import com.lm.android.gankapp.dao.DaoMaster;
 import com.lm.android.gankapp.dao.DaoSession;
 import com.lm.android.gankapp.dao.UpgradeHelper;
+import com.lm.android.gankapp.utils.MyGlideImageLoader;
+import com.lm.android.gankapp.utils.Utils;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.okhttp.OkHttpClient;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -13,6 +17,10 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import java.util.concurrent.TimeUnit;
 
 import cn.bmob.v3.Bmob;
+import cn.finalteam.galleryfinal.CoreConfig;
+import cn.finalteam.galleryfinal.FunctionConfig;
+import cn.finalteam.galleryfinal.GalleryFinal;
+import cn.finalteam.galleryfinal.ThemeConfig;
 
 /**
  * Created by liumeng on 2015/12/14.
@@ -35,7 +43,10 @@ public class GankApplication extends Application {
         client.setConnectTimeout(10000, TimeUnit.MILLISECONDS);
 
         // 初始化bmob服务
-        Bmob.initialize(instance, "1d12db91cc13949729e6db732046c69f");
+        Bmob.initialize(instance, Utils.Bmob_ID);
+
+        // 初始化GalleryFinal配置
+        initGalleryFinalConfig();
     }
 
     public static GankApplication getInstance() {
@@ -58,5 +69,27 @@ public class GankApplication extends Application {
         DaoMaster daoMaster = new DaoMaster(db);
         // 获取类似于缓存管理器,提供各表的DAO类
         daoSession = daoMaster.newSession();
+    }
+
+    private void initGalleryFinalConfig() {
+        ThemeConfig theme = new ThemeConfig.Builder()
+                .setTitleBarBgColor(getResources().getColor(R.color.colorPrimary))
+                .setTitleBarTextColor(getResources().getColor(R.color.white))
+                .setTitleBarIconColor(getResources().getColor(R.color.white))
+                .setCropControlColor(getResources().getColor(R.color.colorAccent))
+                .setIconCamera(R.mipmap.ic_camera_alt_white_36dp)
+                .setIconCrop(R.mipmap.ic_crop_white_36dp)
+                .setPreviewBg(new ColorDrawable(Color.WHITE)).build();
+        FunctionConfig functionConfig = new FunctionConfig.Builder()
+                .setEnableCamera(true)
+                .setEnableCrop(true)
+                .setCropSquare(true).build();
+        MyGlideImageLoader imageLoader = new MyGlideImageLoader();
+        CoreConfig coreConfig = new CoreConfig.Builder(this, imageLoader, theme)
+                .setDebug(BuildConfig.DEBUG)
+                .setFunctionConfig(functionConfig)
+                .setEditPhotoCacheFolder(Utils.getGalleryFinalCacheDir(this))
+                .setTakePhotoFolder(Utils.getTakePictureDir(this)).build();
+        GalleryFinal.init(coreConfig);
     }
 }

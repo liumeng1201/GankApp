@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.lm.android.gankapp.R;
-import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
+import com.lm.android.gankapp.listener.OnContentItemClickListener;
 import com.lm.android.gankapp.models.UserInfoModel;
 import com.lm.android.gankapp.utils.StringUtils;
 

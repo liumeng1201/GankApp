@@ -86,3 +86,8 @@
 # for sharesdk
 -keep class cn.sharesdk.** {*;}
 -keep class com.mob.** {*;}
+
+# for GalleryFinal
+-keep class cn.finalteam.galleryfinal.widget.*{*;}
+-keep class cn.finalteam.galleryfinal.widget.crop.*{*;}
+-keep class cn.finalteam.galleryfinal.widget.zoonview.*{*;}

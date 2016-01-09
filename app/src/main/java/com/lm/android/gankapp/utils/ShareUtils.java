@@ -12,7 +12,7 @@ import android.view.View;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.ShareListAdapter;
 import com.lm.android.gankapp.component.CustomLinearLayoutManager;
-import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
+import com.lm.android.gankapp.listener.OnContentItemClickListener;
 import com.lm.android.gankapp.interfaces.ShareSDKOptCallback;
 import com.lm.android.gankapp.listener.MyPlatformActionListener;
 import com.lm.android.gankapp.models.SharePlatItem;

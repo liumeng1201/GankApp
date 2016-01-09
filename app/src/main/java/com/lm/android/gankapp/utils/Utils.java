@@ -12,9 +12,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bmob.BTPFileResponse;
+import com.bmob.BmobProFile;
+import com.bmob.btp.callback.UploadListener;
 import com.lm.android.gankapp.R;
+import com.lm.android.gankapp.listener.MyBmobUploadListener;
 
 import java.io.File;
+
+import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * Created by liumeng on 2015/12/15.
@@ -28,6 +34,8 @@ public class Utils {
     public static final int REQUEST_CODE_LOGIN = 20001;
     public static final int REQUEST_CODE_REGISTER = 20002;
     public static final int REQUEST_CODE_USERINFO = 20003;
+    public static final String Bmob_ID = "1d12db91cc13949729e6db732046c69f";
+    public static final String Bmob_ACCESS_KEY = "c9fe7f4e03bc6e083cb37a55b8048768";
 
     /**
      * @return app外部存储基准目录
@@ -38,6 +46,22 @@ public class Utils {
             FileUtils.makeFolders(path);
         }
         return path;
+    }
+
+    /**
+     * @return GalleryFinal用的缓存文件夹
+     */
+    public static File getGalleryFinalCacheDir(Context context) {
+        String path = context.getExternalCacheDir().getPath() + File.separator + "gfcache";
+        return new File(path);
+    }
+
+    /**
+     * @return 获取拍照图片存放目录
+     */
+    public static File getTakePictureDir(Context context) {
+        String path = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
+        return new File(path);
     }
 
     /**
@@ -101,5 +125,34 @@ public class Utils {
             }
         });
         return dialog;
+    }
+
+    /**
+     * Bmob上传单一文件操作
+     *
+     * @param context
+     * @param path     文件路径
+     * @param listener 上传文件回调监听
+     * @return BTPFileResponse
+     */
+    public static BTPFileResponse uploadSingleFile(final Context context, String path, final MyBmobUploadListener listener) {
+        BTPFileResponse response = BmobProFile.getInstance(context).upload(path, new UploadListener() {
+            @Override
+            public void onSuccess(String fileName, String url, BmobFile file) {
+                String accessUrl = BmobProFile.getInstance(context).signURL(fileName, url, Utils.Bmob_ACCESS_KEY, 0, null);
+                listener.onSuccess(fileName, url, file, accessUrl);
+            }
+
+            @Override
+            public void onProgress(int progress) {
+                listener.onProgress(progress);
+            }
+
+            @Override
+            public void onError(int statuscode, String errormsg) {
+                listener.onError(statuscode, errormsg);
+            }
+        });
+        return response;
     }
 }

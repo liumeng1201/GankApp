@@ -17,10 +17,12 @@ import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.SimpleAdapter;
 import com.lm.android.gankapp.adapters.UserInfoAdapter;
 import com.lm.android.gankapp.component.CustomLinearLayoutManager;
-import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
+import com.lm.android.gankapp.listener.MyBmobUploadListener;
+import com.lm.android.gankapp.listener.OnContentItemClickListener;
 import com.lm.android.gankapp.listener.MyBmobUpdateListener;
 import com.lm.android.gankapp.models.User;
 import com.lm.android.gankapp.models.UserInfoModel;
+import com.lm.android.gankapp.utils.LogUtils;
 import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
@@ -29,6 +31,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
+import cn.finalteam.galleryfinal.GalleryFinal;
+import cn.finalteam.galleryfinal.model.PhotoInfo;
 
 public class MeActivity extends BaseActivityWithLoadingDialog {
     private RecyclerView recyclerView;
@@ -37,7 +42,13 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
     private List<UserInfoModel> userInfo;
 
     private User currentUser;
+    private boolean avatarChange = false;
     private boolean userInfoChange = false;
+
+    private AlertDialog avatarDialog;
+    private GalleryFinal.OnHanlderResultCallback mOnHanlderResultCallback;
+    private final int REQUEST_CODE_GALLERY = 301;
+    private final int REQUEST_CODE_CAMERA = 302;
 
     @Override
     protected void setContentLayout() {
@@ -85,6 +96,23 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
             }
         };
 
+        mOnHanlderResultCallback = new GalleryFinal.OnHanlderResultCallback() {
+            @Override
+            public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
+                String path = resultList.get(0).getPhotoPath();
+                if (!StringUtils.isEmpty(path)) {
+                    avatarChange = true;
+                    currentUser.setAvatar(path);
+                    setUserInfo(currentUser);
+                }
+            }
+
+            @Override
+            public void onHanlderFailure(int requestCode, String errorMsg) {
+                Utils.showToastShort(context, "获取照片失败，请重试");
+            }
+        };
+
         adapter = new UserInfoAdapter(userInfo);
         adapter.setOnItemClickListener(itemClickListener);
         recyclerView.setAdapter(adapter);
@@ -125,27 +153,35 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
     }
 
     private void backOpt() {
-        if (userInfoChange) {
-            loadingDialog.show();
-            currentUser.update(context, new MyBmobUpdateListener() {
-                @Override
-                protected void successOpt() {
-                    loadingDialog.dismiss();
-                    Utils.showToastShort(context, "用户信息更新成功");
-                    setResult(RESULT_OK);
-                    finish();
-                }
-
-                @Override
-                protected void failureOpt(int i, String s) {
-                    loadingDialog.dismiss();
-                    Utils.showToastShort(context, "更新用户信息失败，请稍候重试");
-                    finish();
-                }
-            });
+        if (avatarChange) {
+            // 头像发生变动
+            updateAvatarAndSaveUserInfo(currentUser.getAvatar());
+        } else if (userInfoChange) {
+            // 头像之外的信息发生变动
+            upLoadUserInfo();
         } else {
             finish();
         }
+    }
+
+    private void upLoadUserInfo() {
+        showLoadingDialog();
+        currentUser.update(context, new MyBmobUpdateListener() {
+            @Override
+            protected void successOpt() {
+                dismissLoadingDialog();
+                Utils.showToastShort(context, "用户信息更新成功");
+                setResult(RESULT_OK);
+                finish();
+            }
+
+            @Override
+            protected void failureOpt(int i, String s) {
+                dismissLoadingDialog();
+                Utils.showToastShort(context, "更新用户信息失败，请稍候重试");
+                finish();
+            }
+        });
     }
 
     @Override
@@ -168,26 +204,40 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
         adapter.refresh(userInfo);
     }
 
+    /**
+     * 显示用户拍照、从相册选取图片对话框
+     */
     private void showAvatarDialog() {
-        AlertDialog avatarDialog = new AlertDialog.Builder(context).create();
-        avatarDialog.setCanceledOnTouchOutside(true);
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_avatar_dialog, null);
-        RecyclerView avatarList = (RecyclerView) view.findViewById(R.id.take_avatar_option);
-        List<String> options = new ArrayList<>();
-        options.add(getString(R.string.avatar_from_camera));
-        options.add(getString(R.string.avatar_from_image));
-        SimpleAdapter adapter = new SimpleAdapter(options);
-        adapter.setItemClickListener(new OnContentItemClickListener() {
-            @Override
-            public void onItemClickListener(View view, int position) {
-                Utils.showToastShort(context, "click " + position);
+        if (avatarDialog == null) {
+            avatarDialog = new AlertDialog.Builder(context).create();
+            avatarDialog.setCanceledOnTouchOutside(true);
+            View view = LayoutInflater.from(context).inflate(R.layout.layout_avatar_dialog, null);
+            RecyclerView avatarList = (RecyclerView) view.findViewById(R.id.take_avatar_option);
+            List<String> options = new ArrayList<>();
+            options.add(getString(R.string.avatar_from_camera));
+            options.add(getString(R.string.avatar_from_image));
+            SimpleAdapter adapter = new SimpleAdapter(options);
+            adapter.setItemClickListener(new OnContentItemClickListener() {
+                @Override
+                public void onItemClickListener(View view, int position) {
+                    avatarDialog.dismiss();
+                    if (position == 0) {
+                        GalleryFinal.openCamera(REQUEST_CODE_CAMERA, mOnHanlderResultCallback);
+                    } else if (position == 1) {
+                        GalleryFinal.openGallerySingle(REQUEST_CODE_GALLERY, mOnHanlderResultCallback);
+                    }
+                }
+            });
+            avatarList.setAdapter(adapter);
+            avatarList.setLayoutManager(new CustomLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+            avatarList.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
+            avatarDialog.setView(view);
+            avatarDialog.show();
+        } else {
+            if (!avatarDialog.isShowing()) {
+                avatarDialog.show();
             }
-        });
-        avatarList.setAdapter(adapter);
-        avatarList.setLayoutManager(new CustomLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        avatarList.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).build());
-        avatarDialog.setView(view);
-        avatarDialog.show();
+        }
     }
 
     /**
@@ -238,5 +288,28 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
         inputDialog.setCanceledOnTouchOutside(false);
         inputDialog.setView(view);
         inputDialog.show();
+    }
+
+    private void updateAvatarAndSaveUserInfo(String path) {
+        showLoadingDialog();
+        Utils.uploadSingleFile(context, path, new MyBmobUploadListener() {
+            @Override
+            public void onSuccess(String fileName, String url, BmobFile file, String accessUrl) {
+                LogUtils.logi("fileName=" + fileName + "\n" + "url=" + url + "\n" + "accessUrl=" + accessUrl);
+                currentUser.setAvatar(accessUrl);
+                // 更新用户信息到bmob后台
+                upLoadUserInfo();
+            }
+
+            @Override
+            public void onProgress(int progress) {
+            }
+
+            @Override
+            public void onError(int statuscode, String errormsg) {
+                dismissLoadingDialog();
+                Utils.showToastShort(context, "更新用户信息失败，请稍候重试");
+            }
+        });
     }
 }

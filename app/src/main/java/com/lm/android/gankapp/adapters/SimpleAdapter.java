@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lm.android.gankapp.R;
-import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
+import com.lm.android.gankapp.listener.OnContentItemClickListener;
 
 import java.util.List;
 

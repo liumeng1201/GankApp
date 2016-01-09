@@ -17,7 +17,7 @@ import com.lm.android.gankapp.adapters.ContentAdapter;
 import com.lm.android.gankapp.dao.ReadContent;
 import com.lm.android.gankapp.dao.ReadContentDao;
 import com.lm.android.gankapp.interfaces.DatasCallback;
-import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
+import com.lm.android.gankapp.listener.OnContentItemClickListener;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentItemInfo;
 import com.lm.android.gankapp.utils.LogUtils;

@@ -1,4 +1,4 @@
-package com.lm.android.gankapp.interfaces;
+package com.lm.android.gankapp.listener;
 
 import android.view.View;
 

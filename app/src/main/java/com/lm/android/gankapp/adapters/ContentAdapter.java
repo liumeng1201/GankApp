@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.dao.DaoSession;
 import com.lm.android.gankapp.dao.ReadContentDao;
-import com.lm.android.gankapp.interfaces.OnContentItemClickListener;
+import com.lm.android.gankapp.listener.OnContentItemClickListener;
 import com.lm.android.gankapp.models.ContentItemInfo;
 import com.lm.android.gankapp.utils.ListUtils;
 

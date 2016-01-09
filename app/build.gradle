@@ -109,4 +109,7 @@ dependencies {
 
     // recyclerview分割线
     compile 'com.yqritc:recyclerview-flexibledivider:1.2.6'
+
+    // GalleryFinal，实现图片选择、拍照、裁剪功能
+    compile 'cn.finalteam:galleryfinal:1.4.3'
 }
