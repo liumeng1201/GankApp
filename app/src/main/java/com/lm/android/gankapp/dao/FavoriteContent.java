@@ -10,17 +10,14 @@ public class FavoriteContent {
     /** Not-null value. */
     private String objectId;
     /** Not-null value. */
+    private String contentObjectId;
+    /** Not-null value. */
     private String type;
     /** Not-null value. */
     private String desc;
     /** Not-null value. */
     private String url;
-    /** Not-null value. */
-    private String who;
-    /** Not-null value. */
-    private String publishedAt;
-    /** Not-null value. */
-    private java.util.Date favoriteAt;
+    private long favoriteAt;
 
     public FavoriteContent() {
     }
@@ -29,14 +26,13 @@ public class FavoriteContent {
         this.id = id;
     }
 
-    public FavoriteContent(Long id, String objectId, String type, String desc, String url, String who, String publishedAt, java.util.Date favoriteAt) {
+    public FavoriteContent(Long id, String objectId, String contentObjectId, String type, String desc, String url, long favoriteAt) {
         this.id = id;
         this.objectId = objectId;
+        this.contentObjectId = contentObjectId;
         this.type = type;
         this.desc = desc;
         this.url = url;
-        this.who = who;
-        this.publishedAt = publishedAt;
         this.favoriteAt = favoriteAt;
     }
 
@@ -56,6 +52,16 @@ public class FavoriteContent {
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setObjectId(String objectId) {
         this.objectId = objectId;
+    }
+
+    /** Not-null value. */
+    public String getContentObjectId() {
+        return contentObjectId;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setContentObjectId(String contentObjectId) {
+        this.contentObjectId = contentObjectId;
     }
 
     /** Not-null value. */
@@ -88,33 +94,11 @@ public class FavoriteContent {
         this.url = url;
     }
 
-    /** Not-null value. */
-    public String getWho() {
-        return who;
-    }
-
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setWho(String who) {
-        this.who = who;
-    }
-
-    /** Not-null value. */
-    public String getPublishedAt() {
-        return publishedAt;
-    }
-
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setPublishedAt(String publishedAt) {
-        this.publishedAt = publishedAt;
-    }
-
-    /** Not-null value. */
-    public java.util.Date getFavoriteAt() {
+    public long getFavoriteAt() {
         return favoriteAt;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setFavoriteAt(java.util.Date favoriteAt) {
+    public void setFavoriteAt(long favoriteAt) {
         this.favoriteAt = favoriteAt;
     }
 

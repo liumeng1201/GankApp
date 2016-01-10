@@ -18,15 +18,21 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.lm.android.gankapp.R;
+import com.lm.android.gankapp.dao.FavoriteContent;
+import com.lm.android.gankapp.dao.FavoriteContentDao;
 import com.lm.android.gankapp.interfaces.ShareSDKOptCallback;
+import com.lm.android.gankapp.listener.MyBmobDeleteListener;
 import com.lm.android.gankapp.listener.MyBmobFindListener;
 import com.lm.android.gankapp.listener.MyBmobSaveListener;
 import com.lm.android.gankapp.listener.MyBmobUpdateListener;
+import com.lm.android.gankapp.models.ContentItemFavorite;
 import com.lm.android.gankapp.models.ContentItemReadHot;
+import com.lm.android.gankapp.models.User;
 import com.lm.android.gankapp.utils.DrawableUtils;
 import com.lm.android.gankapp.utils.ListUtils;
 import com.lm.android.gankapp.utils.LogUtils;
 import com.lm.android.gankapp.utils.ShareUtils;
+import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
 
@@ -34,7 +40,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.sharesdk.framework.Platform;
+import de.greenrobot.dao.query.Query;
 import icepick.State;
 
 public class DetailActivity extends BaseActivity implements View.OnClickListener {
@@ -48,6 +56,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     private GestureDetector gs = null;
 
     private ContentItemReadHot contentItemReadHot;
+    private FavoriteContentDao favoriteDao;
 
     @State
     String url;
@@ -61,6 +70,8 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     String type;
     @State
     String publishAt;
+    @State
+    String userId;
 
     private ShareSDKOptCallback shareCallback;
 
@@ -127,9 +138,9 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 protected void successOpt(List<ContentItemReadHot> list) {
                     if (ListUtils.isEmpty(list)) {
-                        insertAndUpdateContent();
+                        insertHotReadContent();
                     } else {
-                        updateContent(list.get(0), list.get(0).getObjectId());
+                        updateHotReadContent(list.get(0), list.get(0).getObjectId());
                     }
                 }
 
@@ -139,6 +150,16 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
             });
         }
 
+        User currentUser = BmobUser.getCurrentUser(context, User.class);
+        if (currentUser != null) {
+            userId = currentUser.getObjectId();
+        }
+
+        favoriteDao = gankApplication.getDaoSession().getFavoriteContentDao();
+        if (!StringUtils.isEmpty(hasFavorite(contentObjectId))) {
+            btnFavorite.setSelected(true);
+        }
+
         setTitle(title);
         webView.loadUrl(url);
     }
@@ -146,13 +167,12 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     /**
      * 后台没有该条记录则插入并更新count
      */
-    private void insertAndUpdateContent() {
+    private void insertHotReadContent() {
         contentItemReadHot = new ContentItemReadHot(who, publishAt, title, type, url, contentObjectId);
         contentItemReadHot.save(context, new MyBmobSaveListener() {
             @Override
             protected void successOpt() {
-                LogUtils.logd("Add " + title + " to bmob db");
-                updateContent(contentItemReadHot, contentItemReadHot.getObjectId());
+                updateHotReadContent(contentItemReadHot, contentItemReadHot.getObjectId());
             }
 
 
@@ -167,7 +187,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
      *
      * @param objectId
      */
-    private void updateContent(ContentItemReadHot contentItemReadHot, String objectId) {
+    private void updateHotReadContent(ContentItemReadHot contentItemReadHot, String objectId) {
         contentItemReadHot.increment("count");
         contentItemReadHot.update(context, objectId, new MyBmobUpdateListener() {
             @Override
@@ -296,6 +316,34 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_favorite:
+                final String id = hasFavorite(contentObjectId);
+                if (!StringUtils.isEmpty(id)) {
+                    final ContentItemFavorite item = new ContentItemFavorite();
+                    item.delete(context, id, new MyBmobDeleteListener() {
+                        @Override
+                        public void successOpt() {
+                            delFavoriteFromDB(item.getObjectId());
+                            btnFavorite.setSelected(false);
+                        }
+
+                        @Override
+                        public void failureOpt(int i, String s) {
+                        }
+                    });
+                } else {
+                    final ContentItemFavorite item = new ContentItemFavorite(title, type, url, contentObjectId, System.currentTimeMillis(), userId);
+                    item.save(context, new MyBmobSaveListener() {
+                        @Override
+                        protected void successOpt() {
+                            addFavoriteToDB(item);
+                            btnFavorite.setSelected(true);
+                        }
+
+                        @Override
+                        protected void failureOpt(int i, String s) {
+                        }
+                    });
+                }
                 break;
             case R.id.btn_share:
                 ShareUtils.showShare(context, shareCallback, url, title, null);
@@ -319,4 +367,38 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    /**
+     * 判断是否已经收藏
+     *
+     * @param contentObjectId
+     * @return 已收藏返回objectId，否则返回空
+     */
+    private String hasFavorite(String contentObjectId) {
+        Query query = favoriteDao.queryBuilder().where(FavoriteContentDao.Properties.ContentObjectId.eq(contentObjectId)).build();
+        List<FavoriteContent> list = query.list();
+        if (ListUtils.isEmpty(list)) {
+            return null;
+        }
+        return list.get(0).getObjectId();
+    }
+
+    /**
+     * 将收藏数据添加到本地数据库以方便使用
+     */
+    private void addFavoriteToDB(ContentItemFavorite item) {
+        FavoriteContent entity = new FavoriteContent();
+        entity.setType(item.getType());
+        entity.setDesc(item.getDesc());
+        entity.setUrl(item.getUrl());
+        entity.setContentObjectId(item.getContentObjectId());
+        entity.setFavoriteAt(item.getFavoriteAt());
+        entity.setObjectId(item.getObjectId());
+        favoriteDao.insert(entity);
+    }
+
+    private void delFavoriteFromDB(String objectId) {
+
+    }
+
 }

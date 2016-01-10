@@ -25,12 +25,11 @@ public class FavoriteContentDao extends AbstractDao<FavoriteContent, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property ObjectId = new Property(1, String.class, "objectId", false, "OBJECT_ID");
-        public final static Property Type = new Property(2, String.class, "type", false, "TYPE");
-        public final static Property Desc = new Property(3, String.class, "desc", false, "DESC");
-        public final static Property Url = new Property(4, String.class, "url", false, "URL");
-        public final static Property Who = new Property(5, String.class, "who", false, "WHO");
-        public final static Property PublishedAt = new Property(6, String.class, "publishedAt", false, "PUBLISHED_AT");
-        public final static Property FavoriteAt = new Property(7, java.util.Date.class, "favoriteAt", false, "FAVORITE_AT");
+        public final static Property ContentObjectId = new Property(2, String.class, "contentObjectId", false, "CONTENT_OBJECT_ID");
+        public final static Property Type = new Property(3, String.class, "type", false, "TYPE");
+        public final static Property Desc = new Property(4, String.class, "desc", false, "DESC");
+        public final static Property Url = new Property(5, String.class, "url", false, "URL");
+        public final static Property FavoriteAt = new Property(6, long.class, "favoriteAt", false, "FAVORITE_AT");
     };
 
 
@@ -48,12 +47,11 @@ public class FavoriteContentDao extends AbstractDao<FavoriteContent, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"FAVORITE_CONTENT\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"OBJECT_ID\" TEXT NOT NULL ," + // 1: objectId
-                "\"TYPE\" TEXT NOT NULL ," + // 2: type
-                "\"DESC\" TEXT NOT NULL ," + // 3: desc
-                "\"URL\" TEXT NOT NULL ," + // 4: url
-                "\"WHO\" TEXT NOT NULL ," + // 5: who
-                "\"PUBLISHED_AT\" TEXT NOT NULL ," + // 6: publishedAt
-                "\"FAVORITE_AT\" INTEGER NOT NULL );"); // 7: favoriteAt
+                "\"CONTENT_OBJECT_ID\" TEXT NOT NULL ," + // 2: contentObjectId
+                "\"TYPE\" TEXT NOT NULL ," + // 3: type
+                "\"DESC\" TEXT NOT NULL ," + // 4: desc
+                "\"URL\" TEXT NOT NULL ," + // 5: url
+                "\"FAVORITE_AT\" INTEGER NOT NULL );"); // 6: favoriteAt
     }
 
     /** Drops the underlying database table. */
@@ -72,12 +70,11 @@ public class FavoriteContentDao extends AbstractDao<FavoriteContent, Long> {
             stmt.bindLong(1, id);
         }
         stmt.bindString(2, entity.getObjectId());
-        stmt.bindString(3, entity.getType());
-        stmt.bindString(4, entity.getDesc());
-        stmt.bindString(5, entity.getUrl());
-        stmt.bindString(6, entity.getWho());
-        stmt.bindString(7, entity.getPublishedAt());
-        stmt.bindLong(8, entity.getFavoriteAt().getTime());
+        stmt.bindString(3, entity.getContentObjectId());
+        stmt.bindString(4, entity.getType());
+        stmt.bindString(5, entity.getDesc());
+        stmt.bindString(6, entity.getUrl());
+        stmt.bindLong(7, entity.getFavoriteAt());
     }
 
     /** @inheritdoc */
@@ -92,12 +89,11 @@ public class FavoriteContentDao extends AbstractDao<FavoriteContent, Long> {
         FavoriteContent entity = new FavoriteContent( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // objectId
-            cursor.getString(offset + 2), // type
-            cursor.getString(offset + 3), // desc
-            cursor.getString(offset + 4), // url
-            cursor.getString(offset + 5), // who
-            cursor.getString(offset + 6), // publishedAt
-            new java.util.Date(cursor.getLong(offset + 7)) // favoriteAt
+            cursor.getString(offset + 2), // contentObjectId
+            cursor.getString(offset + 3), // type
+            cursor.getString(offset + 4), // desc
+            cursor.getString(offset + 5), // url
+            cursor.getLong(offset + 6) // favoriteAt
         );
         return entity;
     }
@@ -107,12 +103,11 @@ public class FavoriteContentDao extends AbstractDao<FavoriteContent, Long> {
     public void readEntity(Cursor cursor, FavoriteContent entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setObjectId(cursor.getString(offset + 1));
-        entity.setType(cursor.getString(offset + 2));
-        entity.setDesc(cursor.getString(offset + 3));
-        entity.setUrl(cursor.getString(offset + 4));
-        entity.setWho(cursor.getString(offset + 5));
-        entity.setPublishedAt(cursor.getString(offset + 6));
-        entity.setFavoriteAt(new java.util.Date(cursor.getLong(offset + 7)));
+        entity.setContentObjectId(cursor.getString(offset + 2));
+        entity.setType(cursor.getString(offset + 3));
+        entity.setDesc(cursor.getString(offset + 4));
+        entity.setUrl(cursor.getString(offset + 5));
+        entity.setFavoriteAt(cursor.getLong(offset + 6));
      }
     
     /** @inheritdoc */
