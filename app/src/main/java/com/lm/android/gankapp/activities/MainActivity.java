@@ -227,13 +227,14 @@ public class MainActivity extends BaseActivity {
 
     private void setUserInfo() {
         User user = BmobUser.getCurrentUser(context, User.class);
+        String avatarUrl = null;
         if (user != null) {
             String displayName = PropertyUtils.getUserDisplayName(user);
             if (!StringUtils.isEmpty(displayName)) {
                 userDisplayName.setText(displayName);
             }
+            avatarUrl = user.getAvatar();
         }
-        String avatarUrl = user.getAvatar();
         loadAvatar(avatarUrl);
     }
 

@@ -203,8 +203,12 @@ public class LoginActivity extends BaseActivityWithLoadingDialog implements View
                     @Override
                     public void successOpt(JSONObject jsonObject) {
                         User user = BmobUser.getCurrentUser(context, User.class);
-                        user.setNickName(nickName);
-                        user.setAvatar(avatarUrl);
+                        if (StringUtils.isEmpty(user.getNickName())) {
+                            user.setNickName(nickName);
+                        }
+                        if (StringUtils.isEmpty(user.getAvatar())) {
+                            user.setAvatar(avatarUrl);
+                        }
                         if (snsType.equalsIgnoreCase(BmobUser.BmobThirdUserAuth.SNS_TYPE_QQ)) {
                             user.setQqBinded(true);
                         } else if (snsType.equalsIgnoreCase(BmobUser.BmobThirdUserAuth.SNS_TYPE_WEIBO)) {
