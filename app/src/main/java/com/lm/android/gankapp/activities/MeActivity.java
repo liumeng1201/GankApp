@@ -1,6 +1,7 @@
 package com.lm.android.gankapp.activities;
 
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
@@ -14,25 +15,37 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.lm.android.gankapp.R;
+import com.lm.android.gankapp.adapters.ShareListAdapter;
 import com.lm.android.gankapp.adapters.SimpleAdapter;
 import com.lm.android.gankapp.adapters.UserInfoAdapter;
 import com.lm.android.gankapp.component.CustomLinearLayoutManager;
+import com.lm.android.gankapp.interfaces.ShareSDKOptCallback;
 import com.lm.android.gankapp.listener.MyBmobUpdateListener;
 import com.lm.android.gankapp.listener.MyBmobUploadListener;
+import com.lm.android.gankapp.listener.MyPlatformActionListener;
 import com.lm.android.gankapp.listener.OnContentItemClickListener;
+import com.lm.android.gankapp.models.SharePlatItem;
+import com.lm.android.gankapp.models.ThirdPartyOptType;
 import com.lm.android.gankapp.models.User;
 import com.lm.android.gankapp.models.UserInfoModel;
+import com.lm.android.gankapp.utils.LogUtils;
 import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.finalteam.galleryfinal.GalleryFinal;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.wechat.friends.Wechat;
 
 public class MeActivity extends BaseActivityWithLoadingDialog {
     private RecyclerView recyclerView;
@@ -48,6 +61,7 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
     private GalleryFinal.OnHanlderResultCallback mOnHanlderResultCallback;
     private final int REQUEST_CODE_GALLERY = 301;
     private final int REQUEST_CODE_CAMERA = 302;
+    private AlertDialog snsBindDialog;
 
     @Override
     protected void setContentLayout() {
@@ -79,6 +93,7 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
                         break;
                     case 3:
                         // 账号绑定
+                        showSnsBindDialog();
                         break;
                     case 4:
                         // 个人主页
@@ -289,6 +304,122 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
         inputDialog.show();
     }
 
+    /**
+     * 显示绑定第三方账号对话框
+     */
+    private void showSnsBindDialog() {
+        if (snsBindDialog == null) {
+            snsBindDialog = new AlertDialog.Builder(context).create();
+            View convertView = LayoutInflater.from(context).inflate(R.layout.layout_share_dialog, null);
+            RecyclerView view = (RecyclerView) convertView.findViewById(R.id.share_plat_list);
+            TextView title = (TextView) convertView.findViewById(R.id.title);
+            title.setText("绑定第三方账号");
+            List<SharePlatItem> platList = new ArrayList<>();
+            Resources resources = context.getResources();
+            platList.add(new SharePlatItem(R.drawable.ssdk_oks_skyblue_logo_wechat_checked, resources.getString(R.string.ssdk_wechat_title)));
+            platList.add(new SharePlatItem(R.drawable.ssdk_oks_skyblue_logo_qq_checked, resources.getString(R.string.ssdk_qq)));
+            platList.add(new SharePlatItem(R.drawable.ssdk_oks_skyblue_logo_sinaweibo_checked, resources.getString(R.string.ssdk_sinaweibo)));
+            final ShareListAdapter bindListAdapter = new ShareListAdapter(platList);
+            view.setAdapter(bindListAdapter);
+            view.setLayoutManager(new CustomLinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+            view.addItemDecoration(new HorizontalDividerItemDecoration.Builder(context).build());
+            snsBindDialog.setView(convertView);
+            ShareSDKOptCallback shareSDKOptCallback = new ShareSDKOptCallback() {
+                @Override
+                public void onSuccess(Platform platform, HashMap<String, Object> result) {
+                    // 第三方授权成功，可以获取第三方用户信息，之后进行用户注册
+                    showLoadingDialog();
+
+                    String accesstoken = platform.getDb().getToken();
+                    String experseIn = Long.toString(platform.getDb().getExpiresIn());
+                    String userId = platform.getDb().getUserId();
+                    final String nickName = platform.getDb().get("nickname");
+                    final String avatarUrl = platform.getDb().getUserIcon();
+                    LogUtils.logi(accesstoken + "\n" + experseIn + "\n" + userId + "\n" + nickName + "\n" + avatarUrl);
+
+                    BmobUser.BmobThirdUserAuth authInfo = null;
+                    if (platform.getName().equalsIgnoreCase(QQ.NAME)) {
+                        // 使用QQ登录
+                        authInfo = new BmobUser.BmobThirdUserAuth(BmobUser.BmobThirdUserAuth.SNS_TYPE_QQ, accesstoken, experseIn, userId);
+                    } else if (platform.getName().equalsIgnoreCase(SinaWeibo.NAME)) {
+                        // 使用新浪微博登录
+                        authInfo = new BmobUser.BmobThirdUserAuth(BmobUser.BmobThirdUserAuth.SNS_TYPE_WEIBO, accesstoken, experseIn, userId);
+                    } else if (platform.getName().equalsIgnoreCase(Wechat.NAME)) {
+                        authInfo = new BmobUser.BmobThirdUserAuth(BmobUser.BmobThirdUserAuth.SNS_TYPE_WEIXIN, accesstoken, experseIn, userId);
+                        return;
+                    }
+                    final String snsType = authInfo.getSnsType();
+                    BmobUser.associateWithAuthData(context, authInfo, new MyBmobUpdateListener() {
+                        @Override
+                        protected void successOpt() {
+                            thirdUserBindSuccess(snsType);
+                        }
+
+                        @Override
+                        public void failureOpt(int i, String s) {
+                            dismissLoadingDialog();
+                            Utils.showToastShort(context, getString(R.string.login_failed) + s);
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailed(Throwable throwable) {
+                    Utils.showToastShort(context, getString(R.string.login_failed) + throwable.getMessage());
+                }
+
+                @Override
+                public void onCancel() {
+                    Utils.showToastShort(context, getString(R.string.login_cancel));
+                }
+            };
+            final MyPlatformActionListener platformActionListener = new MyPlatformActionListener(ThirdPartyOptType.LOGIN, shareSDKOptCallback);
+            bindListAdapter.setOnItemClickListener(new OnContentItemClickListener() {
+                @Override
+                public void onItemClickListener(View view, int position) {
+                    Platform platform = null;
+                    switch (bindListAdapter.getItem(position).getPlatImage()) {
+                        case R.drawable.ssdk_oks_skyblue_logo_wechat_checked:
+                            Utils.showToastShort(context, "暂不支持绑定微信");
+                            return;
+                        case R.drawable.ssdk_oks_skyblue_logo_qq_checked:
+                            platform = ShareSDK.getPlatform(QQ.NAME);
+                            break;
+                        case R.drawable.ssdk_oks_skyblue_logo_sinaweibo_checked:
+                            platform = ShareSDK.getPlatform(SinaWeibo.NAME);
+                            break;
+                    }
+                    platform.setPlatformActionListener(platformActionListener);
+                    platform.showUser(null);
+                    snsBindDialog.dismiss();
+                }
+            });
+            snsBindDialog.setCanceledOnTouchOutside(true);
+            snsBindDialog.show();
+        } else if (!snsBindDialog.isShowing()) {
+            snsBindDialog.show();
+        }
+    }
+
+    private void thirdUserBindSuccess(String snsType) {
+        // 设置第三方绑定
+        if (snsType.equalsIgnoreCase(BmobUser.BmobThirdUserAuth.SNS_TYPE_QQ)) {
+            currentUser.setQqBinded(true);
+        } else if (snsType.equalsIgnoreCase(BmobUser.BmobThirdUserAuth.SNS_TYPE_WEIBO)) {
+            currentUser.setSinaWeiboBinded(true);
+        } else if (snsType.equalsIgnoreCase(BmobUser.BmobThirdUserAuth.SNS_TYPE_WEIXIN)) {
+            currentUser.setWechatBinded(true);
+        }
+        setUserInfo(currentUser);
+        dismissLoadingDialog();
+        userInfoChange = true;
+    }
+
+    /**
+     * 保存用户头像之后更新用户信息
+     *
+     * @param path 用户头像在本地SD卡上的路径
+     */
     private void updateAvatarAndSaveUserInfo(String path) {
         showLoadingDialog();
         Utils.uploadSingleFile(context, path, new MyBmobUploadListener() {
