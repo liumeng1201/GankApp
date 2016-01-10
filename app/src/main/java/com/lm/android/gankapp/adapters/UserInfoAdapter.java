@@ -16,6 +16,7 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.listener.OnContentItemClickListener;
 import com.lm.android.gankapp.models.UserInfoModel;
+import com.lm.android.gankapp.utils.ImageUtils;
 import com.lm.android.gankapp.utils.StringUtils;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
 
     private Context context;
     private List<UserInfoModel> userInfo;
+    private RoundedBitmapDrawable circularBitmapDrawable;
 
     private OnContentItemClickListener itemClickListener;
 
@@ -49,6 +51,8 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
+        circularBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), ImageUtils.getBitmapFromRes(context.getResources(), R.mipmap.default_avatar));
+        circularBitmapDrawable.setCircular(true);
         int layoutRes = R.layout.listitem_userinfo_text;
         switch (viewType) {
             case USER_INFO_TYPE_AVATAR:
@@ -69,7 +73,7 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.ViewHo
         UserInfoModel item = getItemData(position);
         switch (getItemViewType(position)) {
             case USER_INFO_TYPE_AVATAR:
-                Glide.with(context).load(item.getValue()).asBitmap().error(R.mipmap.default_avatar).centerCrop().into(new BitmapImageViewTarget(holder.avatar) {
+                Glide.with(context).load(item.getValue()).asBitmap().placeholder(circularBitmapDrawable).error(circularBitmapDrawable).centerCrop().into(new BitmapImageViewTarget(holder.avatar) {
                     @Override
                     protected void setResource(Bitmap resource) {
                         RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), resource);

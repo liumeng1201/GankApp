@@ -17,12 +17,11 @@ import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.SimpleAdapter;
 import com.lm.android.gankapp.adapters.UserInfoAdapter;
 import com.lm.android.gankapp.component.CustomLinearLayoutManager;
+import com.lm.android.gankapp.listener.MyBmobUpdateListener;
 import com.lm.android.gankapp.listener.MyBmobUploadListener;
 import com.lm.android.gankapp.listener.OnContentItemClickListener;
-import com.lm.android.gankapp.listener.MyBmobUpdateListener;
 import com.lm.android.gankapp.models.User;
 import com.lm.android.gankapp.models.UserInfoModel;
-import com.lm.android.gankapp.utils.LogUtils;
 import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
@@ -295,7 +294,6 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
         Utils.uploadSingleFile(context, path, new MyBmobUploadListener() {
             @Override
             public void onSuccess(String fileName, String url, BmobFile file, String accessUrl) {
-                LogUtils.logi("fileName=" + fileName + "\n" + "url=" + url + "\n" + "accessUrl=" + accessUrl);
                 currentUser.setAvatar(accessUrl);
                 // 更新用户信息到bmob后台
                 upLoadUserInfo();

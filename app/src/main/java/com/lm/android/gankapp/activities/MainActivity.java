@@ -28,6 +28,7 @@ import com.lm.android.gankapp.fragments.ContentFragment;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentType;
 import com.lm.android.gankapp.models.User;
+import com.lm.android.gankapp.utils.ImageUtils;
 import com.lm.android.gankapp.utils.PropertyUtils;
 import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
@@ -46,6 +47,7 @@ public class MainActivity extends BaseActivity {
     private ImageView userAvatar;
     private TextView userDisplayName;
 
+    private RoundedBitmapDrawable circularBitmapDrawable;
     private String[] titles;
 
     private final int NAV_HOME = 0;
@@ -72,6 +74,9 @@ public class MainActivity extends BaseActivity {
         MobclickAgent.openActivityDurationTrack(false);
 
         super.onCreate(savedInstanceState);
+
+        circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), ImageUtils.getBitmapFromRes(getResources(), R.mipmap.default_avatar));
+        circularBitmapDrawable.setCircular(true);
 
         titles = getResources().getStringArray(R.array.slide_menu);
 
@@ -227,36 +232,18 @@ public class MainActivity extends BaseActivity {
             if (!StringUtils.isEmpty(displayName)) {
                 userDisplayName.setText(displayName);
             }
-
-            String avatarUrl = user.getAvatar();
-            if (!StringUtils.isEmpty(avatarUrl)) {
-                loadAvatar(avatarUrl);
-            } else {
-                loadAvatar(R.mipmap.default_avatar);
-            }
-        } else {
-            loadAvatar(R.mipmap.default_avatar);
         }
-    }
-
-    private void loadAvatar(int resId) {
-        Glide.with(context).load(resId).asBitmap().centerCrop().into(new BitmapImageViewTarget(userAvatar) {
-            @Override
-            protected void setResource(Bitmap resource) {
-                RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
-                circularBitmapDrawable.setCircular(true);
-                userAvatar.setImageDrawable(circularBitmapDrawable);
-            }
-        });
+        String avatarUrl = user.getAvatar();
+        loadAvatar(avatarUrl);
     }
 
     private void loadAvatar(String url) {
-        Glide.with(context).load(url).asBitmap().error(R.mipmap.default_avatar).centerCrop().into(new BitmapImageViewTarget(userAvatar) {
+        Glide.with(context).load(url).asBitmap().placeholder(circularBitmapDrawable).error(circularBitmapDrawable).centerCrop().into(new BitmapImageViewTarget(userAvatar) {
             @Override
             protected void setResource(Bitmap resource) {
-                RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
-                circularBitmapDrawable.setCircular(true);
-                userAvatar.setImageDrawable(circularBitmapDrawable);
+                RoundedBitmapDrawable circularDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
+                circularDrawable.setCircular(true);
+                userAvatar.setImageDrawable(circularDrawable);
             }
         });
     }

@@ -1,6 +1,8 @@
 package com.lm.android.gankapp.utils;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -37,5 +39,9 @@ public class ImageUtils {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static Bitmap getBitmapFromRes(Resources res, int resId) {
+        return BitmapFactory.decodeResource(res, resId);
     }
 }
