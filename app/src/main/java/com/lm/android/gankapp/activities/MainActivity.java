@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
@@ -35,6 +36,9 @@ import com.lm.android.gankapp.utils.Utils;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.bmob.v3.BmobUser;
 import cn.sharesdk.framework.ShareSDK;
 
@@ -49,6 +53,9 @@ public class MainActivity extends BaseActivity {
 
     private RoundedBitmapDrawable circularBitmapDrawable;
     private String[] titles;
+    private TabAdapter adapter;
+    private List<Fragment> mFragmentList = new ArrayList<>();
+    private List<String> mFragmentTitleList = new ArrayList<>();
 
     private final int NAV_HOME = 0;
     private final int NAV_FAV = 1;
@@ -93,8 +100,9 @@ public class MainActivity extends BaseActivity {
             supportActionBar.setHomeAsUpIndicator(R.mipmap.ic_menu_white);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
-        setupViewPager(viewPager);
-        tabs.setupWithViewPager(viewPager);
+        adapter = new TabAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
+        setupNormalAdapter();
         initNavigationMenuItemClickListener();
         setTitle(titles[0]);
         invalidateOptionsMenu();
@@ -121,9 +129,11 @@ public class MainActivity extends BaseActivity {
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.nav_home:
+                        setupNormalAdapter();
                         navItemIndex = NAV_HOME;
                         break;
                     case R.id.nav_fav:
+                        setupFavoriteAdapter();
                         navItemIndex = NAV_FAV;
                         break;
                     case R.id.nav_gt:
@@ -147,15 +157,40 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
-        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.ANDROID.getType()), getString(R.string.category_android));
-        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.IOS.getType()), getString(R.string.category_ios));
-        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.WEB.getType()), getString(R.string.category_web));
-        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.EXPAND.getType()), getString(R.string.category_expand));
-        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.VIDEO.getType()), getString(R.string.category_video));
-        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.MEIZI.getType()), getString(R.string.categroy_meizi));
-        viewPager.setAdapter(adapter);
+    private void setupNormalAdapter() {
+        mFragmentList.clear();
+        mFragmentTitleList.clear();
+        mFragmentList.add(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.ANDROID.getType()));
+        mFragmentTitleList.add(getString(R.string.category_android));
+        mFragmentList.add(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.IOS.getType()));
+        mFragmentTitleList.add(getString(R.string.category_ios));
+        mFragmentList.add(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.WEB.getType()));
+        mFragmentTitleList.add(getString(R.string.category_web));
+        mFragmentList.add(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.EXPAND.getType()));
+        mFragmentTitleList.add(getString(R.string.category_expand));
+        mFragmentList.add(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.VIDEO.getType()));
+        mFragmentTitleList.add(getString(R.string.category_video));
+        mFragmentList.add(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.MEIZI.getType()));
+        mFragmentTitleList.add(getString(R.string.categroy_meizi));
+        adapter.refresh(mFragmentList, mFragmentTitleList);
+        tabs.setupWithViewPager(viewPager);
+    }
+
+    private void setupFavoriteAdapter() {
+        mFragmentList.clear();
+        mFragmentTitleList.clear();
+        mFragmentList.add(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.ANDROID.getType()));
+        mFragmentTitleList.add(getString(R.string.category_android));
+        mFragmentList.add(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.IOS.getType()));
+        mFragmentTitleList.add(getString(R.string.category_ios));
+        mFragmentList.add(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.WEB.getType()));
+        mFragmentTitleList.add(getString(R.string.category_web));
+        mFragmentList.add(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.EXPAND.getType()));
+        mFragmentTitleList.add(getString(R.string.category_expand));
+        mFragmentList.add(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.VIDEO.getType()));
+        mFragmentTitleList.add(getString(R.string.category_video));
+        adapter.refresh(mFragmentList, mFragmentTitleList);
+        tabs.setupWithViewPager(viewPager);
     }
 
     @Override

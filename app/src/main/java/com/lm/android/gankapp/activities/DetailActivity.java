@@ -316,34 +316,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_favorite:
-                final String id = hasFavorite(contentObjectId);
-                if (!StringUtils.isEmpty(id)) {
-                    final ContentItemFavorite item = new ContentItemFavorite();
-                    item.delete(context, id, new MyBmobDeleteListener() {
-                        @Override
-                        public void successOpt() {
-                            delFavoriteFromDB(item.getObjectId());
-                            btnFavorite.setSelected(false);
-                        }
-
-                        @Override
-                        public void failureOpt(int i, String s) {
-                        }
-                    });
-                } else {
-                    final ContentItemFavorite item = new ContentItemFavorite(title, type, url, contentObjectId, System.currentTimeMillis(), userId);
-                    item.save(context, new MyBmobSaveListener() {
-                        @Override
-                        protected void successOpt() {
-                            addFavoriteToDB(item);
-                            btnFavorite.setSelected(true);
-                        }
-
-                        @Override
-                        protected void failureOpt(int i, String s) {
-                        }
-                    });
-                }
+                favoriteOpt();
                 break;
             case R.id.btn_share:
                 ShareUtils.showShare(context, shareCallback, url, title, null);
@@ -352,6 +325,44 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                 Intent openBrowser = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(openBrowser);
                 break;
+        }
+    }
+
+    private void favoriteOpt() {
+        if (StringUtils.isEmpty(userId)) {
+            // 用户不存在则先进行登录操作
+            Utils.showToastShort(context, "登录之后才可收藏");
+            Intent login = new Intent(context, LoginActivity.class);
+            startActivityForResult(login, Utils.REQUEST_CODE_LOGIN);
+        } else {
+            final String id = hasFavorite(contentObjectId);
+            if (!StringUtils.isEmpty(id)) {
+                final ContentItemFavorite item = new ContentItemFavorite();
+                item.delete(context, id, new MyBmobDeleteListener() {
+                    @Override
+                    public void successOpt() {
+                        delFavoriteFromDB(item.getContentObjectId());
+                        btnFavorite.setSelected(false);
+                    }
+
+                    @Override
+                    public void failureOpt(int i, String s) {
+                    }
+                });
+            } else {
+                final ContentItemFavorite item = new ContentItemFavorite(title, type, url, contentObjectId, System.currentTimeMillis(), userId);
+                item.save(context, new MyBmobSaveListener() {
+                    @Override
+                    protected void successOpt() {
+                        addFavoriteToDB(item);
+                        btnFavorite.setSelected(true);
+                    }
+
+                    @Override
+                    protected void failureOpt(int i, String s) {
+                    }
+                });
+            }
         }
     }
 
@@ -368,6 +379,16 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == Utils.REQUEST_CODE_LOGIN) {
+                favoriteOpt();
+            }
+        }
+    }
+
     /**
      * 判断是否已经收藏
      *
@@ -375,12 +396,24 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
      * @return 已收藏返回objectId，否则返回空
      */
     private String hasFavorite(String contentObjectId) {
+        FavoriteContent item = getFavoriteEntity(contentObjectId);
+        if (item == null) {
+            return null;
+        }
+        return item.getObjectId();
+    }
+
+    /**
+     * @param contentObjectId 文章id
+     * @return 收藏entity
+     */
+    private FavoriteContent getFavoriteEntity(String contentObjectId) {
         Query query = favoriteDao.queryBuilder().where(FavoriteContentDao.Properties.ContentObjectId.eq(contentObjectId)).build();
         List<FavoriteContent> list = query.list();
         if (ListUtils.isEmpty(list)) {
             return null;
         }
-        return list.get(0).getObjectId();
+        return list.get(0);
     }
 
     /**
@@ -397,8 +430,13 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         favoriteDao.insert(entity);
     }
 
-    private void delFavoriteFromDB(String objectId) {
-
+    /**
+     * 从数据库中删除收藏信息
+     *
+     * @param contentObjectId
+     */
+    private void delFavoriteFromDB(String contentObjectId) {
+        favoriteDao.delete(getFavoriteEntity(contentObjectId));
     }
 
 }

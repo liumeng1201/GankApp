@@ -34,8 +34,8 @@ public class Utils {
     public static final int REQUEST_CODE_LOGIN = 20001;
     public static final int REQUEST_CODE_REGISTER = 20002;
     public static final int REQUEST_CODE_USERINFO = 20003;
-    public static final String Bmob_ID = "1d12db91cc13949729e6db732046c69f";
-    public static final String Bmob_ACCESS_KEY = "c9fe7f4e03bc6e083cb37a55b8048768";
+    public static final String Bmob_ID = "359548ddc36b912635b1a45c7ed39e1b";
+    public static final String Bmob_ACCESS_KEY = "ded5326707fc425a52c1d23febe01472";
 
     /**
      * @return app外部存储基准目录
