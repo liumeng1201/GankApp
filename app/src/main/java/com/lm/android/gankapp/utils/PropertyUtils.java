@@ -1,7 +1,10 @@
 package com.lm.android.gankapp.utils;
 
+import com.lm.android.gankapp.dao.FavoriteContent;
+import com.lm.android.gankapp.dao.FavoriteContentDao;
 import com.lm.android.gankapp.dao.PropertyContent;
 import com.lm.android.gankapp.dao.PropertyContentDao;
+import com.lm.android.gankapp.models.ContentItemFavorite;
 import com.lm.android.gankapp.models.User;
 
 import java.util.List;
@@ -83,5 +86,19 @@ public class PropertyUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * 将数据添加到本地数据库中
+     */
+    public static void addFavoriteToDB(ContentItemFavorite item, FavoriteContentDao dao) {
+        FavoriteContent entity = new FavoriteContent();
+        entity.setType(item.getType());
+        entity.setDesc(item.getDesc());
+        entity.setUrl(item.getUrl());
+        entity.setContentObjectId(item.getContentObjectId());
+        entity.setFavoriteAt(item.getFavoriteAt());
+        entity.setObjectId(item.getObjectId());
+        dao.insertOrReplace(entity);
     }
 }

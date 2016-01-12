@@ -20,6 +20,7 @@ import com.lm.android.gankapp.listener.MyBmobUpdateListener;
 import com.lm.android.gankapp.listener.MyPlatformActionListener;
 import com.lm.android.gankapp.models.ThirdPartyOptType;
 import com.lm.android.gankapp.models.User;
+import com.lm.android.gankapp.services.SyncDataService;
 import com.lm.android.gankapp.utils.LogUtils;
 import com.lm.android.gankapp.utils.PropertyUtils;
 import com.lm.android.gankapp.utils.StringUtils;
@@ -131,6 +132,10 @@ public class LoginActivity extends BaseActivityWithLoadingDialog implements View
                 @Override
                 protected void successOpt() {
                     PropertyUtils.setUserLoginStatus("true", propertyContentDao);
+
+                    Intent intent = new Intent(context, SyncDataService.class);
+                    startService(intent);
+
                     dismissLoadingDialog();
                     setResult(RESULT_OK);
                     finish();
@@ -162,6 +167,9 @@ public class LoginActivity extends BaseActivityWithLoadingDialog implements View
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == Utils.REQUEST_CODE_REGISTER) {
+                Intent intent = new Intent(context, SyncDataService.class);
+                startService(intent);
+
                 // 注册成功
                 setResult(RESULT_OK);
                 finish();
@@ -254,6 +262,9 @@ public class LoginActivity extends BaseActivityWithLoadingDialog implements View
 
     private void thirdUserLoginSuccess(String snsType) {
         PropertyUtils.setUserLoginStatus("true", propertyContentDao);
+
+        Intent intent = new Intent(context, SyncDataService.class);
+        startService(intent);
 
         dismissLoadingDialog();
         setResult(RESULT_OK);

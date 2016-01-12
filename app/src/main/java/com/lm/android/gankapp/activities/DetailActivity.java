@@ -30,6 +30,7 @@ import com.lm.android.gankapp.models.ContentItemReadHot;
 import com.lm.android.gankapp.utils.DrawableUtils;
 import com.lm.android.gankapp.utils.ListUtils;
 import com.lm.android.gankapp.utils.LogUtils;
+import com.lm.android.gankapp.utils.PropertyUtils;
 import com.lm.android.gankapp.utils.ShareUtils;
 import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
@@ -346,7 +347,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                 item.save(context, new MyBmobSaveListener() {
                     @Override
                     protected void successOpt() {
-                        addFavoriteToDB(item);
+                        PropertyUtils.addFavoriteToDB(item, favoriteDao);
                         btnFavorite.setSelected(true);
                     }
 
@@ -409,20 +410,6 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
             return list.get(0);
         }
         return null;
-    }
-
-    /**
-     * 将收藏数据添加到本地数据库以方便使用
-     */
-    private void addFavoriteToDB(ContentItemFavorite item) {
-        FavoriteContent entity = new FavoriteContent();
-        entity.setType(item.getType());
-        entity.setDesc(item.getDesc());
-        entity.setUrl(item.getUrl());
-        entity.setContentObjectId(item.getContentObjectId());
-        entity.setFavoriteAt(item.getFavoriteAt());
-        entity.setObjectId(item.getObjectId());
-        favoriteDao.insert(entity);
     }
 
     /**

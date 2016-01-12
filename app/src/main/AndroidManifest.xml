@@ -46,6 +46,13 @@
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.FavoriteActivity" />
+        <activity
+            android:name=".activities.MeActivity"
+            android:label="@string/title_activity_me" />
+
+        <service
+            android:name=".services.SyncDataService"
+            android:process=":sync_service" />
 
         <!-- sharesdk start -->
         <activity
@@ -89,15 +96,7 @@
             android:value="${CHANNEL_VALUE}" />
         <!-- 友盟统计 end -->
 
-        <activity
-            android:name=".activities.MeActivity"
-            android:label="@string/title_activity_me"
-            android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.lm.android.gankapp.activities.MainActivity" />
-        </activity>
+
     </application>
 
 </manifest>

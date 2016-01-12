@@ -34,15 +34,12 @@ public class FavoriteFragment extends BaseFragment {
     @State
     String userId;
 
-    private boolean isLoading = false;
-    private boolean isLoadAll = false;
     private String request_base_url;
     private ArrayList<FavoriteModel> datas;
     private FavoriteContentAdapter adapter;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private SwipeRefreshLayout.OnRefreshListener refreshListener;
-    private RecyclerView.OnScrollListener scrollListener;
 
     public FavoriteFragment() {
         // Required empty public constructor
@@ -80,27 +77,7 @@ public class FavoriteFragment extends BaseFragment {
         refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                requestDatas(request_base_url, false);
-            }
-        };
-        scrollListener = new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                LinearLayoutManager mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
-                int totalItemCount = mLayoutManager.getItemCount();
-                // lastVisibleItem >= totalItemCount - 10 表示剩下10个item自动加载，各位自由选择
-                // dy>0 表示向下滑动
-                if (lastVisibleItem >= totalItemCount - 10 && dy > 0 && !isLoading && !isLoadAll) {
-                    isLoading = true;
-                    requestDatas(request_base_url, true);
-                }
+                requestDatas(request_base_url);
             }
         };
     }
@@ -115,28 +92,25 @@ public class FavoriteFragment extends BaseFragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.addOnScrollListener(scrollListener);
         // 初次进入显示刷新动画
         swipeRefreshLayout.setProgressViewOffset(true, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
         swipeRefreshLayout.setRefreshing(true);
-        requestDatas(request_base_url, false);
+        requestDatas(request_base_url);
         return convertView;
     }
 
     /**
      * 请求数据操作
      *
-     * @param url      请求的url
-     * @param loadMore 是否为加载更多
+     * @param url 请求的url
      */
-    private void requestDatas(String url, final boolean loadMore) {
+    private void requestDatas(String url) {
         Map<String, String> params = new HashMap<>();
         params.put("userId", userId);
         params.put("type", Utils.requestCategory[mCategory]);
         OkHttpUtils.post().url(url).params(params).build().execute(new FavoriteDatasCallback() {
             @Override
             public void onError(Request request, Exception e) {
-                isLoading = false;
                 if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
                 }
@@ -145,21 +119,14 @@ public class FavoriteFragment extends BaseFragment {
 
             @Override
             public void onResponse(ArrayList<FavoriteModel> response) {
-                isLoading = false;
                 if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
                 }
                 if (response == null) {
                     return;
                 }
-                if (response.size() < Utils.requestNum) {
-                    isLoadAll = true;
-                }
-                if (loadMore) {
-                    datas.addAll(response);
-                } else {
-                    datas = response;
-                }
+
+                datas = response;
                 adapter.refresh(datas);
             }
         });
