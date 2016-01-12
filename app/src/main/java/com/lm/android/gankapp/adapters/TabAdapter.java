@@ -11,17 +11,11 @@ import java.util.List;
  * Created by liumeng on 2015/12/15.
  */
 public class TabAdapter extends FragmentPagerAdapter {
-    private List<Fragment> mFragmentList = new ArrayList<>();
-    private List<String> mFragmentTitleList = new ArrayList<>();
+    private final List<Fragment> mFragmentList = new ArrayList<>();
+    private final List<String> mFragmentTitleList = new ArrayList<>();
 
     public TabAdapter(FragmentManager fm) {
         super(fm);
-    }
-
-    public void refresh(List<Fragment> mFragmentList, List<String> mFragmentTitleList) {
-        this.mFragmentList = mFragmentList;
-        this.mFragmentTitleList = mFragmentTitleList;
-        this.notifyDataSetChanged();
     }
 
     @Override
@@ -32,6 +26,11 @@ public class TabAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return mFragmentList.size();
+    }
+
+    public void addFragment(Fragment fragment, String title) {
+        mFragmentList.add(fragment);
+        mFragmentTitleList.add(title);
     }
 
     @Override

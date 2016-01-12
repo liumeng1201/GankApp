@@ -45,6 +45,7 @@
             android:label="@string/title_activity_imageview" />
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.RegisterActivity" />
+        <activity android:name=".activities.FavoriteActivity" />
 
         <!-- sharesdk start -->
         <activity
