@@ -17,9 +17,11 @@ import com.bmob.BmobProFile;
 import com.bmob.btp.callback.UploadListener;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.listener.MyBmobUploadListener;
+import com.lm.android.gankapp.models.User;
 
 import java.io.File;
 
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 
 /**
@@ -34,6 +36,7 @@ public class Utils {
     public static final int REQUEST_CODE_LOGIN = 20001;
     public static final int REQUEST_CODE_REGISTER = 20002;
     public static final int REQUEST_CODE_USERINFO = 20003;
+    public static final int REQUEST_CODE_FAVORITE_LOGIN = 20004;
 
     // Bmob对应各个key值
     public static final String Bmob_ID = "359548ddc36b912635b1a45c7ed39e1b";
@@ -160,5 +163,17 @@ public class Utils {
             }
         });
         return response;
+    }
+
+    /**
+     * @return 用户ID
+     */
+    public static String getUserId(Context context) {
+        String userId = null;
+        User currentUser = BmobUser.getCurrentUser(context, User.class);
+        if (currentUser != null) {
+            userId = currentUser.getObjectId();
+        }
+        return userId;
     }
 }

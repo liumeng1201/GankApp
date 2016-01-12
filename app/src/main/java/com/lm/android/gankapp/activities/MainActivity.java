@@ -101,7 +101,7 @@ public class MainActivity extends BaseActivity {
         userAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (PropertyUtils.getUserLoginStatus(propertyContentDao)) {
+                if (!StringUtils.isEmpty(Utils.getUserId(context))) {
                     Intent intent = new Intent(context, MeActivity.class);
                     startActivityForResult(intent, Utils.REQUEST_CODE_USERINFO);
                 } else {
@@ -122,8 +122,7 @@ public class MainActivity extends BaseActivity {
                     case R.id.nav_home:
                         break;
                     case R.id.nav_fav:
-                        Intent fav = new Intent(context, FavoriteActivity.class);
-                        startActivity(fav);
+                        gotoFavorite();
                         break;
                     case R.id.nav_gt:
                         break;
@@ -138,6 +137,17 @@ public class MainActivity extends BaseActivity {
                 return false;
             }
         });
+    }
+
+    private void gotoFavorite() {
+        if (StringUtils.isEmpty(Utils.getUserId(context))) {
+            Utils.showToastShort(context, "登录之后才可查看");
+            Intent intent = new Intent(context, LoginActivity.class);
+            startActivityForResult(intent, Utils.REQUEST_CODE_FAVORITE_LOGIN);
+        } else {
+            Intent fav = new Intent(context, FavoriteActivity.class);
+            startActivity(fav);
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -174,6 +184,10 @@ public class MainActivity extends BaseActivity {
                 case Utils.REQUEST_CODE_USERINFO:
                     // 用户信息变动
                     setUserInfo();
+                    break;
+                case Utils.REQUEST_CODE_FAVORITE_LOGIN:
+                    setUserInfo();
+                    gotoFavorite();
                     break;
             }
         }

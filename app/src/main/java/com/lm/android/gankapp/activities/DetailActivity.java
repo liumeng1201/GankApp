@@ -27,7 +27,6 @@ import com.lm.android.gankapp.listener.MyBmobSaveListener;
 import com.lm.android.gankapp.listener.MyBmobUpdateListener;
 import com.lm.android.gankapp.models.ContentItemFavorite;
 import com.lm.android.gankapp.models.ContentItemReadHot;
-import com.lm.android.gankapp.models.User;
 import com.lm.android.gankapp.utils.DrawableUtils;
 import com.lm.android.gankapp.utils.ListUtils;
 import com.lm.android.gankapp.utils.LogUtils;
@@ -40,7 +39,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
 import cn.sharesdk.framework.Platform;
 import de.greenrobot.dao.query.Query;
 import icepick.State;
@@ -167,7 +165,6 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
             protected void successOpt() {
                 updateHotReadContent(contentItemReadHot, contentItemReadHot.getObjectId());
             }
-
 
             @Override
             protected void failureOpt(int i, String s) {
@@ -322,11 +319,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void favoriteOpt() {
-        String userId = null;
-        User currentUser = BmobUser.getCurrentUser(context, User.class);
-        if (currentUser != null) {
-            userId = currentUser.getObjectId();
-        }
+        String userId = Utils.getUserId(context);
 
         if (StringUtils.isEmpty(userId)) {
             // 用户不存在则先进行登录操作

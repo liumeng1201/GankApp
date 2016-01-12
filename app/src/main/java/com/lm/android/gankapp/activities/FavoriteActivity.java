@@ -10,6 +10,9 @@ import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.TabAdapter;
 import com.lm.android.gankapp.fragments.FavoriteFragment;
 import com.lm.android.gankapp.models.ContentCategory;
+import com.lm.android.gankapp.models.User;
+
+import cn.bmob.v3.BmobUser;
 
 /**
  * Created by liumeng on 2016/1/12.
@@ -17,6 +20,7 @@ import com.lm.android.gankapp.models.ContentCategory;
 public class FavoriteActivity extends BaseActivityWithLoadingDialog {
     private TabLayout tabs;
     private ViewPager viewPager;
+    private String userId;
 
     @Override
     protected void initLoadingDialog() {
@@ -34,6 +38,7 @@ public class FavoriteActivity extends BaseActivityWithLoadingDialog {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.nav_fav);
 
+        userId = BmobUser.getCurrentUser(context, User.class).getObjectId();
         initView();
     }
 
@@ -47,11 +52,11 @@ public class FavoriteActivity extends BaseActivityWithLoadingDialog {
 
     private void setupViewPager(ViewPager viewPager) {
         TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
-        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.ANDROID.getType()), getString(R.string.category_android));
-        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.IOS.getType()), getString(R.string.category_ios));
-        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.WEB.getType()), getString(R.string.category_web));
-        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.EXPAND.getType()), getString(R.string.category_expand));
-        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.VIDEO.getType()), getString(R.string.category_video));
+        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.ANDROID.getType(), userId), getString(R.string.category_android));
+        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.IOS.getType(), userId), getString(R.string.category_ios));
+        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.WEB.getType(), userId), getString(R.string.category_web));
+        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.EXPAND.getType(), userId), getString(R.string.category_expand));
+        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.VIDEO.getType(), userId), getString(R.string.category_video));
         viewPager.setAdapter(adapter);
     }
 
