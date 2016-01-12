@@ -66,4 +66,5 @@
     <string name="nickname">昵称</string>
     <string name="homepage">个人主页</string>
     <string name="Signature">个性签名</string>
+    <string name="regitsering">注册中...</string>
 </resources>

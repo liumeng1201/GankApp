@@ -69,4 +69,5 @@
     <string name="nickname">Nickname</string>
     <string name="homepage">HomePage</string>
     <string name="Signature">Signature</string>
+    <string name="regitsering">Register...</string>
 </resources>

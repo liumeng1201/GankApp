@@ -352,7 +352,7 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
                     BmobUser.associateWithAuthData(context, authInfo, new MyBmobUpdateListener() {
                         @Override
                         protected void successOpt() {
-                            thirdUserBindSuccess(snsType);
+                            thirdUserBindSuccess(snsType, nickName, avatarUrl);
                         }
 
                         @Override
@@ -401,7 +401,7 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
         }
     }
 
-    private void thirdUserBindSuccess(String snsType) {
+    private void thirdUserBindSuccess(String snsType, String nickName, String avatarUrl) {
         // 设置第三方绑定
         if (snsType.equalsIgnoreCase(BmobUser.BmobThirdUserAuth.SNS_TYPE_QQ)) {
             currentUser.setQqBinded(true);
@@ -409,6 +409,12 @@ public class MeActivity extends BaseActivityWithLoadingDialog {
             currentUser.setSinaWeiboBinded(true);
         } else if (snsType.equalsIgnoreCase(BmobUser.BmobThirdUserAuth.SNS_TYPE_WEIXIN)) {
             currentUser.setWechatBinded(true);
+        }
+        if (StringUtils.isEmpty(currentUser.getNickName())) {
+            currentUser.setNickName(nickName);
+        }
+        if (StringUtils.isEmpty(currentUser.getAvatar())) {
+            currentUser.setAvatar(avatarUrl);
         }
         setUserInfo(currentUser);
         dismissLoadingDialog();

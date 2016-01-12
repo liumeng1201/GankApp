@@ -124,6 +124,6 @@ public class RegisterActivity extends BaseActivityWithLoadingDialog {
 
     @Override
     protected void initLoadingDialog() {
-        loadingDialog = Utils.getLoadingDialog(context, getString(R.string.logining));
+        loadingDialog = Utils.getLoadingDialog(context, getString(R.string.regitsering));
     }
 }
