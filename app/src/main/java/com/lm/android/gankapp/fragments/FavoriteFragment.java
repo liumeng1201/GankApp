@@ -11,17 +11,20 @@ import android.view.ViewGroup;
 
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.activities.DetailActivity;
-import com.lm.android.gankapp.adapters.ContentAdapter;
-import com.lm.android.gankapp.interfaces.DatasCallback;
+import com.lm.android.gankapp.adapters.FavoriteContentAdapter;
+import com.lm.android.gankapp.interfaces.FavoriteDatasCallback;
 import com.lm.android.gankapp.listener.OnContentItemClickListener;
-import com.lm.android.gankapp.models.ContentItemInfo;
-import com.lm.android.gankapp.utils.LogUtils;
+import com.lm.android.gankapp.models.FavoriteModel;
+import com.lm.android.gankapp.models.User;
 import com.lm.android.gankapp.utils.Utils;
 import com.squareup.okhttp.Request;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import cn.bmob.v3.BmobUser;
 import icepick.State;
 
 public class FavoriteFragment extends BaseFragment {
@@ -32,10 +35,9 @@ public class FavoriteFragment extends BaseFragment {
 
     private boolean isLoading = false;
     private boolean isLoadAll = false;
-    private int pageNum = 1;
     private String request_base_url;
-    private ArrayList<ContentItemInfo> datas;
-    private ContentAdapter adapter;
+    private ArrayList<FavoriteModel> datas;
+    private FavoriteContentAdapter adapter;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private SwipeRefreshLayout.OnRefreshListener refreshListener;
@@ -62,20 +64,19 @@ public class FavoriteFragment extends BaseFragment {
         if (getArguments() != null) {
             mCategory = getArguments().getInt(ARG_PARAM_CATEGORY);
         }
-        request_base_url = Utils.base_category_data_url + Utils.requestCategory[mCategory] + "/" + Utils.requestNum + "/";
+        request_base_url = Utils.get_favorite_url;
         datas = new ArrayList<>();
-        adapter = new ContentAdapter(datas, false, null);
+        adapter = new FavoriteContentAdapter(datas);
         adapter.setOnItemClickListener(new OnContentItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
-                ContentItemInfo itemData = adapter.getItemData(position);
-                DetailActivity.actionStart(getActivity(), itemData.getObjectId(), itemData.getUrl(), itemData.getDesc(), itemData.getWho(), itemData.getType(), itemData.getPublishedAt());
+                FavoriteModel itemData = adapter.getItemData(position);
+                DetailActivity.actionStart(getActivity(), itemData.getObjectId(), itemData.getUrl(), itemData.getDesc(), null, itemData.getType(), null);
             }
         });
         refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                pageNum = 1;
                 requestDatas(request_base_url, false);
             }
         };
@@ -126,12 +127,11 @@ public class FavoriteFragment extends BaseFragment {
      * @param loadMore 是否为加载更多
      */
     private void requestDatas(String url, final boolean loadMore) {
-        if (loadMore) {
-            pageNum++;
-        }
-        url = url + pageNum;
-        LogUtils.logd(url);
-        OkHttpUtils.get().url(url).build().execute(new DatasCallback() {
+        Map<String, String> params = new HashMap<>();
+        User user = BmobUser.getCurrentUser(getActivity(), User.class);
+        params.put("userId", user.getObjectId());
+        params.put("type", Utils.requestCategory[mCategory]);
+        OkHttpUtils.post().url(url).params(params).build().execute(new FavoriteDatasCallback() {
             @Override
             public void onError(Request request, Exception e) {
                 isLoading = false;
@@ -142,7 +142,7 @@ public class FavoriteFragment extends BaseFragment {
             }
 
             @Override
-            public void onResponse(ArrayList<ContentItemInfo> response) {
+            public void onResponse(ArrayList<FavoriteModel> response) {
                 isLoading = false;
                 if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
@@ -155,11 +155,10 @@ public class FavoriteFragment extends BaseFragment {
                 }
                 if (loadMore) {
                     datas.addAll(response);
-                    adapter.refresh(datas, false);
                 } else {
                     datas = response;
-                    adapter.refresh(datas, false);
                 }
+                adapter.refresh(datas);
             }
         });
     }
