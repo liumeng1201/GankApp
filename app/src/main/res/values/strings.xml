@@ -70,4 +70,5 @@
     <string name="homepage">HomePage</string>
     <string name="Signature">Signature</string>
     <string name="regitsering">Register...</string>
+    <string name="favorite_login_first">You must Login before favorite</string>
 </resources>

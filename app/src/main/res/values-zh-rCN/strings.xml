@@ -67,4 +67,5 @@
     <string name="homepage">个人主页</string>
     <string name="Signature">个性签名</string>
     <string name="regitsering">注册中...</string>
+    <string name="favorite_login_first">登录之后才可收藏</string>
 </resources>

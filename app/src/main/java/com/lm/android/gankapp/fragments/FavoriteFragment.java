@@ -8,17 +8,12 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.activities.DetailActivity;
-import com.lm.android.gankapp.activities.ImageViewActivity;
 import com.lm.android.gankapp.adapters.ContentAdapter;
-import com.lm.android.gankapp.dao.ReadContent;
-import com.lm.android.gankapp.dao.ReadContentDao;
 import com.lm.android.gankapp.interfaces.DatasCallback;
 import com.lm.android.gankapp.listener.OnContentItemClickListener;
-import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentItemInfo;
 import com.lm.android.gankapp.utils.LogUtils;
 import com.lm.android.gankapp.utils.Utils;
@@ -29,12 +24,9 @@ import java.util.ArrayList;
 
 import icepick.State;
 
-public class ContentFragment extends BaseFragment {
-    private static final String ARG_PARAM_TYPE = "type";
+public class FavoriteFragment extends BaseFragment {
     private static final String ARG_PARAM_CATEGORY = "category";
 
-    @State
-    int mType;
     @State
     int mCategory;
 
@@ -49,18 +41,16 @@ public class ContentFragment extends BaseFragment {
     private SwipeRefreshLayout.OnRefreshListener refreshListener;
     private RecyclerView.OnScrollListener scrollListener;
 
-    public ContentFragment() {
+    public FavoriteFragment() {
         // Required empty public constructor
     }
 
     /**
-     * @param type     页面类型，分为网络数据和收藏数据
      * @param category 数据类型，分为Android、iOS、前端等
      */
-    public static ContentFragment newInstance(int type, int category) {
-        ContentFragment fragment = new ContentFragment();
+    public static FavoriteFragment newInstance(int category) {
+        FavoriteFragment fragment = new FavoriteFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM_TYPE, type);
         args.putInt(ARG_PARAM_CATEGORY, category);
         fragment.setArguments(args);
         return fragment;
@@ -70,29 +60,16 @@ public class ContentFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mType = getArguments().getInt(ARG_PARAM_TYPE);
             mCategory = getArguments().getInt(ARG_PARAM_CATEGORY);
         }
         request_base_url = Utils.base_category_data_url + Utils.requestCategory[mCategory] + "/" + Utils.requestNum + "/";
         datas = new ArrayList<>();
-        adapter = new ContentAdapter(datas, mCategory == ContentCategory.MEIZI.getType() ? true : false, gankApplication.getDaoSession());
+        adapter = new ContentAdapter(datas, false, null);
         adapter.setOnItemClickListener(new OnContentItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
-                final ContentItemInfo itemData = adapter.getItemData(position);
-                ReadContentDao dao = gankApplication.getDaoSession().getReadContentDao();
-                ReadContent readContent = new ReadContent();
-                readContent.setObjectId(itemData.getObjectId());
-                dao.insertOrReplace(readContent);
-
-                if (mCategory == ContentCategory.MEIZI.getType()) {
-                    ImageViewActivity.actionStart(getActivity(), itemData.getUrl(), itemData.getObjectId());
-                } else {
-                    DetailActivity.actionStart(getActivity(), itemData.getObjectId(), itemData.getUrl(), itemData.getDesc(), itemData.getWho(), itemData.getType(), itemData.getPublishedAt());
-                    ((TextView) view.findViewById(R.id.list_title)).setTextColor(getResources().getColor(R.color.read));
-                }
-                ((TextView) view.findViewById(R.id.list_time)).setTextColor(getResources().getColor(R.color.read));
-                ((TextView) view.findViewById(R.id.list_author)).setTextColor(getResources().getColor(R.color.read));
+                ContentItemInfo itemData = adapter.getItemData(position);
+                DetailActivity.actionStart(getActivity(), itemData.getObjectId(), itemData.getUrl(), itemData.getDesc(), itemData.getWho(), itemData.getType(), itemData.getPublishedAt());
             }
         });
         refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
@@ -178,10 +155,10 @@ public class ContentFragment extends BaseFragment {
                 }
                 if (loadMore) {
                     datas.addAll(response);
-                    adapter.refresh(datas, mCategory == ContentCategory.MEIZI.getType() ? true : false);
+                    adapter.refresh(datas, false);
                 } else {
                     datas = response;
-                    adapter.refresh(datas, mCategory == ContentCategory.MEIZI.getType() ? true : false);
+                    adapter.refresh(datas, false);
                 }
             }
         });

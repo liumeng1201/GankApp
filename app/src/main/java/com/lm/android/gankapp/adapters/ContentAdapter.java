@@ -99,19 +99,21 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
         } else {
             holder.title.setText(getItemData(position).getDesc());
         }
-        Query query = daoSession.getReadContentDao().queryBuilder().where(ReadContentDao.Properties.ObjectId.eq(getItemData(position).getObjectId())).build();
-        if (!ListUtils.isEmpty(query.list())) {
-            if (!bigImage) {
-                holder.title.setTextColor(context.getResources().getColor(R.color.read));
+        if (daoSession != null) {
+            Query query = daoSession.getReadContentDao().queryBuilder().where(ReadContentDao.Properties.ObjectId.eq(getItemData(position).getObjectId())).build();
+            if (!ListUtils.isEmpty(query.list())) {
+                if (!bigImage) {
+                    holder.title.setTextColor(context.getResources().getColor(R.color.read));
+                }
+                holder.author.setTextColor(context.getResources().getColor(R.color.read));
+                holder.time.setTextColor(context.getResources().getColor(R.color.read));
+            } else {
+                if (!bigImage) {
+                    holder.title.setTextColor(context.getResources().getColor(R.color.unread));
+                }
+                holder.author.setTextColor(context.getResources().getColor(R.color.unread));
+                holder.time.setTextColor(context.getResources().getColor(R.color.unread));
             }
-            holder.author.setTextColor(context.getResources().getColor(R.color.read));
-            holder.time.setTextColor(context.getResources().getColor(R.color.read));
-        } else {
-            if (!bigImage) {
-                holder.title.setTextColor(context.getResources().getColor(R.color.unread));
-            }
-            holder.author.setTextColor(context.getResources().getColor(R.color.unread));
-            holder.time.setTextColor(context.getResources().getColor(R.color.unread));
         }
         holder.setOnClickListener(position);
     }

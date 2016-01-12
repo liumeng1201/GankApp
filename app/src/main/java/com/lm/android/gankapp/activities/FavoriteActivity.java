@@ -8,9 +8,8 @@ import android.view.MenuItem;
 
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.TabAdapter;
-import com.lm.android.gankapp.fragments.ContentFragment;
+import com.lm.android.gankapp.fragments.FavoriteFragment;
 import com.lm.android.gankapp.models.ContentCategory;
-import com.lm.android.gankapp.models.ContentType;
 
 /**
  * Created by liumeng on 2016/1/12.
@@ -48,11 +47,11 @@ public class FavoriteActivity extends BaseActivityWithLoadingDialog {
 
     private void setupViewPager(ViewPager viewPager) {
         TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
-        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.ANDROID.getType()), getString(R.string.category_android));
-        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.IOS.getType()), getString(R.string.category_ios));
-        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.WEB.getType()), getString(R.string.category_web));
-        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.EXPAND.getType()), getString(R.string.category_expand));
-        adapter.addFragment(ContentFragment.newInstance(ContentType.NET.getType(), ContentCategory.VIDEO.getType()), getString(R.string.category_video));
+        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.ANDROID.getType()), getString(R.string.category_android));
+        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.IOS.getType()), getString(R.string.category_ios));
+        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.WEB.getType()), getString(R.string.category_web));
+        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.EXPAND.getType()), getString(R.string.category_expand));
+        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.VIDEO.getType()), getString(R.string.category_video));
         viewPager.setAdapter(adapter);
     }
 

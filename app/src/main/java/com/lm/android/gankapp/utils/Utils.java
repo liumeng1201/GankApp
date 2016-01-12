@@ -34,8 +34,14 @@ public class Utils {
     public static final int REQUEST_CODE_LOGIN = 20001;
     public static final int REQUEST_CODE_REGISTER = 20002;
     public static final int REQUEST_CODE_USERINFO = 20003;
+
+    // Bmob对应各个key值
     public static final String Bmob_ID = "359548ddc36b912635b1a45c7ed39e1b";
     public static final String Bmob_ACCESS_KEY = "ded5326707fc425a52c1d23febe01472";
+    // Bmob后端代码基础url，Secret Key需要替换为正式版本
+    public static final String Bmob_BASE_URL = "http://cloud.bmob.cn/41f6b8733a573f37/";
+    // 获取收藏数据
+    public static final String get_favorite_url = Bmob_BASE_URL + "getFavoriteList";
 
     /**
      * @return app外部存储基准目录

@@ -70,8 +70,6 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     String type;
     @State
     String publishAt;
-    @State
-    String userId;
 
     private ShareSDKOptCallback shareCallback;
 
@@ -148,11 +146,6 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                 protected void failureOpt(int i, String s) {
                 }
             });
-        }
-
-        User currentUser = BmobUser.getCurrentUser(context, User.class);
-        if (currentUser != null) {
-            userId = currentUser.getObjectId();
         }
 
         favoriteDao = gankApplication.getDaoSession().getFavoriteContentDao();
@@ -329,9 +322,15 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void favoriteOpt() {
+        String userId = null;
+        User currentUser = BmobUser.getCurrentUser(context, User.class);
+        if (currentUser != null) {
+            userId = currentUser.getObjectId();
+        }
+
         if (StringUtils.isEmpty(userId)) {
             // 用户不存在则先进行登录操作
-            Utils.showToastShort(context, "登录之后才可收藏");
+            Utils.showToastShort(context, getString(R.string.favorite_login_first));
             Intent login = new Intent(context, LoginActivity.class);
             startActivityForResult(login, Utils.REQUEST_CODE_LOGIN);
         } else {
@@ -409,11 +408,14 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
      */
     private FavoriteContent getFavoriteEntity(String contentObjectId) {
         Query query = favoriteDao.queryBuilder().where(FavoriteContentDao.Properties.ContentObjectId.eq(contentObjectId)).build();
-        List<FavoriteContent> list = query.list();
-        if (ListUtils.isEmpty(list)) {
-            return null;
+        if (query != null) {
+            List<FavoriteContent> list = query.list();
+            if (ListUtils.isEmpty(list)) {
+                return null;
+            }
+            return list.get(0);
         }
-        return list.get(0);
+        return null;
     }
 
     /**

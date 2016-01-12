@@ -72,12 +72,14 @@ public class PropertyUtils {
      * @return 指定key值所对应的value值
      */
     public static String getPropertyValue(String key, PropertyContentDao dao) {
-        Query nameQuery = dao.queryBuilder().where(PropertyContentDao.Properties.Key.eq(key)).build();
-        List<PropertyContent> list = nameQuery.list();
-        if (!ListUtils.isEmpty(list)) {
-            String value = list.get(0).getValue();
-            if (!StringUtils.isEmpty(value)) {
-                return value;
+        Query query = dao.queryBuilder().where(PropertyContentDao.Properties.Key.eq(key)).build();
+        if (query != null) {
+            List<PropertyContent> list = query.list();
+            if (!ListUtils.isEmpty(list)) {
+                String value = list.get(0).getValue();
+                if (!StringUtils.isEmpty(value)) {
+                    return value;
+                }
             }
         }
         return null;

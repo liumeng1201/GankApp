@@ -157,6 +157,7 @@ public class MainActivity extends BaseActivity {
 
         switch (id) {
             case android.R.id.home:
+                setUserInfo();
                 drawerLayout.openDrawer(GravityCompat.START);
         }
 
