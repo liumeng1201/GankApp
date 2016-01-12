@@ -71,7 +71,7 @@ public class FavoriteFragment extends BaseFragment {
             @Override
             public void onItemClickListener(View view, int position) {
                 FavoriteModel itemData = adapter.getItemData(position);
-                DetailActivity.actionStart(getActivity(), itemData.getObjectId(), itemData.getUrl(), itemData.getDesc(), null, itemData.getType(), null);
+                DetailActivity.actionStart(getActivity(), itemData.getContentObjectId(), itemData.getUrl(), itemData.getDesc(), null, itemData.getType(), null);
             }
         });
         refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
