@@ -33,6 +33,7 @@ import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 import cn.bmob.v3.BmobUser;
 import cn.sharesdk.framework.ShareSDK;
@@ -71,6 +72,12 @@ public class MainActivity extends BaseActivity {
         MobclickAgent.setDebugMode(BuildConfig.DEBUG);
         // 禁止umeng统计默认的统计行为
         MobclickAgent.openActivityDurationTrack(false);
+
+        // 友盟自动更新
+        UmengUpdateAgent.setUpdateCheckConfig(BuildConfig.DEBUG);
+        UmengUpdateAgent.setUpdateOnlyWifi(true);
+        UmengUpdateAgent.setDeltaUpdate(false);
+        UmengUpdateAgent.update(this);
 
         super.onCreate(savedInstanceState);
 
@@ -141,7 +148,7 @@ public class MainActivity extends BaseActivity {
 
     private void gotoFavorite() {
         if (StringUtils.isEmpty(Utils.getUserId(context))) {
-            Utils.showToastShort(context, "登录之后才可查看");
+            Utils.showToastShort(context, getString(R.string.watch_after_login));
             Intent intent = new Intent(context, LoginActivity.class);
             startActivityForResult(intent, Utils.REQUEST_CODE_FAVORITE_LOGIN);
         } else {

@@ -61,6 +61,10 @@ android {
         }
     }
 
+    packagingOptions {
+        exclude 'META-INF/maven/com.squareup.okio/okio/pom.xml'
+        exclude 'META-INF/maven/com.squareup.okio/okio/pom.properties'
+    }
 }
 
 dependencies {
@@ -106,6 +110,10 @@ dependencies {
 
     // 友盟统计
     compile 'com.umeng.analytics:analytics:latest.integration'
+    // 友盟用户反馈
+    compile 'com.umeng:fb:5.4.0'
+    // 友盟自动更新
+    compile project(':umengupdate')
 
     // recyclerview分割线
     compile 'com.yqritc:recyclerview-flexibledivider:1.2.6'
