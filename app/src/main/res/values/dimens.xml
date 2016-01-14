@@ -13,4 +13,6 @@
     <dimen name="listitem_image_height">300dp</dimen>
 
     <dimen name="drawer_margin_top">24dp</dimen>
+
+    <dimen name="conversion_content_padding">80dp</dimen>
 </resources>

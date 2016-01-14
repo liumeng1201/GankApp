@@ -33,6 +33,7 @@ import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.fb.FeedbackAgent;
 import com.umeng.update.UmengUpdateAgent;
 
 import cn.bmob.v3.BmobUser;
@@ -49,6 +50,8 @@ public class MainActivity extends BaseActivity {
 
     private RoundedBitmapDrawable circularBitmapDrawable;
     private String[] titles;
+
+    private FeedbackAgent agent;
 
     private final int NAV_HOME = 0;
     private final int NAV_FAV = 1;
@@ -78,6 +81,11 @@ public class MainActivity extends BaseActivity {
         UmengUpdateAgent.setUpdateOnlyWifi(true);
         UmengUpdateAgent.setDeltaUpdate(false);
         UmengUpdateAgent.update(this);
+
+        // 友盟用户反馈
+        agent = new FeedbackAgent(this);
+        // TODO 通知用户有新反馈的方式调整
+        agent.sync();
 
         super.onCreate(savedInstanceState);
 
@@ -134,6 +142,7 @@ public class MainActivity extends BaseActivity {
                     case R.id.nav_gt:
                         break;
                     case R.id.nav_fk:
+                        FeedbackActivity.actionStart(context);
                         break;
                     case R.id.nav_setting:
                         break;
