@@ -30,4 +30,24 @@ public class DrawableUtils {
         DrawableCompat.setTintList(drawable, colorStateList);
         return drawable;
     }
+
+    /**
+     * 获取一个图片染色之后的图片
+     *
+     * @param res
+     * @param drawableId 要染色的图片
+     * @param colorTint  要染的颜色，类型为Color
+     * @return
+     */
+    public static Drawable getTintDrawable(Resources res, int drawableId, int colorTint) {
+        Drawable drawable;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            drawable = DrawableCompat.wrap(res.getDrawable(drawableId, null));
+        } else {
+            drawable = DrawableCompat.wrap(res.getDrawable(drawableId));
+        }
+        DrawableCompat.setTint(drawable, colorTint);
+        return drawable;
+    }
+
 }

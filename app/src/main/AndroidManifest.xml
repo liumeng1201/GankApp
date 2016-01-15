@@ -48,6 +48,10 @@
         <activity
             android:name=".activities.MeActivity"
             android:label="@string/title_activity_me" />
+        <activity
+            android:name=".activities.FeedbackActivity"
+            android:label="@string/nav_fk"
+            android:windowSoftInputMode="adjustResize" />
 
         <service
             android:name=".services.SyncDataService"
@@ -107,7 +111,7 @@
         <activity android:name="com.umeng.fb.ConversationActivity" />
         <!-- 友盟用户反馈 end -->
 
-        <activity android:name=".activities.FeedbackActivity"></activity>
+
     </application>
 
 </manifest>

@@ -32,7 +32,7 @@ public class FeedbackActivity extends BaseActivityWithLoadingDialog implements V
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, FeedbackActivity.class);
-        context.startService(intent);
+        context.startActivity(intent);
     }
 
     @Override
@@ -56,6 +56,7 @@ public class FeedbackActivity extends BaseActivityWithLoadingDialog implements V
 
         conversionList.setLayoutManager(new LinearLayoutManager(context));
         conversionList.setAdapter(adapter);
+        conversionList.smoothScrollToPosition(adapter.getItemCount());
     }
 
     private void initView() {
@@ -109,8 +110,8 @@ public class FeedbackActivity extends BaseActivityWithLoadingDialog implements V
 
             @Override
             public void onReceiveDevReply(List<Reply> replyList) {
-                // 刷新ListView
-                adapter.notifyDataSetChanged();
+                adapter.refresh(mComversation.getReplyList());
+                conversionList.smoothScrollToPosition(adapter.getItemCount());
             }
         });
     }

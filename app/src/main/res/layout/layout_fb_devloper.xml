@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/conversion_reply_developer"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/content_margin"
-    android:paddingRight="@dimen/conversion_content_padding"
-    android:text="user content" />
+    android:layout_marginBottom="@dimen/content_margin"
+    android:layout_marginLeft="@dimen/content_margin"
+    android:layout_marginRight="@dimen/conversion_content_padding"
+    android:layout_marginTop="@dimen/content_margin"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/conversion_reply_developer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.Medium" />
+</LinearLayout>
