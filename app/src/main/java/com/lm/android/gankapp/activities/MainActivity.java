@@ -118,6 +118,7 @@ public class MainActivity extends BaseActivity {
         });
 
         super.onCreate(savedInstanceState);
+        gankApplication.setMainActivityRunning(true);
 
         circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), ImageUtils.getBitmapFromRes(getResources(), R.mipmap.default_avatar));
         circularBitmapDrawable.setCircular(true);
@@ -283,5 +284,11 @@ public class MainActivity extends BaseActivity {
                 userAvatar.setImageDrawable(circularDrawable);
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        gankApplication.setMainActivityRunning(false);
     }
 }

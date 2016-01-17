@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,11 +97,21 @@ public class FeedbackActivity extends BaseActivityWithLoadingDialog implements V
 
         switch (id) {
             case android.R.id.home:
-                finish();
+                backOpt();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void backOpt() {
+        if (gankApplication.getMainActivityRunning()) {
+            finish();
+        } else {
+            Intent intent = new Intent(context, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -115,9 +126,21 @@ public class FeedbackActivity extends BaseActivityWithLoadingDialog implements V
 
                     // 数据同步
                     sync();
+
+                    adapter.refresh(mComversation.getReplyList());
+                    conversionList.smoothScrollToPosition(adapter.getItemCount());
                 }
                 break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            backOpt();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     // 数据同步
@@ -129,8 +152,6 @@ public class FeedbackActivity extends BaseActivityWithLoadingDialog implements V
 
             @Override
             public void onReceiveDevReply(List<Reply> replyList) {
-                adapter.refresh(mComversation.getReplyList());
-                conversionList.smoothScrollToPosition(adapter.getItemCount());
             }
         });
     }

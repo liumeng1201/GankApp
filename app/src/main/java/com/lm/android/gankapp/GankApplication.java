@@ -92,4 +92,13 @@ public class GankApplication extends Application {
                 .setTakePhotoFolder(Utils.getTakePictureDir(this)).build();
         GalleryFinal.init(coreConfig);
     }
+
+    private boolean mainRunning = false;
+    public void setMainActivityRunning(boolean running) {
+        this.mainRunning = running;
+    }
+
+    public boolean getMainActivityRunning() {
+        return mainRunning;
+    }
 }
