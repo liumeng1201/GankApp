@@ -111,7 +111,6 @@
         <activity android:name="com.umeng.fb.ConversationActivity" />
         <!-- 友盟用户反馈 end -->
 
-
     </application>
 
 </manifest>
