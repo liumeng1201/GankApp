@@ -22,13 +22,6 @@
         android:layout_margin="@dimen/content_margin"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_set_user_contact"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-            android:text="设置您的联系方式\n以便开发者可以联系到您" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

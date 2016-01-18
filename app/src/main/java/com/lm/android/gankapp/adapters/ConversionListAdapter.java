@@ -63,9 +63,9 @@ public class ConversionListAdapter extends RecyclerView.Adapter<ConversionListAd
         holder.time.setText(sdf.format(new Date(getItemData(position).created_at)));
         Drawable background;
         if (getItemViewType(position) == CONVERSION_TYPE_DEVELOPER) {
-            background = DrawableUtils.getTintDrawable(resources, R.drawable.conversion_developer_bg, resources.getColor(R.color.normal_grey));
+            background = DrawableUtils.getTintDrawable(resources, R.drawable.conversion_developer_bg, resources.getColor(R.color.conversion_developer));
         } else {
-            background = DrawableUtils.getTintDrawable(resources, R.drawable.conversion_user_bg, resources.getColor(R.color.gray));
+            background = DrawableUtils.getTintDrawable(resources, R.drawable.conversion_user_bg, resources.getColor(R.color.conversion_user));
         }
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             holder.content.setBackground(background);

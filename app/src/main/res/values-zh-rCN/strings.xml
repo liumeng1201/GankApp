@@ -69,4 +69,7 @@
     <string name="regitsering">注册中...</string>
     <string name="favorite_login_first">登录之后才可收藏</string>
     <string name="watch_after_login">登录之后才可查看</string>
+    <string name="mobile_phone">手机</string>
+    <string name="email">E-mail</string>
+    <string name="input_conversion_info_title">留下您的联系方式\n以便开发者可以联系到您</string>
 </resources>

@@ -1,10 +1,14 @@
 package com.lm.android.gankapp.activities;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
@@ -34,7 +38,12 @@ import com.lm.android.gankapp.utils.Utils;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.fb.FeedbackAgent;
+import com.umeng.fb.SyncListener;
+import com.umeng.fb.model.Conversation;
+import com.umeng.fb.model.Reply;
 import com.umeng.update.UmengUpdateAgent;
+
+import java.util.List;
 
 import cn.bmob.v3.BmobUser;
 import cn.sharesdk.framework.ShareSDK;
@@ -84,10 +93,32 @@ public class MainActivity extends BaseActivity {
 
         // 友盟用户反馈
         agent = new FeedbackAgent(this);
-        // TODO 通知用户有新反馈的方式调整
-        agent.sync();
+        // 通知用户有新的反馈回复
+        Conversation conversation = agent.getDefaultConversation();
+        conversation.sync(new SyncListener() {
+            @Override
+            public void onReceiveDevReply(List<Reply> list) {
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle(getString(R.string.app_name))
+                        .setContentText("您的反馈有了新回复，点击查看");
+                mBuilder.setTicker("您的反馈有了新回复");
+                mBuilder.setAutoCancel(true);
+                Intent details = new Intent(MainActivity.this, FeedbackActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 100,
+                        details, PendingIntent.FLAG_UPDATE_CURRENT);
+                mBuilder.setContentIntent(pendingIntent);
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.notify(1000, mBuilder.build());
+            }
+
+            @Override
+            public void onSendUserReply(List<Reply> list) {
+            }
+        });
 
         super.onCreate(savedInstanceState);
+        gankApplication.setMainActivityRunning(true);
 
         circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), ImageUtils.getBitmapFromRes(getResources(), R.mipmap.default_avatar));
         circularBitmapDrawable.setCircular(true);
@@ -253,5 +284,11 @@ public class MainActivity extends BaseActivity {
                 userAvatar.setImageDrawable(circularDrawable);
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        gankApplication.setMainActivityRunning(false);
     }
 }

@@ -18,7 +18,8 @@
             android:id="@+id/nav_gt"
             android:icon="@mipmap/ic_chat_bubble_white"
             android:tint="@color/normal_grey"
-            android:title="@string/nav_gt" />
+            android:title="@string/nav_gt"
+            android:visible="false" />
 
         <item
             android:id="@+id/nav_fk"

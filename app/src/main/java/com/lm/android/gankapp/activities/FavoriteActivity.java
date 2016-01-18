@@ -56,7 +56,6 @@ public class FavoriteActivity extends BaseActivityWithLoadingDialog {
         adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.IOS.getType(), userId), getString(R.string.category_ios));
         adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.WEB.getType(), userId), getString(R.string.category_web));
         adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.EXPAND.getType(), userId), getString(R.string.category_expand));
-        adapter.addFragment(FavoriteFragment.newInstance(ContentCategory.VIDEO.getType(), userId), getString(R.string.category_video));
         viewPager.setAdapter(adapter);
     }
 

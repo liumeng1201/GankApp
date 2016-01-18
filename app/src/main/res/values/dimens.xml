@@ -15,4 +15,5 @@
     <dimen name="drawer_margin_top">24dp</dimen>
 
     <dimen name="conversion_content_padding">80dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

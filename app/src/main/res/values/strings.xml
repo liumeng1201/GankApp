@@ -72,4 +72,8 @@
     <string name="regitsering">Register...</string>
     <string name="favorite_login_first">You must Login before favorite</string>
     <string name="watch_after_login">You must Login before access</string>
+    <string name="mobile_phone">Mobile</string>
+    <string name="email">E-mail</string>
+    <string name="input_conversion_info_title">Please leave your contact info</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>
