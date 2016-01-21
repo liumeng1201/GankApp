@@ -24,6 +24,7 @@ public class PropertyUtils {
     public static final String sex = "sex";
     public static final String province = "province";
     public static final String city = "city";
+    public static final String fb_latest_dev_reply_time = "fb_latest_dev_reply_time";
 
     /**
      * 保存用户是否登录
@@ -100,5 +101,28 @@ public class PropertyUtils {
         entity.setFavoriteAt(item.getFavoriteAt());
         entity.setObjectId(item.getObjectId());
         dao.insertOrReplace(entity);
+    }
+
+    /**
+     * @param _time 用户意见反馈收到开发者最后一次回复的时间
+     * @param dao
+     */
+    public static void setFbDevReplyTime(long _time, PropertyContentDao dao) {
+        PropertyContent entity = new PropertyContent();
+        entity.setKey(fb_latest_dev_reply_time);
+        entity.setValue(String.valueOf(_time));
+        dao.insertOrReplace(entity);
+    }
+
+    /**
+     * @param dao
+     * @return 用户意见反馈收到开发者最后一次回复的时间
+     */
+    public static long getFbDevReplyTime(PropertyContentDao dao) {
+        String time = getPropertyValue(PropertyUtils.fb_latest_dev_reply_time, dao);
+        if (StringUtils.isEmpty(time)) {
+            return 0;
+        }
+        return Long.valueOf(time);
     }
 }

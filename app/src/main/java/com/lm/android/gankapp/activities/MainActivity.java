@@ -32,6 +32,7 @@ import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentType;
 import com.lm.android.gankapp.models.User;
 import com.lm.android.gankapp.utils.ImageUtils;
+import com.lm.android.gankapp.utils.ListUtils;
 import com.lm.android.gankapp.utils.PropertyUtils;
 import com.lm.android.gankapp.utils.StringUtils;
 import com.lm.android.gankapp.utils.Utils;
@@ -98,18 +99,23 @@ public class MainActivity extends BaseActivity {
         conversation.sync(new SyncListener() {
             @Override
             public void onReceiveDevReply(List<Reply> list) {
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle(getString(R.string.app_name))
-                        .setContentText("您的反馈有了新回复，点击查看");
-                mBuilder.setTicker("您的反馈有了新回复");
-                mBuilder.setAutoCancel(true);
-                Intent details = new Intent(MainActivity.this, FeedbackActivity.class);
-                PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 100,
-                        details, PendingIntent.FLAG_UPDATE_CURRENT);
-                mBuilder.setContentIntent(pendingIntent);
-                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                manager.notify(1000, mBuilder.build());
+                if (!ListUtils.isEmpty(list)) {
+                    if (PropertyUtils.getFbDevReplyTime(propertyContentDao) < list.get(list.size()).created_at) {
+                        PropertyUtils.setFbDevReplyTime(list.get(list.size()).created_at, propertyContentDao);
+                        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle(getString(R.string.app_name))
+                                .setContentText("您的反馈有了新回复，点击查看");
+                        mBuilder.setTicker("您的反馈有了新回复");
+                        mBuilder.setAutoCancel(true);
+                        Intent details = new Intent(MainActivity.this, FeedbackActivity.class);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 100,
+                                details, PendingIntent.FLAG_UPDATE_CURRENT);
+                        mBuilder.setContentIntent(pendingIntent);
+                        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        manager.notify(1000, mBuilder.build());
+                    }
+                }
             }
 
             @Override

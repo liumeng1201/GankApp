@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -254,6 +253,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                 progressBar.setProgress(newProgress);
             }
         });
+        /* webview滚动时隐藏底部操作栏 *
         webView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -288,6 +288,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                 return false;
             }
         });
+        */
     }
 
     @Override
