@@ -329,8 +329,10 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
             startActivityForResult(login, Utils.REQUEST_CODE_LOGIN);
         } else {
             String hasFavorite = hasFavorite(contentObjectId);
-            final ContentItemFavorite item = new ContentItemFavorite(title, type, url, contentObjectId, System.currentTimeMillis(), userId);
             if (!StringUtils.isEmpty(hasFavorite)) {
+                FavoriteContent content = getFavoriteEntity(contentObjectId);
+                final ContentItemFavorite item = new ContentItemFavorite(content.getDesc(), content.getType(), content.getUrl(), contentObjectId, System.currentTimeMillis(), userId);
+                item.setObjectId(content.getObjectId());
                 if (hasFavorite.equalsIgnoreCase("true")) {
                     item.setShowFavorite(false);
                 } else {
@@ -348,6 +350,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                     }
                 });
             } else {
+                final ContentItemFavorite item = new ContentItemFavorite(title, type, url, contentObjectId, System.currentTimeMillis(), userId);
                 item.setShowFavorite(true);
                 item.save(context, new MyBmobSaveListener() {
                     @Override

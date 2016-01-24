@@ -12,6 +12,7 @@ public class FavoriteModel {
     private String updatedAt;
     private String url;
     private String type;
+    private boolean showFavorite;
 
     public void setContentObjectId(String contentObjectId) {
         this.contentObjectId = contentObjectId;
@@ -75,5 +76,13 @@ public class FavoriteModel {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public boolean isShowFavorite() {
+        return showFavorite;
+    }
+
+    public void setShowFavorite(boolean showFavorite) {
+        this.showFavorite = showFavorite;
     }
 }

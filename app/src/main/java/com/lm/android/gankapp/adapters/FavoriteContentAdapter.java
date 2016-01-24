@@ -53,11 +53,13 @@ public class FavoriteContentAdapter extends RecyclerView.Adapter<FavoriteContent
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        long time = getItemData(position).getFavoriteAt();
-        Date date = new Date(time);
-        holder.time.setText(sdf.format(date));
-        holder.title.setText(getItemData(position).getDesc());
-        holder.setOnClickListener(position);
+        if (getItemData(position).isShowFavorite()) {
+            long time = getItemData(position).getFavoriteAt();
+            Date date = new Date(time);
+            holder.time.setText(sdf.format(date));
+            holder.title.setText(getItemData(position).getDesc());
+            holder.setOnClickListener(position);
+        }
     }
 
     @Override
