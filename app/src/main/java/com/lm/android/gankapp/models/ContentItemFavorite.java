@@ -7,6 +7,7 @@ package com.lm.android.gankapp.models;
 public class ContentItemFavorite extends BmobContentItemBase {
     private Long favoriteAt;
     private String userId;
+    private boolean showFavorite;
 
     public ContentItemFavorite() {
     }
@@ -34,5 +35,13 @@ public class ContentItemFavorite extends BmobContentItemBase {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public boolean isShowFavorite() {
+        return showFavorite;
+    }
+
+    public void setShowFavorite(boolean showFavorite) {
+        this.showFavorite = showFavorite;
     }
 }

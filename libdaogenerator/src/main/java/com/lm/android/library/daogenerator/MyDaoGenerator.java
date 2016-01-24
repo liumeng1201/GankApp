@@ -31,6 +31,7 @@ public class MyDaoGenerator {
         favoriteContent.addStringProperty("desc").notNull();
         favoriteContent.addStringProperty("url").notNull();
         favoriteContent.addLongProperty("favoriteAt").notNull();
+        favoriteContent.addBooleanProperty("showFavorite").notNull();
     }
 
     // 用来代替SharedPreference的属性表

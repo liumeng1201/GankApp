@@ -30,6 +30,7 @@ public class FavoriteContentDao extends AbstractDao<FavoriteContent, Long> {
         public final static Property Desc = new Property(4, String.class, "desc", false, "DESC");
         public final static Property Url = new Property(5, String.class, "url", false, "URL");
         public final static Property FavoriteAt = new Property(6, long.class, "favoriteAt", false, "FAVORITE_AT");
+        public final static Property ShowFavorite = new Property(7, boolean.class, "showFavorite", false, "SHOW_FAVORITE");
     };
 
 
@@ -51,7 +52,8 @@ public class FavoriteContentDao extends AbstractDao<FavoriteContent, Long> {
                 "\"TYPE\" TEXT NOT NULL ," + // 3: type
                 "\"DESC\" TEXT NOT NULL ," + // 4: desc
                 "\"URL\" TEXT NOT NULL ," + // 5: url
-                "\"FAVORITE_AT\" INTEGER NOT NULL );"); // 6: favoriteAt
+                "\"FAVORITE_AT\" INTEGER NOT NULL ," + // 6: favoriteAt
+                "\"SHOW_FAVORITE\" INTEGER NOT NULL );"); // 7: showFavorite
     }
 
     /** Drops the underlying database table. */
@@ -75,6 +77,7 @@ public class FavoriteContentDao extends AbstractDao<FavoriteContent, Long> {
         stmt.bindString(5, entity.getDesc());
         stmt.bindString(6, entity.getUrl());
         stmt.bindLong(7, entity.getFavoriteAt());
+        stmt.bindLong(8, entity.getShowFavorite() ? 1L: 0L);
     }
 
     /** @inheritdoc */
@@ -93,7 +96,8 @@ public class FavoriteContentDao extends AbstractDao<FavoriteContent, Long> {
             cursor.getString(offset + 3), // type
             cursor.getString(offset + 4), // desc
             cursor.getString(offset + 5), // url
-            cursor.getLong(offset + 6) // favoriteAt
+            cursor.getLong(offset + 6), // favoriteAt
+            cursor.getShort(offset + 7) != 0 // showFavorite
         );
         return entity;
     }
@@ -108,6 +112,7 @@ public class FavoriteContentDao extends AbstractDao<FavoriteContent, Long> {
         entity.setDesc(cursor.getString(offset + 4));
         entity.setUrl(cursor.getString(offset + 5));
         entity.setFavoriteAt(cursor.getLong(offset + 6));
+        entity.setShowFavorite(cursor.getShort(offset + 7) != 0);
      }
     
     /** @inheritdoc */

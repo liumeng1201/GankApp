@@ -18,6 +18,7 @@ public class FavoriteContent {
     /** Not-null value. */
     private String url;
     private long favoriteAt;
+    private boolean showFavorite;
 
     public FavoriteContent() {
     }
@@ -26,7 +27,7 @@ public class FavoriteContent {
         this.id = id;
     }
 
-    public FavoriteContent(Long id, String objectId, String contentObjectId, String type, String desc, String url, long favoriteAt) {
+    public FavoriteContent(Long id, String objectId, String contentObjectId, String type, String desc, String url, long favoriteAt, boolean showFavorite) {
         this.id = id;
         this.objectId = objectId;
         this.contentObjectId = contentObjectId;
@@ -34,6 +35,7 @@ public class FavoriteContent {
         this.desc = desc;
         this.url = url;
         this.favoriteAt = favoriteAt;
+        this.showFavorite = showFavorite;
     }
 
     public Long getId() {
@@ -100,6 +102,14 @@ public class FavoriteContent {
 
     public void setFavoriteAt(long favoriteAt) {
         this.favoriteAt = favoriteAt;
+    }
+
+    public boolean getShowFavorite() {
+        return showFavorite;
+    }
+
+    public void setShowFavorite(boolean showFavorite) {
+        this.showFavorite = showFavorite;
     }
 
 }

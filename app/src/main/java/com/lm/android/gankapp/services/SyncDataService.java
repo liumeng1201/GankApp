@@ -51,9 +51,13 @@ public class SyncDataService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         LogUtils.logi("start service");
         User currentUser = BmobUser.getCurrentUser(this, User.class);
-        String userId = currentUser.getObjectId();
-        if (!StringUtils.isEmpty(userId)) {
-            syncFavoriteData(userId);
+        if (currentUser != null) {
+            String userId = currentUser.getObjectId();
+            if (!StringUtils.isEmpty(userId)) {
+                syncFavoriteData(userId);
+            } else {
+                stopSelf();
+            }
         } else {
             stopSelf();
         }
@@ -67,7 +71,8 @@ public class SyncDataService extends Service {
         OkHttpUtils.post().url(Utils.get_favorite_url).params(params).build().execute(new FavoriteDatasCallback() {
             @Override
             public void onError(Request request, Exception e) {
-                // Error! Please retry!
+                // Error
+                stopSelf();
             }
 
             @Override
@@ -82,7 +87,7 @@ public class SyncDataService extends Service {
                     for (FavoriteModel data : datas) {
                         ContentItemFavorite item = new ContentItemFavorite(data.getDesc(), data.getType(), data.getUrl(), data.getContentObjectId(), data.getFavoriteAt(), userId);
                         item.setObjectId(data.getObjectId());
-                        PropertyUtils.addFavoriteToDB(item, favoriteDao);
+                        PropertyUtils.setFavoriteToDB(item, favoriteDao);
                     }
                 }
                 stopSelf();

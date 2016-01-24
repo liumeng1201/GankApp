@@ -98,6 +98,7 @@
             android:name="UMENG_CHANNEL"
             android:value="${CHANNEL_VALUE}" />
         <!-- 友盟统计 end -->
+
         <!-- 友盟自动更新 start -->
         <service
             android:name="com.umeng.update.net.DownloadingService"
@@ -107,6 +108,7 @@
             android:name="com.umeng.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- 友盟自动更新 end -->
+
         <!-- 友盟用户反馈 start -->
         <activity android:name="com.umeng.fb.ConversationActivity" />
         <!-- 友盟用户反馈 end -->
