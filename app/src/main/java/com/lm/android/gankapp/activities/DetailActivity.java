@@ -20,7 +20,6 @@ import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.dao.FavoriteContent;
 import com.lm.android.gankapp.dao.FavoriteContentDao;
 import com.lm.android.gankapp.interfaces.ShareSDKOptCallback;
-import com.lm.android.gankapp.listener.MyBmobDeleteListener;
 import com.lm.android.gankapp.listener.MyBmobFindListener;
 import com.lm.android.gankapp.listener.MyBmobSaveListener;
 import com.lm.android.gankapp.listener.MyBmobUpdateListener;
@@ -329,26 +328,34 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
             Intent login = new Intent(context, LoginActivity.class);
             startActivityForResult(login, Utils.REQUEST_CODE_LOGIN);
         } else {
-            final String id = hasFavorite(contentObjectId);
-            if (!StringUtils.isEmpty(id)) {
-                final ContentItemFavorite item = new ContentItemFavorite();
-                item.delete(context, id, new MyBmobDeleteListener() {
+            String hasFavorite = hasFavorite(contentObjectId);
+            if (!StringUtils.isEmpty(hasFavorite)) {
+                FavoriteContent content = getFavoriteEntity(contentObjectId);
+                final ContentItemFavorite item = new ContentItemFavorite(content.getDesc(), content.getType(), content.getUrl(), contentObjectId, System.currentTimeMillis(), userId);
+                item.setObjectId(content.getObjectId());
+                if (hasFavorite.equalsIgnoreCase("true")) {
+                    item.setShowFavorite(false);
+                } else {
+                    item.setShowFavorite(true);
+                }
+                item.update(context, new MyBmobUpdateListener() {
                     @Override
-                    public void successOpt() {
-                        delFavoriteFromDB(item.getContentObjectId());
+                    protected void successOpt() {
+                        PropertyUtils.setFavoriteToDB(item, favoriteDao);
                         btnFavorite.setSelected(false);
                     }
 
                     @Override
-                    public void failureOpt(int i, String s) {
+                    protected void failureOpt(int i, String s) {
                     }
                 });
             } else {
                 final ContentItemFavorite item = new ContentItemFavorite(title, type, url, contentObjectId, System.currentTimeMillis(), userId);
+                item.setShowFavorite(true);
                 item.save(context, new MyBmobSaveListener() {
                     @Override
                     protected void successOpt() {
-                        PropertyUtils.addFavoriteToDB(item, favoriteDao);
+                        PropertyUtils.setFavoriteToDB(item, favoriteDao);
                         btnFavorite.setSelected(true);
                     }
 
@@ -387,14 +394,15 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
      * 判断是否已经收藏
      *
      * @param contentObjectId
-     * @return 已收藏返回objectId，否则返回空
+     * @return 已收藏返回true，否则返回空
      */
+
     private String hasFavorite(String contentObjectId) {
         FavoriteContent item = getFavoriteEntity(contentObjectId);
         if (item == null) {
             return null;
         }
-        return item.getObjectId();
+        return String.valueOf(item.getShowFavorite());
     }
 
     /**
@@ -411,15 +419,6 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
             return list.get(0);
         }
         return null;
-    }
-
-    /**
-     * 从数据库中删除收藏信息
-     *
-     * @param contentObjectId
-     */
-    private void delFavoriteFromDB(String contentObjectId) {
-        favoriteDao.delete(getFavoriteEntity(contentObjectId));
     }
 
 }

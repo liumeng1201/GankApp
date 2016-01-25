@@ -90,9 +90,9 @@ public class PropertyUtils {
     }
 
     /**
-     * 将数据添加到本地数据库中
+     * 将数据设置到本地数据库中
      */
-    public static void addFavoriteToDB(ContentItemFavorite item, FavoriteContentDao dao) {
+    public static void setFavoriteToDB(ContentItemFavorite item, FavoriteContentDao dao) {
         FavoriteContent entity = new FavoriteContent();
         entity.setType(item.getType());
         entity.setDesc(item.getDesc());
@@ -100,6 +100,7 @@ public class PropertyUtils {
         entity.setContentObjectId(item.getContentObjectId());
         entity.setFavoriteAt(item.getFavoriteAt());
         entity.setObjectId(item.getObjectId());
+        entity.setShowFavorite(item.isShowFavorite());
         dao.insertOrReplace(entity);
     }
 

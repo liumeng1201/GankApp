@@ -31,6 +31,7 @@ import com.lm.android.gankapp.fragments.ContentFragment;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentType;
 import com.lm.android.gankapp.models.User;
+import com.lm.android.gankapp.services.SyncDataService;
 import com.lm.android.gankapp.utils.ImageUtils;
 import com.lm.android.gankapp.utils.ListUtils;
 import com.lm.android.gankapp.utils.PropertyUtils;
@@ -164,6 +165,10 @@ public class MainActivity extends BaseActivity {
         });
 
         setUserInfo();
+
+        // 启动数据同步服务
+        Intent intent = new Intent(context, SyncDataService.class);
+        startService(intent);
     }
 
     private void initNavigationMenuItemClickListener() {
