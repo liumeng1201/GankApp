@@ -161,7 +161,6 @@ public class ContentFragment extends BaseFragment {
                 if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
                 }
-                Utils.showToastShort(getActivity(), "Error! Please retry!");
             }
 
             @Override
