@@ -83,6 +83,7 @@ public class ContentFragment extends BaseFragment {
                 ReadContentDao dao = gankApplication.getDaoSession().getReadContentDao();
                 ReadContent readContent = new ReadContent();
                 readContent.setObjectId(itemData.getObjectId());
+                // TODO
                 dao.insertOrReplace(readContent);
 
                 if (mCategory == ContentCategory.MEIZI.getType()) {

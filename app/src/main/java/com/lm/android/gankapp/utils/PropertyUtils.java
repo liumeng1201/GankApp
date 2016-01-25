@@ -36,6 +36,7 @@ public class PropertyUtils {
         PropertyContent entity = new PropertyContent();
         entity.setKey(loginstatus);
         entity.setValue(_status);
+        // TODO
         dao.insertOrReplace(entity);
     }
 
@@ -101,6 +102,7 @@ public class PropertyUtils {
         entity.setFavoriteAt(item.getFavoriteAt());
         entity.setObjectId(item.getObjectId());
         entity.setShowFavorite(item.isShowFavorite());
+        // TODO
         dao.insertOrReplace(entity);
     }
 
@@ -112,6 +114,7 @@ public class PropertyUtils {
         PropertyContent entity = new PropertyContent();
         entity.setKey(fb_latest_dev_reply_time);
         entity.setValue(String.valueOf(_time));
+        // TODO
         dao.insertOrReplace(entity);
     }
 
