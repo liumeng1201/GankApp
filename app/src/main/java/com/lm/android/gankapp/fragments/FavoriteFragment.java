@@ -154,13 +154,13 @@ public class FavoriteFragment extends BaseFragment {
                 if (response == null) {
                     return;
                 }
+                datas = response;
+                adapter.refresh(datas);
 
                 Intent intent = new Intent(getActivity(), SyncDataService.class);
                 intent.putExtra(SyncDataService.ACTION_TYPE, SyncDataService.UPDATE_FAV_DB);
-                intent.putExtra(SyncDataService.ACTION_DATA, new Gson().toJson(response));
+                intent.putExtra(SyncDataService.ACTION_DATA, new Gson().toJson(datas));
                 getActivity().startService(intent);
-                datas = response;
-                adapter.refresh(datas);
             }
         });
     }

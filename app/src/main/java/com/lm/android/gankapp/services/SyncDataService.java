@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lm.android.gankapp.GankApplication;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.dao.FavoriteContentDao;
@@ -49,7 +49,6 @@ public class SyncDataService extends Service {
 
         // 初始化logger
         Logger.init(getString(R.string.app_name));
-        LogUtils.logi("create service");
 
         gankApplication = GankApplication.getInstance();
         favoriteDao = gankApplication.getDaoSession().getFavoriteContentDao();
@@ -58,7 +57,6 @@ public class SyncDataService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        LogUtils.logi("start service");
         int actionType = intent.getIntExtra(ACTION_TYPE, SYNC_FAV_DATA);
         User currentUser = BmobUser.getCurrentUser(this, User.class);
         if (currentUser != null) {
@@ -70,9 +68,12 @@ public class SyncDataService extends Service {
                         break;
                     case UPDATE_FAV_DB:
                         String data = intent.getStringExtra(ACTION_DATA);
-                        ArrayList<FavoriteModel> datas = gson.fromJson(data, new TypeToken<ArrayList<FavoriteModel>>() {
-                        }.getType());
-                        updateFavoriteDB(datas, userId);
+                        if (!StringUtils.isEmpty(data)) {
+                            ArrayList<FavoriteModel> datas = gson.fromJson(data, new TypeToken<ArrayList<FavoriteModel>>() {}.getType());
+                            if (!ListUtils.isEmpty(datas)) {
+                                updateFavoriteDB(datas, userId);
+                            }
+                        }
                         break;
                 }
             } else {
@@ -85,7 +86,6 @@ public class SyncDataService extends Service {
     }
 
     private void syncFavoriteData(final String userId) {
-        LogUtils.logi("sync favorite data");
         Map<String, String> params = new HashMap<>();
         params.put("userId", userId);
         OkHttpUtils.post().url(Utils.get_favorite_url).params(params).build().execute(new FavoriteDatasCallback() {
