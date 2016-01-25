@@ -168,6 +168,7 @@ public class MainActivity extends BaseActivity {
 
         // 启动数据同步服务
         Intent intent = new Intent(context, SyncDataService.class);
+        intent.putExtra(SyncDataService.ACTION_TYPE, SyncDataService.SYNC_FAV_DATA);
         startService(intent);
     }
 

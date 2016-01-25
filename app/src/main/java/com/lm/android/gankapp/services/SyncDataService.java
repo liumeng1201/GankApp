@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.lm.android.gankapp.GankApplication;
 import com.lm.android.gankapp.R;
@@ -32,6 +33,13 @@ import cn.bmob.v3.BmobUser;
  * Created by liumeng on 2016/1/10.
  */
 public class SyncDataService extends Service {
+    public static final String ACTION_TYPE = "action_type";
+    public static final String ACTION_DATA = "action_data";
+    public static final int SYNC_FAV_DATA = 80001;
+    public static final int UPDATE_FAV_DB = 80002;
+
+    private Gson gson;
+
     private GankApplication gankApplication;
     private FavoriteContentDao favoriteDao;
 
@@ -45,16 +53,28 @@ public class SyncDataService extends Service {
 
         gankApplication = GankApplication.getInstance();
         favoriteDao = gankApplication.getDaoSession().getFavoriteContentDao();
+        gson = new Gson();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         LogUtils.logi("start service");
+        int actionType = intent.getIntExtra(ACTION_TYPE, SYNC_FAV_DATA);
         User currentUser = BmobUser.getCurrentUser(this, User.class);
         if (currentUser != null) {
             String userId = currentUser.getObjectId();
             if (!StringUtils.isEmpty(userId)) {
-                syncFavoriteData(userId);
+                switch (actionType) {
+                    case SYNC_FAV_DATA:
+                        syncFavoriteData(userId);
+                        break;
+                    case UPDATE_FAV_DB:
+                        String data = intent.getStringExtra(ACTION_DATA);
+                        ArrayList<FavoriteModel> datas = gson.fromJson(data, new TypeToken<ArrayList<FavoriteModel>>() {
+                        }.getType());
+                        updateFavoriteDB(datas, userId);
+                        break;
+                }
             } else {
                 stopSelf();
             }
@@ -80,19 +100,28 @@ public class SyncDataService extends Service {
                 if (response == null) {
                     return;
                 }
-
-                ArrayList<FavoriteModel> datas = response;
-                if (!ListUtils.isEmpty(datas)) {
-                    LogUtils.json(new Gson().toJson(datas));
-                    for (FavoriteModel data : datas) {
-                        ContentItemFavorite item = new ContentItemFavorite(data.getDesc(), data.getType(), data.getUrl(), data.getContentObjectId(), data.getFavoriteAt(), userId);
-                        item.setObjectId(data.getObjectId());
-                        PropertyUtils.setFavoriteToDB(item, favoriteDao);
-                    }
-                }
-                stopSelf();
+                updateFavoriteDB(response, userId);
             }
         });
+    }
+
+    /**
+     * 更新收藏数据表
+     *
+     * @param datas
+     * @param userId
+     */
+    private void updateFavoriteDB(ArrayList<FavoriteModel> datas, String userId) {
+        if (!ListUtils.isEmpty(datas)) {
+            LogUtils.json(gson.toJson(datas));
+            for (FavoriteModel data : datas) {
+                ContentItemFavorite item = new ContentItemFavorite(data.getDesc(), data.getType(), data.getUrl(), data.getContentObjectId(), data.getFavoriteAt(), userId);
+                item.setObjectId(data.getObjectId());
+                PropertyUtils.setFavoriteToDB(item, favoriteDao);
+            }
+        }
+
+        stopSelf();
     }
 
     @Nullable

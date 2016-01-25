@@ -1,5 +1,6 @@
 package com.lm.android.gankapp.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,20 +10,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.activities.DetailActivity;
 import com.lm.android.gankapp.adapters.FavoriteContentAdapter;
+import com.lm.android.gankapp.dao.FavoriteContent;
+import com.lm.android.gankapp.dao.FavoriteContentDao;
 import com.lm.android.gankapp.interfaces.FavoriteDatasCallback;
 import com.lm.android.gankapp.listener.OnContentItemClickListener;
 import com.lm.android.gankapp.models.FavoriteModel;
+import com.lm.android.gankapp.services.SyncDataService;
+import com.lm.android.gankapp.utils.ListUtils;
 import com.lm.android.gankapp.utils.Utils;
 import com.squareup.okhttp.Request;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import de.greenrobot.dao.query.Query;
 import icepick.State;
 
 public class FavoriteFragment extends BaseFragment {
@@ -114,7 +122,28 @@ public class FavoriteFragment extends BaseFragment {
                 if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
                 }
-                Utils.showToastShort(getActivity(), "Error! Please retry!");
+                // 获取网络数据失败，改用本地数据库中的数据
+                FavoriteContentDao favoriteDao = gankApplication.getDaoSession().getFavoriteContentDao();
+                Query query = favoriteDao.queryBuilder().where(FavoriteContentDao.Properties.Type.eq(Utils.requestCategory[mCategory])).build();
+                if (query != null) {
+                    List<FavoriteContent> list = query.list();
+                    if (ListUtils.isEmpty(list)) {
+                    } else {
+                        datas.clear();
+                        for (FavoriteContent item : list) {
+                            FavoriteModel model = new FavoriteModel();
+                            model.setContentObjectId(item.getContentObjectId());
+                            model.setObjectId(item.getObjectId());
+                            model.setDesc(item.getDesc());
+                            model.setUrl(item.getUrl());
+                            model.setType(item.getType());
+                            model.setShowFavorite(item.getShowFavorite());
+                            model.setFavoriteAt(item.getFavoriteAt());
+                            datas.add(model);
+                        }
+                        adapter.refresh(datas);
+                    }
+                }
             }
 
             @Override
@@ -126,6 +155,10 @@ public class FavoriteFragment extends BaseFragment {
                     return;
                 }
 
+                Intent intent = new Intent(getActivity(), SyncDataService.class);
+                intent.putExtra(SyncDataService.ACTION_TYPE, SyncDataService.UPDATE_FAV_DB);
+                intent.putExtra(SyncDataService.ACTION_DATA, new Gson().toJson(response));
+                getActivity().startService(intent);
                 datas = response;
                 adapter.refresh(datas);
             }
