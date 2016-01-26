@@ -33,8 +33,11 @@ public class PropertyUtils {
      * @param dao
      */
     public static void setUserLoginStatus(String _status, PropertyContentDao dao) {
-        PropertyContent entity = new PropertyContent();
-        entity.setKey(loginstatus);
+        PropertyContent entity = getPropertyItem(loginstatus, dao);
+        if (entity == null) {
+            entity = new PropertyContent();
+            entity.setKey(loginstatus);
+        }
         entity.setValue(_status);
         // TODO
         dao.insertOrReplace(entity);
@@ -85,6 +88,22 @@ public class PropertyUtils {
                 if (!StringUtils.isEmpty(value)) {
                     return value;
                 }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param key
+     * @param dao
+     * @return 指定key值所对应的Property item
+     */
+    public static PropertyContent getPropertyItem(String key, PropertyContentDao dao) {
+        Query query = dao.queryBuilder().where(PropertyContentDao.Properties.Key.eq(key)).build();
+        if (query != null) {
+            List<PropertyContent> list = query.list();
+            if (!ListUtils.isEmpty(list)) {
+                return list.get(0);
             }
         }
         return null;
