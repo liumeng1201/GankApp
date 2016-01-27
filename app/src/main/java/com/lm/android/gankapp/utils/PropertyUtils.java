@@ -39,7 +39,6 @@ public class PropertyUtils {
             entity.setKey(loginstatus);
         }
         entity.setValue(_status);
-        // TODO
         dao.insertOrReplace(entity);
     }
 
@@ -113,15 +112,24 @@ public class PropertyUtils {
      * 将数据设置到本地数据库中
      */
     public static void setFavoriteToDB(ContentItemFavorite item, FavoriteContentDao dao) {
-        FavoriteContent entity = new FavoriteContent();
+        FavoriteContent entity = null;
+        Query query = dao.queryBuilder().where(FavoriteContentDao.Properties.ContentObjectId.eq(item.getContentObjectId())).build();
+        if (query != null) {
+            List<FavoriteContent> list = query.list();
+            if (!ListUtils.isEmpty(list)) {
+                entity = list.get(0);
+            }
+        }
+        if (entity == null) {
+            entity = new FavoriteContent();
+            entity.setContentObjectId(item.getContentObjectId());
+        }
         entity.setType(item.getType());
         entity.setDesc(item.getDesc());
         entity.setUrl(item.getUrl());
-        entity.setContentObjectId(item.getContentObjectId());
         entity.setFavoriteAt(item.getFavoriteAt());
         entity.setObjectId(item.getObjectId());
         entity.setShowFavorite(item.isShowFavorite());
-        // TODO
         dao.insertOrReplace(entity);
     }
 
@@ -130,10 +138,12 @@ public class PropertyUtils {
      * @param dao
      */
     public static void setFbDevReplyTime(long _time, PropertyContentDao dao) {
-        PropertyContent entity = new PropertyContent();
-        entity.setKey(fb_latest_dev_reply_time);
+        PropertyContent entity = getPropertyItem(fb_latest_dev_reply_time, dao);
+        if (entity == null) {
+            entity = new PropertyContent();
+            entity.setKey(fb_latest_dev_reply_time);
+        }
         entity.setValue(String.valueOf(_time));
-        // TODO
         dao.insertOrReplace(entity);
     }
 
