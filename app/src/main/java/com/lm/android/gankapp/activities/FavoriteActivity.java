@@ -3,6 +3,7 @@ package com.lm.android.gankapp.activities;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -11,6 +12,7 @@ import com.lm.android.gankapp.adapters.TabAdapter;
 import com.lm.android.gankapp.fragments.FavoriteFragment;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.User;
+import com.lm.android.gankapp.utils.Utils;
 
 import cn.bmob.v3.BmobUser;
 
@@ -20,6 +22,7 @@ import cn.bmob.v3.BmobUser;
 public class FavoriteActivity extends BaseActivityWithLoadingDialog {
     private TabLayout tabs;
     private ViewPager viewPager;
+    private SearchView searchView;
     private String userId;
 
     @Override
@@ -62,6 +65,19 @@ public class FavoriteActivity extends BaseActivityWithLoadingDialog {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.mainactivity_menu, menu);
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Utils.showToastShort(context, newText);
+                return false;
+            }
+        });
         return true;
     }
 

@@ -20,13 +20,16 @@ import com.lm.android.gankapp.interfaces.DatasCallback;
 import com.lm.android.gankapp.listener.OnContentItemClickListener;
 import com.lm.android.gankapp.models.ContentCategory;
 import com.lm.android.gankapp.models.ContentItemInfo;
+import com.lm.android.gankapp.utils.ListUtils;
 import com.lm.android.gankapp.utils.LogUtils;
 import com.lm.android.gankapp.utils.Utils;
 import com.squareup.okhttp.Request;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import de.greenrobot.dao.query.Query;
 import icepick.State;
 
 public class ContentFragment extends BaseFragment {
@@ -81,9 +84,18 @@ public class ContentFragment extends BaseFragment {
             public void onItemClickListener(View view, int position) {
                 final ContentItemInfo itemData = adapter.getItemData(position);
                 ReadContentDao dao = gankApplication.getDaoSession().getReadContentDao();
-                ReadContent readContent = new ReadContent();
-                readContent.setObjectId(itemData.getObjectId());
-                // TODO
+                ReadContent readContent = null;
+                Query query = dao.queryBuilder().where(ReadContentDao.Properties.ObjectId.eq(itemData.getObjectId())).build();
+                if (query != null) {
+                    List<ReadContent> list = query.list();
+                    if (!ListUtils.isEmpty(list)) {
+                        readContent = list.get(0);
+                    }
+                }
+                if (readContent == null) {
+                    readContent = new ReadContent();
+                    readContent.setObjectId(itemData.getObjectId());
+                }
                 dao.insertOrReplace(readContent);
 
                 if (mCategory == ContentCategory.MEIZI.getType()) {
