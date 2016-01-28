@@ -52,6 +52,8 @@
             android:name=".activities.FeedbackActivity"
             android:label="@string/nav_fk"
             android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".activities.SearchFavoriteActivity"
+            android:label="@string/search"/>
 
         <service
             android:name=".services.SyncDataService"

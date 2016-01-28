@@ -1,7 +1,11 @@
 package com.lm.android.gankapp.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +14,7 @@ import android.widget.TextView;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.listener.OnContentItemClickListener;
 import com.lm.android.gankapp.models.FavoriteModel;
+import com.lm.android.gankapp.utils.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,6 +28,8 @@ public class FavoriteContentAdapter extends RecyclerView.Adapter<FavoriteContent
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
     private Context context;
     private ArrayList<FavoriteModel> datas;
+    private boolean showFilterData = false;
+    private String filter;
 
     private OnContentItemClickListener itemClickListener;
 
@@ -38,6 +45,15 @@ public class FavoriteContentAdapter extends RecyclerView.Adapter<FavoriteContent
      */
     public void refresh(ArrayList<FavoriteModel> datas) {
         this.datas = datas;
+        this.showFilterData = false;
+        this.filter = null;
+        this.notifyDataSetChanged();
+    }
+
+    public void refresh(ArrayList<FavoriteModel> datas, String filter, boolean showFilterData) {
+        this.datas = datas;
+        this.showFilterData = showFilterData;
+        this.filter = filter;
         this.notifyDataSetChanged();
     }
 
@@ -58,7 +74,13 @@ public class FavoriteContentAdapter extends RecyclerView.Adapter<FavoriteContent
             long time = getItemData(position).getFavoriteAt();
             Date date = new Date(time);
             holder.time.setText(sdf.format(date));
-            holder.title.setText(getItemData(position).getDesc());
+            if (showFilterData && !StringUtils.isEmpty(filter)) {
+                SpannableStringBuilder styled = new SpannableStringBuilder(filter);
+                styled.setSpan(new ForegroundColorSpan(Color.RED), 0, filter.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                holder.title.setText(styled);
+            } else {
+                holder.title.setText(getItemData(position).getDesc());
+            }
             holder.setOnClickListener(position);
         } else {
             holder.itemView.setVisibility(View.GONE);
