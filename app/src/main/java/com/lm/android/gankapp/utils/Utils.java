@@ -2,8 +2,13 @@ package com.lm.android.gankapp.utils;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.CharacterStyle;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -20,6 +25,8 @@ import com.lm.android.gankapp.listener.MyBmobUploadListener;
 import com.lm.android.gankapp.models.User;
 
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -175,5 +182,18 @@ public class Utils {
             userId = currentUser.getObjectId();
         }
         return userId;
+    }
+
+    public static SpannableStringBuilder highlight(String text, String target) {
+        SpannableStringBuilder spannable = new SpannableStringBuilder(text);
+        CharacterStyle span = null;
+
+        Pattern p = Pattern.compile(target);
+        Matcher m = p.matcher(text);
+        while (m.find()) {
+            span = new ForegroundColorSpan(Color.RED);// 需要重复！
+            spannable.setSpan(span, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return spannable;
     }
 }
