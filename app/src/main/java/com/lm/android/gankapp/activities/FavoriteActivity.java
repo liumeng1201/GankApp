@@ -71,7 +71,7 @@ public class FavoriteActivity extends BaseActivityWithLoadingDialog {
 
         switch (id) {
             case R.id.action_search:
-                SearchFavoriteActivity.actionStart(context, null);
+                SearchFavoriteActivity.actionStart(context, viewPager.getCurrentItem());
                 return true;
             case android.R.id.home:
                 finish();

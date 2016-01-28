@@ -10,15 +10,20 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lm.android.gankapp.R;
 import com.lm.android.gankapp.adapters.FavoriteContentAdapter;
+import com.lm.android.gankapp.dao.FavoriteContent;
+import com.lm.android.gankapp.dao.FavoriteContentDao;
 import com.lm.android.gankapp.listener.OnContentItemClickListener;
 import com.lm.android.gankapp.models.FavoriteModel;
+import com.lm.android.gankapp.utils.ListUtils;
 import com.lm.android.gankapp.utils.StringUtils;
+import com.lm.android.gankapp.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import de.greenrobot.dao.query.Query;
 
 /**
  * Created by liumeng on 2016/1/28.
@@ -29,9 +34,9 @@ public class SearchFavoriteActivity extends BaseActivityWithLoadingDialog {
     private ArrayList<FavoriteModel> filterDatas;
     private FavoriteContentAdapter adapter;
 
-    public static void actionStart(Context context, String datas) {
+    public static void actionStart(Context context, int type) {
         Intent intent = new Intent(context, SearchFavoriteActivity.class);
-        intent.putExtra("datas", datas);
+        intent.putExtra("type", type);
         context.startActivity(intent);
     }
 
@@ -52,8 +57,8 @@ public class SearchFavoriteActivity extends BaseActivityWithLoadingDialog {
         edtInput = (EditText) findViewById(R.id.search_input);
 
         filterDatas = new ArrayList<>();
-        String data = getIntent().getStringExtra("datas");
-        datas = new Gson().fromJson(data, new TypeToken<ArrayList<FavoriteModel>>() { }.getType());
+        int type = getIntent().getIntExtra("type", -1);
+        datas = getDatas(type);
         if (datas == null) {
             datas = new ArrayList<>();
         }
@@ -91,5 +96,30 @@ public class SearchFavoriteActivity extends BaseActivityWithLoadingDialog {
                 }
             }
         });
+    }
+
+    private ArrayList<FavoriteModel> getDatas(int type) {
+        FavoriteContentDao dao = gankApplication.getDaoSession().getFavoriteContentDao();
+        Query query = dao.queryBuilder().where(FavoriteContentDao.Properties.Type.eq(Utils.requestCategory[type])).build();
+        if (query != null) {
+            List<FavoriteContent> list = query.list();
+            if (!ListUtils.isEmpty(list)) {
+                ArrayList<FavoriteModel> favoriteList = new ArrayList<>();
+                for (FavoriteContent item : list) {
+                    if (item.getShowFavorite()) {
+                        FavoriteModel model = new FavoriteModel();
+                        model.setFavoriteAt(item.getFavoriteAt());
+                        model.setShowFavorite(item.getShowFavorite());
+                        model.setType(item.getType());
+                        model.setContentObjectId(item.getContentObjectId());
+                        model.setDesc(item.getDesc());
+                        model.setUrl(item.getUrl());
+                        favoriteList.add(model);
+                    }
+                }
+                return favoriteList;
+            }
+        }
+        return null;
     }
 }
