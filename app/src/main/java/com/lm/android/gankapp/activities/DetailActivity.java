@@ -332,7 +332,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
             if (!StringUtils.isEmpty(hasFavorite)) {
                 // 已经收藏过该文章
                 FavoriteContent content = getFavoriteEntity(contentObjectId);
-                final ContentItemFavorite item = new ContentItemFavorite(content.getDesc(), content.getType(), content.getUrl(), contentObjectId, System.currentTimeMillis(), userId);
+                final ContentItemFavorite item = new ContentItemFavorite(content.getDesc(), content.getType(), content.getUrl(), contentObjectId, System.currentTimeMillis(), userId, content.getShowFavorite());
                 item.setObjectId(content.getObjectId());
                 if (hasFavorite.equalsIgnoreCase("true")) {
                     // 收藏状态
@@ -354,7 +354,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                 });
             } else {
                 // 没有收藏过该文章
-                final ContentItemFavorite item = new ContentItemFavorite(title, type, url, contentObjectId, System.currentTimeMillis(), userId);
+                final ContentItemFavorite item = new ContentItemFavorite(title, type, url, contentObjectId, System.currentTimeMillis(), userId, true);
                 item.setShowFavorite(true);
                 item.save(context, new MyBmobSaveListener() {
                     @Override

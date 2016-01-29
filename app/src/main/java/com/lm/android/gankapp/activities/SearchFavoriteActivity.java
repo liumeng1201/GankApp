@@ -85,6 +85,7 @@ public class SearchFavoriteActivity extends BaseActivityWithLoadingDialog {
             public void afterTextChanged(Editable s) {
                 String content = s.toString();
                 if (!StringUtils.isEmpty(content)) {
+                    filterDatas.clear();
                     for (FavoriteModel item : datas) {
                         if (item.getDesc().contains(content)) {
                             filterDatas.add(item);

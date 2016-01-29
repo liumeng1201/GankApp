@@ -116,7 +116,7 @@ public class SyncDataService extends Service {
         if (!ListUtils.isEmpty(datas)) {
             LogUtils.json(gson.toJson(datas));
             for (FavoriteModel data : datas) {
-                ContentItemFavorite item = new ContentItemFavorite(data.getDesc(), data.getType(), data.getUrl(), data.getContentObjectId(), data.getFavoriteAt(), userId);
+                ContentItemFavorite item = new ContentItemFavorite(data.getDesc(), data.getType(), data.getUrl(), data.getContentObjectId(), data.getFavoriteAt(), userId, data.isShowFavorite());
                 item.setObjectId(data.getObjectId());
                 PropertyUtils.setFavoriteToDB(item, favoriteDao);
             }

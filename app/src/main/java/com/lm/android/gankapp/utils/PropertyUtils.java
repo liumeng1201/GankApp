@@ -1,5 +1,6 @@
 package com.lm.android.gankapp.utils;
 
+import com.google.gson.Gson;
 import com.lm.android.gankapp.dao.FavoriteContent;
 import com.lm.android.gankapp.dao.FavoriteContentDao;
 import com.lm.android.gankapp.dao.PropertyContent;
@@ -130,6 +131,7 @@ public class PropertyUtils {
         entity.setFavoriteAt(item.getFavoriteAt());
         entity.setObjectId(item.getObjectId());
         entity.setShowFavorite(item.isShowFavorite());
+        LogUtils.json(new Gson().toJson(entity));
         dao.insertOrReplace(entity);
     }
 

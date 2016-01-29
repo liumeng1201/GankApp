@@ -2,7 +2,6 @@ package com.lm.android.gankapp.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,8 +72,7 @@ public class FavoriteContentAdapter extends RecyclerView.Adapter<FavoriteContent
             Date date = new Date(time);
             holder.time.setText(sdf.format(date));
             if (showFilterData && !StringUtils.isEmpty(filter)) {
-                SpannableStringBuilder builder = Utils.highlight(getItemData(position).getDesc(), filter);
-                holder.title.setText(builder.toString());
+                holder.title.setText(Utils.highlight(getItemData(position).getDesc(), filter));
             } else {
                 holder.title.setText(getItemData(position).getDesc());
             }

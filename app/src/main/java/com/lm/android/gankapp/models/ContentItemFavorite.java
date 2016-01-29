@@ -12,13 +12,14 @@ public class ContentItemFavorite extends BmobContentItemBase {
     public ContentItemFavorite() {
     }
 
-    public ContentItemFavorite(String desc, String type, String url, String contentObjectId, Long favoriteAt, String userId) {
+    public ContentItemFavorite(String desc, String type, String url, String contentObjectId, Long favoriteAt, String userId, boolean showFavorite) {
         setDesc(desc);
         setType(type);
         setUrl(url);
         setContentObjectId(contentObjectId);
         setFavoriteAt(favoriteAt);
         setUserId(userId);
+        setShowFavorite(showFavorite);
     }
 
     public Long getFavoriteAt() {
