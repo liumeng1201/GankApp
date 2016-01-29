@@ -72,4 +72,7 @@
     <string name="mobile_phone">手机</string>
     <string name="email">E-mail</string>
     <string name="input_conversion_info_title">留下您的联系方式\n以便开发者可以联系到您</string>
+    <string name="title_activity_settings">设置</string>
+    <string name="about">关于</string>
+    <string name="exit">退出登录</string>
 </resources>

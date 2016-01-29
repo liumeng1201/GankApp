@@ -188,6 +188,7 @@ public class MainActivity extends BaseActivity {
                         FeedbackActivity.actionStart(context);
                         break;
                     case R.id.nav_setting:
+                        SettingsActivity.actionStart(context);
                         break;
                     default:
                         break;

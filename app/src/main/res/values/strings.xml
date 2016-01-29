@@ -75,5 +75,8 @@
     <string name="mobile_phone">Mobile</string>
     <string name="email">E-mail</string>
     <string name="input_conversion_info_title">Please leave your contact info</string>
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="about">About</string>
+    <string name="exit">Exit</string>
+
 </resources>

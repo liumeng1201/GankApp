@@ -52,8 +52,15 @@
             android:name=".activities.FeedbackActivity"
             android:label="@string/nav_fk"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activities.SearchFavoriteActivity"
-            android:label="@string/search"/>
+        <activity
+            android:name=".activities.SearchFavoriteActivity"
+            android:label="@string/search" />
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".activities.AboutActivity"
+            android:label="@string/about" />
 
         <service
             android:name=".services.SyncDataService"
@@ -101,6 +108,7 @@
             android:value="${CHANNEL_VALUE}" />
         <!-- 友盟统计 end -->
 
+
         <!-- 友盟自动更新 start -->
         <service
             android:name="com.umeng.update.net.DownloadingService"
@@ -110,6 +118,7 @@
             android:name="com.umeng.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- 友盟自动更新 end -->
+
 
         <!-- 友盟用户反馈 start -->
         <activity android:name="com.umeng.fb.ConversationActivity" />
