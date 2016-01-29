@@ -57,6 +57,7 @@ public class SyncDataService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        LogUtils.logd("sync favorite datas");
         int actionType = intent.getIntExtra(ACTION_TYPE, SYNC_FAV_DATA);
         User currentUser = BmobUser.getCurrentUser(this, User.class);
         if (currentUser != null) {
