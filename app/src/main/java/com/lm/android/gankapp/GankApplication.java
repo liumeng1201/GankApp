@@ -62,7 +62,7 @@ public class GankApplication extends Application {
 
     private void initDaoSession() {
         // 相当于得到数据库帮助对象，用于便捷获取db
-        UpgradeHelper helper = new UpgradeHelper(this, "gank_db", null);
+        UpgradeHelper helper = new UpgradeHelper(this, Utils.db_name, null);
         // 得到可写的数据库操作对象
         SQLiteDatabase db = helper.getWritableDatabase();
         // 获得Master实例,相当于给database包装工具

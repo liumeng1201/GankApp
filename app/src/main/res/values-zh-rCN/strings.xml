@@ -75,4 +75,8 @@
     <string name="title_activity_settings">设置</string>
     <string name="about">关于</string>
     <string name="exit">退出登录</string>
+    <string name="exit_tishi">确定要退出吗？</string>
+    <string name="already_lagout">尚未登录</string>
+    <string name="fb_new_reply">您的反馈有了新回复，点击查看</string>
+    <string name="fb_new_reply_title">您的反馈有了新回复</string>
 </resources>

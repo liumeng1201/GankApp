@@ -106,8 +106,8 @@ public class MainActivity extends BaseActivity {
                         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MainActivity.this)
                                 .setSmallIcon(R.mipmap.ic_launcher)
                                 .setContentTitle(getString(R.string.app_name))
-                                .setContentText("您的反馈有了新回复，点击查看");
-                        mBuilder.setTicker("您的反馈有了新回复");
+                                .setContentText(getString(R.string.fb_new_reply));
+                        mBuilder.setTicker(getString(R.string.fb_new_reply_title));
                         mBuilder.setAutoCancel(true);
                         Intent details = new Intent(MainActivity.this, FeedbackActivity.class);
                         PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 100,

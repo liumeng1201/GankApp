@@ -78,5 +78,9 @@
     <string name="title_activity_settings">Settings</string>
     <string name="about">About</string>
     <string name="exit">Exit</string>
+    <string name="exit_tishi">Are you sure to exit?</string>
+    <string name="already_lagout">No user login</string>
+    <string name="fb_new_reply">You have a new reply for your feedback, click to see details</string>
+    <string name="fb_new_reply_title">You have a new reply</string>
 
 </resources>
